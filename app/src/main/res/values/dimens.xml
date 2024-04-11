@@ -1,0 +1,8 @@
+<resources>
+    <dimen name="header_panel_height">56dp</dimen>
+    <dimen name="main_padding">16dp</dimen>
+    <dimen name="image_padding">8dp</dimen>
+    <dimen name="header_margin">4dp</dimen>
+    <dimen name="space_after_header">24dp</dimen>
+    <dimen name="list_item_height">62dp</dimen>
+</resources>

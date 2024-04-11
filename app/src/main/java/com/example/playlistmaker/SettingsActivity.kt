@@ -18,8 +18,7 @@ class SettingsActivity : AppCompatActivity() {
 
         // переход на главный экран
         backBtn.setOnClickListener {
-            val displayIntent = Intent(this, MainActivity::class.java)
-            startActivity(displayIntent)
+            finish()
         }
     }
 }

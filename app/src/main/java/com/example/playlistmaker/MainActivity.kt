@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
@@ -13,9 +14,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val searchCard = findViewById<FrameLayout>(R.id.search_card)
-        val mediaCard = findViewById<FrameLayout>(R.id.media_card)
-        val settingsCard = findViewById<FrameLayout>(R.id.settings_card)
+        val searchCard = findViewById<LinearLayout>(R.id.search_card)
+        val mediaCard = findViewById<LinearLayout>(R.id.media_card)
+        val settingsCard = findViewById<LinearLayout>(R.id.settings_card)
 
         // переход на экран поиска
         searchCard.setOnClickListener {
