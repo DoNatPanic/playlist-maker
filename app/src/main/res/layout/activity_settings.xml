@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    android:orientation="vertical"
+    style="@style/SettingsScreenBgStyle"
     tools:context=".SettingsActivity">
 
     <!-- Header Panel-->
@@ -24,33 +21,23 @@
             android:src="@drawable/back" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
-            android:fontFamily="@font/ys_display_medium"
-            android:text="@string/settings_str"
-            android:textColor="@color/black_light" />
+            style="@style/SettingsScreenHeaderPanelTextStyle"
+            android:text="@string/settings_str" />
     </LinearLayout>
+
     <!-- List -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="@dimen/main_padding"
         android:layout_marginVertical="@dimen/space_after_header"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/main_padding">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/list_item_height"
-            android:gravity="center_vertical|center"
-            android:orientation="horizontal">
+        <LinearLayout style="@style/LinearLayoutStyle">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/ys_display_regular"
-                android:text="@string/settings_str"
-                android:textColor="@color/black" />
+                style="@style/SettingsListTextStyle"
+                android:text="@string/settings_str" />
 
             <Switch
                 android:layout_width="match_parent"
@@ -58,17 +45,12 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/list_item_height"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:id="@+id/share_btn"
+            style="@style/LinearLayoutStyle">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/ys_display_regular"
-                android:text="@string/share_str"
-                android:textColor="@color/black" />
+                style="@style/SettingsListTextStyle"
+                android:text="@string/share_str" />
 
             <Space
                 android:layout_width="wrap_content"
@@ -82,17 +64,12 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/list_item_height"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:id="@+id/support_btn"
+            style="@style/LinearLayoutStyle">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/ys_display_regular"
-                android:text="@string/support_str"
-                android:textColor="@color/black" />
+                style="@style/SettingsListTextStyle"
+                android:text="@string/support_str" />
 
             <Space
                 android:layout_width="wrap_content"
@@ -106,17 +83,12 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/list_item_height"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:id="@+id/agreement_btn"
+            style="@style/LinearLayoutStyle">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/ys_display_regular"
-                android:text="@string/oferta_str"
-                android:textColor="@color/black" />
+                style="@style/SettingsListTextStyle"
+                android:text="@string/agreement_str" />
 
             <Space
                 android:layout_width="wrap_content"
