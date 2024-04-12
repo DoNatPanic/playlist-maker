@@ -1,19 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    style="@style/MainScreenBgStyle"
     tools:context=".MainActivity">
 
+    <!-- Header Panel-->
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        style="@style/MainScreenHeaderPanelTextStyle"
+        android:text="@string/app_name" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- Buttons Panel-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginVertical="@dimen/space_after_header"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/main_padding">
+
+        <!-- Кнопка Поиск -->
+        <Button
+            android:id="@+id/search_card"
+            style="@style/MainScreenButtonStyle"
+            android:layout_marginBottom="@dimen/main_padding"
+            android:drawableLeft="@drawable/search"
+            android:text="@string/search_str" />
+
+        <!-- Кнопка Медиатека -->
+        <Button
+            android:id="@+id/media_card"
+            style="@style/MainScreenButtonStyle"
+            android:layout_marginBottom="@dimen/main_padding"
+            android:drawableLeft="@drawable/media"
+            android:text="@string/media_str" />
+
+        <!-- Кнопка Настройки -->
+        <Button
+            android:id="@+id/settings_card"
+            style="@style/MainScreenButtonStyle"
+            android:layout_marginBottom="@dimen/main_padding"
+            android:drawableLeft="@drawable/settings"
+            android:text="@string/settings_str" />
+    </LinearLayout>
+</LinearLayout>
