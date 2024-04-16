@@ -23,23 +23,25 @@ class SearchActivity : AppCompatActivity() {
         const val TEXT_VALUE = ""
     }
 
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        // восстанавливаем сохраненное значение
+        searchText = savedInstanceState.getString(INPUT_TEXT, TEXT_VALUE)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        val backBtn = findViewById<ImageView>(R.id.back_btn)
+        val backBtn = findViewById<com.google.android.material.appbar.MaterialToolbar>(R.id.toolbar)
         val inputEditText = findViewById<EditText>(R.id.inputEditText)
         val clearButton = findViewById<ImageView>(R.id.clearIcon)
 
-        // восстанавливаем сохраненное значение (если оно существует)
-        // и выводим его в inputEditText
-        if (savedInstanceState != null) {
-            searchText = savedInstanceState.getString(INPUT_TEXT, TEXT_VALUE)
-        }
+        // восстановленное значение глобальной переменной выводим в inputEditText
         inputEditText.setText(searchText)
 
         // переход на главный экран
-        backBtn.setOnClickListener {
+        backBtn.setNavigationOnClickListener {
             finish()
         }
 

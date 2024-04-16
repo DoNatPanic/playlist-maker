@@ -12,13 +12,13 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        val backBtn = findViewById<ImageView>(R.id.back_btn)
-        val shareBtn = findViewById<LinearLayout>(R.id.share_btn)
-        val supportBtn = findViewById<LinearLayout>(R.id.support_btn)
-        val agreementBtn = findViewById<LinearLayout>(R.id.agreement_btn)
+        val backBtn = findViewById<com.google.android.material.appbar.MaterialToolbar>(R.id.toolbar)
+        val shareBtn = findViewById<com.google.android.material.textview.MaterialTextView>(R.id.share_btn)
+        val supportBtn = findViewById<com.google.android.material.textview.MaterialTextView>(R.id.support_btn)
+        val agreementBtn = findViewById<com.google.android.material.textview.MaterialTextView>(R.id.agreement_btn)
 
         // переход на главный экран
-        backBtn.setOnClickListener {
+        backBtn.setNavigationOnClickListener {
             finish()
         }
 

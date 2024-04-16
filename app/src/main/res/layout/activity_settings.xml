@@ -1,29 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/SettingsScreenBgStyle"
     tools:context=".SettingsActivity">
 
-    <!-- Header Panel-->
-    <LinearLayout
+    <!-- ToolBar widget -->
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/header_panel_height"
-        android:layout_marginLeft="@dimen/header_margin"
-        android:layout_marginTop="@dimen/header_margin"
-        android:gravity="center_vertical|left"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/back_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingRight="@dimen/image_padding"
-            android:src="@drawable/back" />
-
-        <TextView
-            style="@style/SettingsScreenHeaderPanelTextStyle"
-            android:text="@string/settings_str" />
-    </LinearLayout>
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            style="@style/SimpleToolbar"
+            app:navigationIcon="@drawable/back"
+            app:title="@string/settings_str" />
+    </com.google.android.material.appbar.AppBarLayout>
 
     <!-- List -->
     <LinearLayout
@@ -33,72 +25,27 @@
         android:orientation="vertical"
         android:paddingHorizontal="@dimen/main_padding">
 
-        <LinearLayout style="@style/LinearLayoutStyle">
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            style="@style/SettingsSwitch"
+            android:text="@string/settings_str" />
 
-            <TextView
-                style="@style/SettingsListTextStyle"
-                android:text="@string/settings_str" />
-
-            <Switch
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-
-        <LinearLayout
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/share_btn"
-            style="@style/LinearLayoutStyle">
+            style="@style/SettingsTextView"
+            android:drawableEnd="@drawable/share"
+            android:text="@string/share_str" />
 
-            <TextView
-                style="@style/SettingsListTextStyle"
-                android:text="@string/share_str" />
-
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/share" />
-        </LinearLayout>
-
-        <LinearLayout
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/support_btn"
-            style="@style/LinearLayoutStyle">
+            style="@style/SettingsTextView"
+            android:drawableEnd="@drawable/support"
+            android:text="@string/support_str" />
 
-            <TextView
-                style="@style/SettingsListTextStyle"
-                android:text="@string/support_str" />
-
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/support" />
-        </LinearLayout>
-
-        <LinearLayout
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/agreement_btn"
-            style="@style/LinearLayoutStyle">
+            style="@style/SettingsTextView"
+            android:drawableEnd="@drawable/arrow_forward"
+            android:text="@string/agreement_str" />
 
-            <TextView
-                style="@style/SettingsListTextStyle"
-                android:text="@string/agreement_str" />
-
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/arrow_forward" />
-        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

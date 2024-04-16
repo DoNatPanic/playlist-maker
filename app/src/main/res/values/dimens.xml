@@ -6,4 +6,5 @@
     <dimen name="space_after_header">24dp</dimen>
     <dimen name="list_item_height">62dp</dimen>
     <dimen name="menu_btn_radius">16dp</dimen>
+    <dimen name="edit_text_radius">8dp</dimen>
 </resources>
