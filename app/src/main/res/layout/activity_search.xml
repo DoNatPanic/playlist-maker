@@ -5,17 +5,11 @@
     style="@style/SearchScreenBgStyle"
     tools:context=".SearchActivity">
 
-    <!-- ToolBar widget -->
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            style="@style/SimpleToolbar"
-            app:navigationIcon="@drawable/back"
-            app:title="@string/search_str" />
-    </com.google.android.material.appbar.AppBarLayout>
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        style="@style/SimpleToolbar"
+        app:navigationIcon="@drawable/back"
+        app:title="@string/search_str" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -39,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="right"
-            android:layout_marginRight="12dp"
+            android:layout_marginEnd="12dp"
             android:src="@drawable/clear"
             android:visibility="visible" />
     </FrameLayout>

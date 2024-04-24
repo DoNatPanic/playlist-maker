@@ -5,17 +5,11 @@
     style="@style/SettingsScreenBgStyle"
     tools:context=".SettingsActivity">
 
-    <!-- ToolBar widget -->
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            style="@style/SimpleToolbar"
-            app:navigationIcon="@drawable/back"
-            app:title="@string/settings_str" />
-    </com.google.android.material.appbar.AppBarLayout>
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        style="@style/SimpleToolbar"
+        app:navigationIcon="@drawable/back"
+        app:title="@string/settings_str" />
 
     <!-- List -->
     <LinearLayout
