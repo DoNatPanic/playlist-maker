@@ -2,10 +2,8 @@ package com.example.playlistmaker
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.widget.FrameLayout
+import android.widget.Button
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
@@ -14,13 +12,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val searchCard = findViewById<LinearLayout>(R.id.search_card)
-        val mediaCard = findViewById<LinearLayout>(R.id.media_card)
-        val settingsCard = findViewById<LinearLayout>(R.id.settings_card)
+        val searchCard = findViewById<Button>(R.id.search_card)
+        val mediaCard = findViewById<Button>(R.id.media_card)
+        val settingsCard = findViewById<Button>(R.id.settings_card)
 
         // переход на экран поиска
         searchCard.setOnClickListener {
-            val displayIntent = Intent(this, SeachActivity::class.java)
+            val displayIntent = Intent(this, SearchActivity::class.java)
             startActivity(displayIntent)
         }
 
