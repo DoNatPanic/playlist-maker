@@ -1,0 +1,66 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="@dimen/card_image_size"
+        android:layout_height="@dimen/card_image_size"
+        android:layout_marginVertical="@dimen/card_image_vertical_margin"
+        android:layout_marginStart="@dimen/card_horizontal_margin"
+        android:elevation="0dp"
+        app:cardCornerRadius="@dimen/album_image_radius">
+
+        <ImageView
+            android:id="@+id/sourceImage"
+            style="@style/AlbumImageStyle" />
+    </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|center"
+        android:layout_marginVertical="@dimen/card_text_vertical_margin"
+        android:layout_marginStart="66dp"
+        android:layout_marginEnd="40dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/trackName"
+            style="@style/TrackNameTextStyle"
+            android:text="@string/track_name_ph" />
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/artistName"
+                style="@style/ArtistNameTrackTimeTextStyle"
+                android:layout_gravity="start"
+                android:layout_marginEnd="52dp"
+                android:text="@string/artist_name_ph" />
+            <TextView
+                style="@style/ArtistNameTrackTimeTextStyle"
+                android:layout_gravity="end"
+                android:layout_marginEnd="45dp"
+                android:text="•" />
+
+            <TextView
+                android:id="@+id/trackTime"
+                style="@style/ArtistNameTrackTimeTextStyle"
+                android:layout_width="@dimen/track_time_width"
+                android:layout_gravity="end"
+                android:text="@string/track_time_ph" />
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|right"
+        android:layout_marginEnd="@dimen/card_horizontal_margin"
+        android:src="@drawable/arrow_forward" />
+</FrameLayout>
