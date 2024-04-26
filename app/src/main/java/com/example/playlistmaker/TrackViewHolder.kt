@@ -21,6 +21,10 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         trackName.text = model.trackName
         artistName.text = model.artistName
         trackTime.text = model.trackTime
-        Glide.with(itemView).load(model.artworkUrl100).into(image)
+        Glide.with(itemView)
+            .load(model.artworkUrl100)
+            .placeholder(R.drawable.album_image)
+            .error(R.drawable.album_image)
+            .into(image)
     }
 }
