@@ -6,6 +6,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import java.io.InputStream
 import java.net.URL
 
@@ -21,10 +22,15 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         trackName.text = model.trackName
         artistName.text = model.artistName
         trackTime.text = model.trackTime
+
+        val radius = itemView.resources.getDimensionPixelSize(R.dimen.album_image_radius)
+
         Glide.with(itemView)
             .load(model.artworkUrl100)
             .placeholder(R.drawable.album_image)
             .error(R.drawable.album_image)
+            .centerCrop()
+            .transform(RoundedCorners(radius))
             .into(image)
     }
 }
