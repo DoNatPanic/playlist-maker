@@ -12,4 +12,7 @@
     <string name="email">fainashi@yandex.ru</string>
     <string name="agreement_url">https://yandex.ru/legal/practicum_offer/</string>
     <string name="search_input_hint">Поиск</string>
+    <string name="track_name_ph">Название композиции</string>
+    <string name="artist_name_ph">Исполнитель</string>
+    <string name="track_time_ph">0:00</string>
 </resources>

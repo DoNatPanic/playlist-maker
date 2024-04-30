@@ -62,6 +62,28 @@
         <item name="android:textSize">16sp</item>
     </style>
 
+    <style name="TrackNameTextStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:fontWeight">400</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="ArtistNameTrackTimeTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:fontWeight">400</item>
+        <item name="android:textSize">11sp</item>
+    </style>
+
     <!--    Other activities styles    -->
     <style name="DefaultScreenBgStyle">
         <item name="android:background">@color/black_light</item>
