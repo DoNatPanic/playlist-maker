@@ -13,4 +13,9 @@
     <dimen name="card_image_size">45dp</dimen>
     <dimen name="album_image_radius">2dp</dimen>
     <dimen name="track_time_width">40dp</dimen>
+    <dimen name="search_image_padding_top">102dp</dimen>
+    <dimen name="search_image_padding_bottom">16dp</dimen>
+    <dimen name="search_ph_text_padding_horizontal">40dp</dimen>
+    <dimen name="search_ph_text_padding_vertical">16dp</dimen>
+    <dimen name="btns_radius">54dp</dimen>
 </resources>

@@ -15,4 +15,7 @@
     <string name="track_name_ph">Название композиции</string>
     <string name="artist_name_ph">Исполнитель</string>
     <string name="track_time_ph">0:00</string>
+    <string name="something_went_wrong">Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
+    <string name="nothing_found">Ничего не нашлось</string>
+    <string name="update_btn_str">Обновить</string>
 </resources>

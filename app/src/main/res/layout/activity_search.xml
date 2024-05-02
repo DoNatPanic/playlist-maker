@@ -25,8 +25,10 @@
             android:drawableStart="@drawable/et_search"
             android:drawablePadding="8dp"
             android:hint="@string/search_input_hint"
+            android:imeOptions="actionDone"
             android:inputType="text"
-            android:lines="1" />
+            android:lines="1"
+            android:singleLine="true" />
 
         <ImageView
             android:id="@+id/clearIcon"
@@ -37,6 +39,35 @@
             android:src="@drawable/clear"
             android:visibility="visible" />
     </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <ImageView
+            android:id="@+id/notFoundImage"
+            style="@style/NotFoundImageStyle"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/wentWrongImage"
+            style="@style/WentWrongStyle"
+            android:visibility="gone" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/placeholderMessage"
+        style="@style/PlaceholderMessageStyle"
+        android:text="Text"
+        android:visibility="gone" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/updateBtn"
+        style="@style/SimpleButtonStyle"
+        android:text="@string/update_btn_str"
+        android:visibility="gone"
+        app:cornerRadius="@dimen/btns_radius" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
