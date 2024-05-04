@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.button.MaterialButton
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -33,7 +34,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var placeholderMessage: TextView
     private lateinit var wentWrongImage: ImageView
     private lateinit var notFoundImage: ImageView
-    private lateinit var updateBtn: com.google.android.material.button.MaterialButton
+    private lateinit var updateBtn: MaterialButton
 
     private var searchText: String = TEXT_VALUE
 

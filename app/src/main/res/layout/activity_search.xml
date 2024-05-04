@@ -37,7 +37,7 @@
             android:layout_gravity="right"
             android:layout_marginEnd="12dp"
             android:src="@drawable/clear"
-            android:visibility="visible" />
+            android:visibility="gone" />
     </FrameLayout>
 
     <FrameLayout
@@ -65,9 +65,9 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/updateBtn"
         style="@style/SimpleButtonStyle"
-        android:text="@string/update_btn_str"
+        android:text="@string/update_button_str"
         android:visibility="gone"
-        app:cornerRadius="@dimen/btns_radius" />
+        app:cornerRadius="@dimen/buttons_radius" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

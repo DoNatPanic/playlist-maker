@@ -12,10 +12,10 @@
     <string name="email">fainashi@yandex.ru</string>
     <string name="agreement_url">https://yandex.ru/legal/practicum_offer/</string>
     <string name="search_input_hint">Поиск</string>
-    <string name="track_name_ph">Название композиции</string>
-    <string name="artist_name_ph">Исполнитель</string>
-    <string name="track_time_ph">0:00</string>
+    <string name="track_name_placeholder">Название композиции</string>
+    <string name="artist_name_placeholder">Исполнитель</string>
+    <string name="track_time_placeholder">0:00</string>
     <string name="something_went_wrong">Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
     <string name="nothing_found">Ничего не нашлось</string>
-    <string name="update_btn_str">Обновить</string>
+    <string name="update_button_str">Обновить</string>
 </resources>

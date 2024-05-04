@@ -24,23 +24,23 @@
             android:id="@+id/search_card"
             style="@style/MainScreenButtonStyle"
             android:layout_marginBottom="@dimen/main_padding"
-            android:drawableLeft="@drawable/search"
-            android:text="@string/search_str" />
+            android:text="@string/search_str"
+            app:icon="@drawable/search" />
 
         <!-- Кнопка Медиатека -->
         <Button
             android:id="@+id/media_card"
             style="@style/MainScreenButtonStyle"
             android:layout_marginBottom="@dimen/main_padding"
-            android:drawableLeft="@drawable/media"
-            android:text="@string/media_str" />
+            android:text="@string/media_str"
+            app:icon="@drawable/media" />
 
         <!-- Кнопка Настройки -->
         <Button
             android:id="@+id/settings_card"
             style="@style/MainScreenButtonStyle"
             android:layout_marginBottom="@dimen/main_padding"
-            android:drawableLeft="@drawable/settings"
-            android:text="@string/settings_str" />
+            android:text="@string/settings_str"
+            app:icon="@drawable/settings" />
     </LinearLayout>
 </LinearLayout>

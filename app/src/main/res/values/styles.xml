@@ -48,11 +48,11 @@
         <item name="android:textColor">@color/black_light</item>
         <item name="fontFamily">@font/ys_display_medium</item>
         <item name="android:textSize">22sp</item>
+        <item name="iconPadding">20dp</item>
+        <item name="iconGravity">textStart</item>
         <item name="android:textAllCaps">false</item>
-        <item name="android:paddingHorizontal">80dp</item>
-        <item name="cornerRadius">@dimen/menu_btn_radius</item>
+        <item name="cornerRadius">@dimen/menu_button_radius</item>
         <item name="iconTint">@color/black_light</item>
-        <item name="iconEndPadding">@dimen/image_padding</item>
     </style>
 
     <!--    Settings activity styles    -->
@@ -125,8 +125,8 @@
     <style name="PlaceholderMessageStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:paddingHorizontal">@dimen/search_ph_text_padding_horizontal</item>
-        <item name="android:paddingVertical">@dimen/search_ph_text_padding_vertical</item>
+        <item name="android:paddingHorizontal">@dimen/search_placeholder_text_padding_horizontal</item>
+        <item name="android:paddingVertical">@dimen/search_placeholder_text_padding_vertical</item>
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:gravity">center</item>
         <item name="android:textColor">@color/black_light</item>
