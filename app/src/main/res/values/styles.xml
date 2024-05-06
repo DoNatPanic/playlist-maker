@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <style name="SimpleButtonStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:backgroundTint">@color/black_light</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:fontWeight">500</item>
+    </style>
+
     <style name="SimpleToolbar">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -36,11 +48,11 @@
         <item name="android:textColor">@color/black_light</item>
         <item name="fontFamily">@font/ys_display_medium</item>
         <item name="android:textSize">22sp</item>
+        <item name="iconPadding">20dp</item>
+        <item name="iconGravity">textStart</item>
         <item name="android:textAllCaps">false</item>
-        <item name="android:paddingHorizontal">80dp</item>
-        <item name="cornerRadius">@dimen/menu_btn_radius</item>
+        <item name="cornerRadius">@dimen/menu_button_radius</item>
         <item name="iconTint">@color/black_light</item>
-        <item name="iconEndPadding">@dimen/image_padding</item>
     </style>
 
     <!--    Settings activity styles    -->
@@ -108,6 +120,34 @@
         <item name="android:textColor">@color/gray</item>
         <item name="android:fontWeight">400</item>
         <item name="android:textSize">11sp</item>
+    </style>
+
+    <style name="PlaceholderMessageStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingHorizontal">@dimen/search_placeholder_text_padding_horizontal</item>
+        <item name="android:paddingVertical">@dimen/search_placeholder_text_padding_vertical</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/black_light</item>
+        <item name="android:fontWeight">400</item>
+        <item name="android:textSize">19sp</item>
+    </style>
+
+    <style name="NotFoundImageStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingTop">@dimen/search_image_padding_top</item>
+        <item name="android:paddingBottom">@dimen/search_image_padding_bottom</item>
+        <item name="android:src">@drawable/track_not_found_lm</item>
+    </style>
+
+    <style name="WentWrongStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingTop">@dimen/search_image_padding_top</item>
+        <item name="android:paddingBottom">@dimen/search_image_padding_bottom</item>
+        <item name="android:src">@drawable/track_wrong_search_lm</item>
     </style>
 
     <!--    Other activities styles    -->

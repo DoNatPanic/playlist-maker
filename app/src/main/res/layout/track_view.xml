@@ -22,7 +22,7 @@
         <TextView
             android:id="@+id/trackName"
             style="@style/TrackNameTextStyle"
-            android:text="@string/track_name_ph" />
+            android:text="@string/track_name_placeholder" />
 
         <FrameLayout
             android:layout_width="wrap_content"
@@ -34,7 +34,7 @@
                 style="@style/ArtistNameTrackTimeTextStyle"
                 android:layout_gravity="start"
                 android:layout_marginEnd="52dp"
-                android:text="@string/artist_name_ph" />
+                android:text="@string/artist_name_placeholder" />
 
             <TextView
                 style="@style/ArtistNameTrackTimeTextStyle"
@@ -47,7 +47,7 @@
                 style="@style/ArtistNameTrackTimeTextStyle"
                 android:layout_width="@dimen/track_time_width"
                 android:layout_gravity="end"
-                android:text="@string/track_time_ph" />
+                android:text="@string/track_time_placeholder" />
         </FrameLayout>
 
     </LinearLayout>
