@@ -3,19 +3,29 @@ package com.example.playlistmaker
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.widget.ImageView
-import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.switchmaterial.SwitchMaterial
+import com.google.android.material.textview.MaterialTextView
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        val backBtn = findViewById<com.google.android.material.appbar.MaterialToolbar>(R.id.toolbar)
-        val shareBtn = findViewById<com.google.android.material.textview.MaterialTextView>(R.id.share_btn)
-        val supportBtn = findViewById<com.google.android.material.textview.MaterialTextView>(R.id.support_btn)
-        val agreementBtn = findViewById<com.google.android.material.textview.MaterialTextView>(R.id.agreement_btn)
+        val themeSwitcher = findViewById<SwitchMaterial>(R.id.themeSwitcher)
+        val backBtn = findViewById<MaterialToolbar>(R.id.toolbar)
+        val shareBtn = findViewById<MaterialTextView>(R.id.shareBtn)
+        val supportBtn = findViewById<MaterialTextView>(R.id.supportBtn)
+        val agreementBtn = findViewById<MaterialTextView>(R.id.agreementBtn)
+
+        themeSwitcher.isChecked = DARK_MODE_VALUE
+
+        themeSwitcher.setOnCheckedChangeListener { _, checked ->
+            (applicationContext as App).switchTheme(checked)
+            DARK_MODE_VALUE = checked
+            (applicationContext as App).saveShared(checked)
+        }
 
         // переход на главный экран
         backBtn.setNavigationOnClickListener {
@@ -26,8 +36,8 @@ class SettingsActivity : AppCompatActivity() {
         shareBtn.setOnClickListener {
             val urlString = getText(R.string.share_text)
             val intent = Intent(Intent.ACTION_SEND)
-            intent.putExtra(Intent.EXTRA_TEXT, urlString);
-            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_TEXT, urlString)
+            intent.setType("text/plain")
             startActivity(intent)
         }
 

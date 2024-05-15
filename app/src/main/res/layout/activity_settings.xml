@@ -20,23 +20,24 @@
         android:paddingHorizontal="@dimen/main_padding">
 
         <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/themeSwitcher"
             style="@style/SettingsSwitch"
             android:text="@string/settings_str" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/share_btn"
+            android:id="@+id/shareBtn"
             style="@style/SettingsTextView"
             android:drawableEnd="@drawable/share"
             android:text="@string/share_str" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/support_btn"
+            android:id="@+id/supportBtn"
             style="@style/SettingsTextView"
             android:drawableEnd="@drawable/support"
             android:text="@string/support_str" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/agreement_btn"
+            android:id="@+id/agreementBtn"
             style="@style/SettingsTextView"
             android:drawableEnd="@drawable/arrow_forward"
             android:text="@string/agreement_str" />
