@@ -24,7 +24,6 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-
 const val TRACKS_HISTORY = "tracks_history"
 
 class SearchActivity : AppCompatActivity() {
@@ -191,42 +190,49 @@ class SearchActivity : AppCompatActivity() {
 
     // меняем список истории, когда пользователь нажимает на какой-либо элемент
     fun rebuildTrackHistoryList(position: Int) {
-        // перед нами список песен, которые пришли из iTunes
         if (!inputEditText.text.isNullOrEmpty()) {
-            if (trackHistoryList.size > 0) {
-                var isExist = false
-                var existElement: Track? = null
-                trackHistoryList.forEach { element ->
-                    // выбранный трек уже есть в истории - замоминаем его
-                    if (element.trackId == trackList[position].trackId) {
-                        isExist = true
-                        existElement = element
-                    }
-                }
-                // удаляем его из  списка истории
-                if (isExist) {
-                    trackHistoryList.remove(existElement)
-                }
-                if (trackHistoryList.size >= 10) {
-                    trackHistoryList.removeLast()
-                }
-            }
-            // и добавляем его в начало списка
-            trackHistoryList.add(0, trackList[position])
-            trackHistoryAdapter.notifyDataSetChanged()
-            searchHistory.saveToShared(trackHistoryList)
+            iTunesListSelection(position)
+        } else{
+            historyListSelection(position)
         }
-        // отображается история и пользователь нажал на трек истории
-        else {
-            if (trackHistoryList.size > 1) {
-                // перестроили список
-                val element = trackHistoryList[position]
-                trackHistoryList.removeAt(position)
-                trackHistoryList.add(0, element)
-                trackHistoryAdapter.notifyDataSetChanged()
-                // сохранили его в SP
-                searchHistory.saveToShared(trackHistoryList)
+    }
+
+    // пользователь выбрал песню из списка
+    private fun iTunesListSelection(position: Int) {
+        if (trackHistoryList.size > 0) {
+            var isExist = false
+            var existElement: Track? = null
+            trackHistoryList.forEach { element ->
+                // выбранный трек уже есть в истории - замоминаем его
+                if (element.trackId == trackList[position].trackId) {
+                    isExist = true
+                    existElement = element
+                }
             }
+            // удаляем его из  списка истории
+            if (isExist) {
+                trackHistoryList.remove(existElement)
+            }
+            if (trackHistoryList.size >= 10) {
+                trackHistoryList.removeLast()
+            }
+        }
+        // и добавляем его в начало списка
+        trackHistoryList.add(0, trackList[position])
+        trackHistoryAdapter.notifyDataSetChanged()
+        searchHistory.saveToShared(trackHistoryList)
+    }
+
+    // отображается история и пользователь нажал на трек истории
+    private fun historyListSelection(position: Int) {
+        if (trackHistoryList.size > 1) {
+            // перестроили список
+            val element = trackHistoryList[position]
+            trackHistoryList.removeAt(position)
+            trackHistoryList.add(0, element)
+            trackHistoryAdapter.notifyDataSetChanged()
+            // сохранили его в SP
+            searchHistory.saveToShared(trackHistoryList)
         }
     }
 
