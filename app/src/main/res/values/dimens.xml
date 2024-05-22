@@ -18,4 +18,13 @@
     <dimen name="search_placeholder_text_padding_horizontal">40dp</dimen>
     <dimen name="search_placeholder_text_padding_vertical">16dp</dimen>
     <dimen name="buttons_radius">54dp</dimen>
+    <dimen name="audio_player_small_button_size">51dp</dimen>
+    <dimen name="audio_player_large_button_size">100dp</dimen>
+    <dimen name="audio_player_button_elevation">8dp</dimen>
+    <dimen name="audio_player_margin">24dp</dimen>
+    <dimen name="audio_player_buttons_top_margin">24dp</dimen>
+    <dimen name="audio_player_time_top_margin">32dp</dimen>
+    <dimen name="audio_player_time_bottom_margin">16dp</dimen>
+    <dimen name="audio_player_info_text_margin">16dp</dimen>
+    <dimen name="album_large_image_radius">8dp</dimen>
 </resources>
