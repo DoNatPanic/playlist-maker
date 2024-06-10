@@ -1,6 +1,6 @@
 package com.example.playlistmaker
 
-import android.content.SharedPreferences
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,14 +10,12 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -35,7 +33,7 @@ class SearchActivity : AppCompatActivity() {
     private val trackHistoryAdapter = TrackAdapter(trackHistoryList, this)
     private lateinit var searchHistory: SearchHistory
 
-    private lateinit var backBtn: com.google.android.material.appbar.MaterialToolbar
+    private lateinit var backBtn: MaterialToolbar
     private lateinit var inputEditText: EditText
     private lateinit var clearButton: ImageView
     private lateinit var placeholderMessage: TextView
@@ -192,9 +190,25 @@ class SearchActivity : AppCompatActivity() {
     fun rebuildTrackHistoryList(position: Int) {
         if (!inputEditText.text.isNullOrEmpty()) {
             iTunesListSelection(position)
-        } else{
+            openAudioPlayer(trackList[position])
+        } else {
             historyListSelection(position)
+            openAudioPlayer(trackHistoryList[position])
         }
+    }
+
+    // перейти на экран аудиоплеера
+    private fun openAudioPlayer(track: Track) {
+        val displayIntent = Intent(this, AudioPlayerActivity::class.java)
+        displayIntent.putExtra("trackName", track.trackName)
+        displayIntent.putExtra("artistName", track.artistName)
+        displayIntent.putExtra("trackTimeMillis", track.trackTime)
+        displayIntent.putExtra("artworkUrl100", track.artworkUrl100)
+        displayIntent.putExtra("collectionName", track.collectionName)
+        displayIntent.putExtra("releaseDate", track.releaseDate)
+        displayIntent.putExtra("primaryGenreName", track.primaryGenreName)
+        displayIntent.putExtra("country", track.country)
+        startActivity(displayIntent)
     }
 
     // пользователь выбрал песню из списка

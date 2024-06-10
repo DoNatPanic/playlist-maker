@@ -125,7 +125,8 @@
     <style name="PlaceholderMessageStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:paddingHorizontal">@dimen/search_placeholder_text_padding_horizontal</item>
+        <item name="android:paddingHorizontal">@dimen/search_placeholder_text_padding_horizontal
+        </item>
         <item name="android:paddingVertical">@dimen/search_placeholder_text_padding_vertical</item>
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:gravity">center</item>
@@ -148,6 +149,88 @@
         <item name="android:paddingTop">@dimen/search_image_padding_top</item>
         <item name="android:paddingBottom">@dimen/search_image_padding_bottom</item>
         <item name="android:src">@drawable/track_wrong_search_lm</item>
+    </style>
+
+    <!--    AudioPlayer activity style    -->
+    <style name="AudioPlayerScreenBgStyle">
+        <item name="android:background">@color/white</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="AudioPlayerTrackNameTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textColor">@color/black_light</item>
+        <item name="android:fontWeight">400</item>
+        <item name="android:textSize">22sp</item>
+    </style>
+
+    <style name="AudioPlayerArtistNameTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textColor">@color/black_light</item>
+        <item name="android:fontWeight">400</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="AudioPlayerTrackTimeTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textColor">@color/black_light</item>
+        <item name="android:fontWeight">500</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="AudioPlayerInfoTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:layout_marginTop">@dimen/audio_player_info_text_margin</item>
+        <item name="android:fontWeight">400</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="AudioPlayerInfoValueTextStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/audio_player_info_text_margin</item>
+        <item name="android:gravity">right</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textColor">@color/black_light</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:fontWeight">400</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="AddImageButtonStyle">
+        <item name="android:layout_width">@dimen/audio_player_small_button_size</item>
+        <item name="android:layout_height">@dimen/audio_player_small_button_size</item>
+        <item name="android:background">@drawable/ellipse_1</item>
+        <item name="android:elevation">@dimen/audio_player_button_elevation</item>
+        <item name="android:src">@drawable/add</item>
+    </style>
+
+    <style name="EmptyLikeImageButtonStyle">
+        <item name="android:layout_width">@dimen/audio_player_small_button_size</item>
+        <item name="android:layout_height">@dimen/audio_player_small_button_size</item>
+        <item name="android:background">@drawable/ellipse_1</item>
+        <item name="android:elevation">@dimen/audio_player_button_elevation</item>
+        <item name="android:src">@drawable/empty_like</item>
+    </style>
+
+    <style name="PlayImageButtonStyle">
+        <item name="android:layout_width">@dimen/audio_player_large_button_size</item>
+        <item name="android:layout_height">@dimen/audio_player_large_button_size</item>
+        <item name="android:background">@drawable/ellipse_1</item>
+        <item name="android:elevation">@dimen/audio_player_button_elevation</item>
+        <item name="android:src">@drawable/play</item>
     </style>
 
     <!--    Other activities styles    -->
