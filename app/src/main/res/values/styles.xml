@@ -21,6 +21,14 @@
         <item name="navigationIconTint">@color/black_light</item>
     </style>
 
+    <style name="ProgressBarStyle">
+        <item name="android:layout_width">@dimen/progress_bar_size</item>
+        <item name="android:layout_height">@dimen/progress_bar_size</item>
+        <item name="android:indeterminateTint">@color/blue</item>
+        <item name="android:background">@color/white</item>
+        <item name="navigationIconTint">@color/black_light</item>
+    </style>
+
     <!--    Main activity styles    -->
     <style name="MainScreenHeaderPanelTextStyle">
         <item name="android:layout_width">match_parent</item>

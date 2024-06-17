@@ -40,6 +40,12 @@
             android:visibility="gone" />
     </FrameLayout>
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="@style/ProgressBarStyle"
+        android:layout_gravity="center"
+        android:visibility="gone"/>
+
     <TextView
         android:id="@+id/historyMessage"
         style="@style/PlaceholderMessageStyle"
