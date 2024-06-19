@@ -2,6 +2,8 @@ package com.example.playlistmaker
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -9,6 +11,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.NestedScrollView
@@ -45,6 +48,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var historyRecyclerView: RecyclerView
     private lateinit var historyScrollView: NestedScrollView
+    private lateinit var progressBar: ProgressBar
 
     private var searchText: String = TEXT_VALUE
 
@@ -65,6 +69,28 @@ class SearchActivity : AppCompatActivity() {
     companion object {
         const val INPUT_TEXT = "INPUT_TEXT"
         const val TEXT_VALUE = ""
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
+    }
+
+    private var isClickAllowed = true
+
+    private val handler = Handler(Looper.getMainLooper())
+
+    private fun clickDebounce() : Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
+    }
+
+    private val searchRunnable = Runnable { enterSearch() }
+
+    private fun searchDebounce() {
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -89,6 +115,7 @@ class SearchActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.recyclerView)
         historyScrollView = findViewById(R.id.historyScrollView)
         historyRecyclerView = findViewById(R.id.historyRecyclerView)
+        progressBar = findViewById(R.id.progressBar)
 
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = trackAdapter
@@ -177,6 +204,7 @@ class SearchActivity : AppCompatActivity() {
                 if (!s.isNullOrEmpty()) {
                     showHistory(false)
                 }
+                searchDebounce()
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -199,16 +227,19 @@ class SearchActivity : AppCompatActivity() {
 
     // перейти на экран аудиоплеера
     private fun openAudioPlayer(track: Track) {
-        val displayIntent = Intent(this, AudioPlayerActivity::class.java)
-        displayIntent.putExtra("trackName", track.trackName)
-        displayIntent.putExtra("artistName", track.artistName)
-        displayIntent.putExtra("trackTimeMillis", track.trackTime)
-        displayIntent.putExtra("artworkUrl100", track.artworkUrl100)
-        displayIntent.putExtra("collectionName", track.collectionName)
-        displayIntent.putExtra("releaseDate", track.releaseDate)
-        displayIntent.putExtra("primaryGenreName", track.primaryGenreName)
-        displayIntent.putExtra("country", track.country)
-        startActivity(displayIntent)
+        if (clickDebounce()) {
+            val displayIntent = Intent(this, AudioPlayerActivity::class.java)
+            displayIntent.putExtra("trackName", track.trackName)
+            displayIntent.putExtra("artistName", track.artistName)
+            displayIntent.putExtra("trackTimeMillis", track.trackTime)
+            displayIntent.putExtra("artworkUrl100", track.artworkUrl100)
+            displayIntent.putExtra("collectionName", track.collectionName)
+            displayIntent.putExtra("releaseDate", track.releaseDate)
+            displayIntent.putExtra("primaryGenreName", track.primaryGenreName)
+            displayIntent.putExtra("country", track.country)
+            displayIntent.putExtra("previewUrl", track.previewUrl)
+            startActivity(displayIntent)
+        }
     }
 
     // пользователь выбрал песню из списка
@@ -252,12 +283,19 @@ class SearchActivity : AppCompatActivity() {
 
     private fun enterSearch() {
         if (inputEditText.text.isNotEmpty()) {
+            // Меняем видимость элементов
+            progressBar.visibility = View.VISIBLE
+            recyclerView.visibility = View.GONE
+            historyRecyclerView.visibility = View.GONE
             iTunesService.search(inputEditText.text.toString()).enqueue(object :
                 Callback<TracksResponse> {
                 override fun onResponse(
                     call: Call<TracksResponse>,
                     response: Response<TracksResponse>
                 ) {
+                    progressBar.visibility = View.GONE // Прячем ProgressBar после успешного выполнения запроса
+                    recyclerView.visibility = View.VISIBLE // список треков отображается если есть
+                    historyRecyclerView.visibility = View.VISIBLE // список истории треков отображается если есть
                     if (response.code() == 200) {
                         trackList.clear()
                         wentWrongImage.visibility = View.GONE
@@ -281,6 +319,7 @@ class SearchActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<TracksResponse>, t: Throwable) {
+                    progressBar.visibility = View.GONE // Прячем ProgressBar после выполнения запроса с ошибкой
                     showMessage(
                         getString(R.string.something_went_wrong),
                     )
