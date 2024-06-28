@@ -1,21 +1,21 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui.audioplayer
 
-import android.media.MediaPlayer
-import android.opengl.Visibility
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.playlistmaker.creator.Creator
+import com.example.playlistmaker.R
+import com.example.playlistmaker.domain.api.PlayerInteractor
+import com.example.playlistmaker.domain.entity.PlayerState
 import com.google.android.material.appbar.MaterialToolbar
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.util.Locale
 
 class AudioPlayerActivity : AppCompatActivity() {
@@ -33,23 +33,18 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     private lateinit var playButton: ImageButton
     private lateinit var pauseButton: ImageButton
-    private var mediaPlayer = MediaPlayer()
     private var previewUrl: String? = null
 
     companion object {
-        private const val STATE_DEFAULT = 0
-        private const val STATE_PREPARED = 1
-        private const val STATE_PLAYING = 2
-        private const val STATE_PAUSED = 3
-
         private const val DELAY = 1000L
-
         private const val PREVIEW_TIME = 30_000L
     }
 
-    private var playerState = STATE_DEFAULT
+    private var playerState = PlayerState.DEFAULT
     private var mainThreadHandler: Handler? = null
     private var elapsedTime: Long = 0L
+
+    private val player = Creator.provideAudioPlayerInteractor()
 
     private fun startTimer() {
         // Запоминаем время начала таймера
@@ -69,7 +64,7 @@ class AudioPlayerActivity : AppCompatActivity() {
                 elapsedTime = System.currentTimeMillis() - startTime + elTime
 
                 if (elapsedTime <= duration) {
-                    if (playerState == STATE_PLAYING) {
+                    if (playerState == PlayerState.PLAYING) {
                         // Если всё ещё отсчитываем секунды —
                         // обновляем UI и снова планируем задачу
                         val seconds = elapsedTime / DELAY
@@ -78,7 +73,7 @@ class AudioPlayerActivity : AppCompatActivity() {
                     }
                 } else {
                     // Если таймер окончен, останавливаем воспроизведение
-                    pausePlayer()
+                    player.pause()
                     resetTimerUI()
                     elapsedTime = 0L
                 }
@@ -151,42 +146,41 @@ class AudioPlayerActivity : AppCompatActivity() {
                 .into(trackImage)
         }
 
-        preparePlayer()
+        player.prepare(previewUrl,
+            object : PlayerInteractor.OnStateChangeListener {
+                override fun onChange(state: PlayerState) {
+                    playerState = state
+                    when (state) {
+                        PlayerState.PLAYING -> {
+                            playButton.visibility = View.GONE
+                            pauseButton.visibility = View.VISIBLE
+                        }
+
+                        PlayerState.PAUSED -> {
+                            playButton.visibility = View.VISIBLE
+                            pauseButton.visibility = View.GONE
+                        }
+
+                        else -> {
+                            playButton.visibility = View.VISIBLE
+                            pauseButton.visibility = View.GONE
+                        }
+                    }
+                }
+            }
+        )
 
         playButton.setOnClickListener {
-            if (playerState == STATE_PREPARED || playerState == STATE_PAUSED) {
-                startPlayer()
+            if (playerState == PlayerState.PREPARED || playerState == PlayerState.PAUSED) {
+                player.play()
                 startTimer() // запускаем таймер
             }
         }
 
         pauseButton.setOnClickListener {
-            if (playerState == STATE_PLAYING) {
-                pausePlayer()
+            if (playerState == PlayerState.PLAYING) {
+                player.pause()
             }
-        }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        pausePlayer()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        mediaPlayer.release()
-    }
-
-    private fun preparePlayer() {
-        mediaPlayer.setDataSource(previewUrl)
-        mediaPlayer.prepareAsync()
-        mediaPlayer.setOnPreparedListener {
-            playerState = STATE_PREPARED
-            resetTimerUI()
-        }
-        mediaPlayer.setOnCompletionListener {
-            playButton.visibility = View.VISIBLE
-            playerState = STATE_PREPARED
         }
     }
 
@@ -194,17 +188,13 @@ class AudioPlayerActivity : AppCompatActivity() {
         trackDuration?.text = "0:00"
     }
 
-    private fun startPlayer() {
-        mediaPlayer.start()
-        playButton.visibility = View.GONE
-        pauseButton.visibility = View.VISIBLE
-        playerState = STATE_PLAYING
+    override fun onPause() {
+        super.onPause()
+        player.pause()
     }
 
-    private fun pausePlayer() {
-        mediaPlayer.pause()
-        playButton.visibility = View.VISIBLE
-        pauseButton.visibility = View.GONE
-        playerState = STATE_PAUSED
+    override fun onDestroy() {
+        super.onDestroy()
+        player.destroy()
     }
 }
