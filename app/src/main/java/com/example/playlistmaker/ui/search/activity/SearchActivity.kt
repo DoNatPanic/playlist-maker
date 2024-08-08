@@ -189,7 +189,8 @@ class SearchActivity : AppCompatActivity() {
     private fun renderSearchResult(result: SearchResult) {
         when(result) {
             is SearchResult.Error -> {
-                setMessage(result.message)
+                val message = getString(R.string.something_went_wrong)
+                setMessage(message)
                 binding.placeholderMessage.visibility = View.VISIBLE
                 binding.updateBtn.visibility = View.VISIBLE
                 binding.notFoundImage.visibility = View.GONE

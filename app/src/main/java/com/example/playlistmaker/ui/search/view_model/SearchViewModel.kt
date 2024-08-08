@@ -23,7 +23,7 @@ class SearchViewModel(
 ) : AndroidViewModel(application) {
 
     private var trackHistoryList: MutableList<Track> = mutableListOf()
-    private var searchResultData: MutableLiveData<SearchResult> =
+    private val searchResultData: MutableLiveData<SearchResult> =
         MutableLiveData(SearchResult.Empty)
 
     fun searchResultLiveData(): LiveData<SearchResult> = searchResultData
@@ -67,7 +67,7 @@ class SearchViewModel(
                     when (data) {
                         is ConsumerData.Error -> {
                             searchResult =
-                                SearchResult.Error(data.message)
+                                SearchResult.Error
                         }
 
                         is ConsumerData.Data -> {

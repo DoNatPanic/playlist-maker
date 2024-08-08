@@ -27,6 +27,7 @@ class AudioPlayerActivity : ComponentActivity() {
 
         // назад
         binding.toolbar.setNavigationOnClickListener {
+            onPlayerPause()
             finish()
         }
 
@@ -122,6 +123,11 @@ class AudioPlayerActivity : ComponentActivity() {
     }
 
     private fun onPlayerPause() {
+        viewModel.pause()
+    }
+
+    override fun onPause() {
+        super.onPause()
         viewModel.pause()
     }
 

@@ -19,8 +19,8 @@ class GetTrackDetailsUseCase(
             val track = trackId?.let { tracksApi.getTrackById(trackId) }
 
             when (track) {
-                null -> consumer.consume(ConsumerData.Error("Что-то пошло не так, попробуйте еще раз :("))
-                is ApiResponse.Error -> consumer.consume(ConsumerData.Error(track.message))
+                null -> consumer.consume(ConsumerData.Error())
+                is ApiResponse.Error -> consumer.consume(ConsumerData.Error())
                 is ApiResponse.Success -> consumer.consume(ConsumerData.Data(track.data))
             }
         }

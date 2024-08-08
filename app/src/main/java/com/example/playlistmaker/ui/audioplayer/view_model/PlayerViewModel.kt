@@ -21,13 +21,13 @@ class PlayerViewModel(
 
     private var mainThreadHandler: Handler? = null
 
-    private var playerState = MutableLiveData(PlayerState.DEFAULT)
+    private val playerState = MutableLiveData(PlayerState.DEFAULT)
     fun playerStateLiveData(): LiveData<PlayerState> = playerState
 
-    private var trackState: MutableLiveData<Track?> = MutableLiveData()
+    private val trackState: MutableLiveData<Track?> = MutableLiveData()
     fun trackLiveData(): LiveData<Track?> = trackState
 
-    private var elapsedTimeState = MutableLiveData(0L)
+    private val elapsedTimeState = MutableLiveData(0L)
     fun elapsedTimeLiveData(): LiveData<Long> = elapsedTimeState
 
     init {

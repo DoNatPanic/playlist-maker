@@ -18,7 +18,7 @@ class GetTrackListUseCase(
     ) {
         executor.execute {
             when (val tracks = tracksApi.getTracks(query)) {
-                is ApiResponse.Error -> consumer.consume(ConsumerData.Error(tracks.message))
+                is ApiResponse.Error -> consumer.consume(ConsumerData.Error())
                 is ApiResponse.Success -> consumer.consume(ConsumerData.Data(tracks.data))
             }
         }

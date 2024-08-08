@@ -6,6 +6,7 @@ import com.example.playlistmaker.data.network.RetrofitTracksApi
 import com.example.playlistmaker.data.player.PlayerRepositoryImpl
 import com.example.playlistmaker.data.search.SearchRepositoryImpl
 import com.example.playlistmaker.data.settings.SettingsRepositoryImpl
+import com.example.playlistmaker.data.sharing.ContactProviderImpl
 import com.example.playlistmaker.data.sharing.ExternalNavigatorImpl
 import com.example.playlistmaker.domain.player.api.PlayerInteractor
 import com.example.playlistmaker.domain.player.api.PlayerRepository
@@ -19,6 +20,7 @@ import com.example.playlistmaker.domain.search.use_case.GetTrackListUseCase
 import com.example.playlistmaker.domain.settings.api.SettingsInteractor
 import com.example.playlistmaker.domain.settings.api.SettingsRepository
 import com.example.playlistmaker.domain.settings.impl.SettingsInteractorImpl
+import com.example.playlistmaker.domain.sharing.api.ContactProvider
 import com.example.playlistmaker.domain.sharing.api.ExternalNavigator
 import com.example.playlistmaker.domain.sharing.api.SharingInteractor
 import com.example.playlistmaker.domain.sharing.impl.SharingInteractorImpl
@@ -44,8 +46,12 @@ object Creator : Application() {
         return ExternalNavigatorImpl(context)
     }
 
+    private fun getContactProvider(context: Context): ContactProvider {
+        return ContactProviderImpl(context)
+    }
+
     fun provideSharingInteractor(context: Context): SharingInteractor {
-        return SharingInteractorImpl(context, getSharingRepository(context))
+        return SharingInteractorImpl(getContactProvider(context), getSharingRepository(context))
     }
 
     private fun getSearchRepository(context: Context): SearchRepository {
