@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     style="@style/MainScreenBgStyle"
-    tools:context=".MainActivity">
+    tools:context=".ui.main.activity.MainActivity">
 
     <!-- Header Panel-->
     <TextView
@@ -29,7 +29,7 @@
 
         <!-- Кнопка Медиатека -->
         <Button
-            android:id="@+id/media_card"
+            android:id="@+id/media_library_card"
             style="@style/MainScreenButtonStyle"
             android:layout_marginBottom="@dimen/main_padding"
             android:text="@string/media_str"

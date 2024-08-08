@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/AudioPlayerScreenBgStyle"
-    tools:context=".ui.audioplayer.AudioPlayerActivity">
+    tools:context=".ui.audioplayer.activity.AudioPlayerActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"

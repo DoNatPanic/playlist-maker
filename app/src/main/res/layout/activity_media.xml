@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     style="@style/DefaultScreenBgStyle"
-    tools:context=".MediaActivity">
+    tools:context=".ui.media.activity.MediaActivity">
 
     <TextView
         android:layout_width="match_parent"
