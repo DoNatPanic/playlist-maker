@@ -1,13 +1,8 @@
 package com.example.playlistmaker.ui.search.view_model
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlistmaker.creator.Creator
+import androidx.lifecycle.ViewModel
 import com.example.playlistmaker.domain.search.api.SearchInteractor
 import com.example.playlistmaker.domain.search.consumer.Consumer
 import com.example.playlistmaker.domain.search.consumer.ConsumerData
@@ -15,12 +10,15 @@ import com.example.playlistmaker.domain.search.entity.SearchResult
 import com.example.playlistmaker.domain.search.entity.Track
 import com.example.playlistmaker.domain.search.entity.TrackSearchHistory
 import com.example.playlistmaker.domain.search.entity.TracksResponse
+import com.example.playlistmaker.domain.search.use_case.GetTrackListUseCase
 import com.example.playlistmaker.presentation.utils.SingleEventLiveData
+import org.koin.core.component.KoinComponent
+import org.koin.core.parameter.parametersOf
 
 class SearchViewModel(
-    application: Application,
+//    application: Application,
     private val searchInteractor: SearchInteractor
-) : AndroidViewModel(application) {
+) : ViewModel(), KoinComponent {
 
     private var trackHistoryList: MutableList<Track> = mutableListOf()
     private val searchResultData: MutableLiveData<SearchResult> =
@@ -53,7 +51,9 @@ class SearchViewModel(
     }
 
     fun searchTracks(query: String) {
-        val getTrackListUseCase = Creator.provideGetTracksUseCase(query)
+        val getTrackListUseCase: GetTrackListUseCase = getKoin().get() {
+            parametersOf(query)
+        }
         if (query.isEmpty()) {
             return
         }
@@ -146,19 +146,5 @@ class SearchViewModel(
         )
 
         openMediaPlayerTrigger.value = track
-    }
-
-    companion object {
-        fun getSearchViewModelFactory(): ViewModelProvider.Factory =
-            viewModelFactory {
-                initializer {
-                    val application =
-                        this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Application
-                    SearchViewModel(
-                        application,
-                        Creator.provideSearchInteractor(application)
-                    )
-                }
-            }
     }
 }

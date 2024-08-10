@@ -57,4 +57,5 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("androidx.core:core-ktx:1.9.0") // подключает все семейство библиотек
     // implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1") // только mvvm
+    implementation("io.insert-koin:koin-android:3.3.0")
 }

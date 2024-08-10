@@ -3,7 +3,6 @@ package com.example.playlistmaker.ui.audioplayer.activity
 import android.os.Bundle
 import android.view.View
 import androidx.activity.ComponentActivity
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
@@ -11,12 +10,18 @@ import com.example.playlistmaker.databinding.ActivityAudioPlayerBinding
 import com.example.playlistmaker.domain.player.entity.PlayerState
 import com.example.playlistmaker.domain.search.entity.Track
 import com.example.playlistmaker.ui.audioplayer.view_model.PlayerViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class AudioPlayerActivity : ComponentActivity() {
 
-    private lateinit var viewModel: PlayerViewModel
+    private var trackId: Long = -1
+
+    private val viewModel: PlayerViewModel by viewModel {
+        parametersOf(trackId)
+    }
     private lateinit var binding: ActivityAudioPlayerBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,12 +39,7 @@ class AudioPlayerActivity : ComponentActivity() {
         // получаем информацию о треке
         val arguments = intent.extras
         if (arguments != null) {
-            val trackId = arguments.getLong("trackId")
-
-            viewModel = ViewModelProvider(
-                this,
-                PlayerViewModel.getPlayerViewModelFactory(trackId)
-            )[PlayerViewModel::class.java]
+            trackId = arguments.getLong("trackId")
         }
 
         viewModel.playerStateLiveData().observe(this) { state ->
