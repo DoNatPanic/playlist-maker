@@ -1,29 +1,26 @@
 package com.example.playlistmaker.data.search
 
-import android.content.Context
+import com.example.playlistmaker.data.shared_prefs.SharedPrefs
+import com.example.playlistmaker.data.shared_prefs.TRACKS_HISTORY
 import com.example.playlistmaker.domain.search.api.SearchRepository
 import com.example.playlistmaker.domain.search.entity.Track
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-const val TRACKS_HISTORY = "tracks_history"
-
 class SearchRepositoryImpl(
-    private val context: Context,
+    private val sharedPrefs: SharedPrefs,
+    private val gson: Gson,
 ) : SearchRepository {
 
-    private val sharedPreferences =
-        context.getSharedPreferences(TRACKS_HISTORY, Context.MODE_PRIVATE)
-
     override fun saveHistory(tracks: List<Track>) {
-        sharedPreferences.edit()
+        sharedPrefs.getTracksHistorySP().edit()
             .putString(TRACKS_HISTORY, createJsonFromFact(tracks))
             .apply()
     }
 
     override fun loadHistory(): MutableList<Track> {
         var list: MutableList<Track> = mutableListOf()
-        val trackListString = sharedPreferences.getString(TRACKS_HISTORY, null)
+        val trackListString = sharedPrefs.getTracksHistorySP().getString(TRACKS_HISTORY, null)
         if (trackListString != null) {
             list.addAll(createFactFromJson(trackListString))
         }
@@ -31,11 +28,11 @@ class SearchRepositoryImpl(
     }
 
     private fun createJsonFromFact(track: List<Track>): String {
-        return Gson().toJson(track)
+        return gson.toJson(track)
     }
 
     private fun createFactFromJson(json: String): MutableList<Track> {
         val mutableListTutorialType = object : TypeToken<MutableList<Track>>() {}.type
-        return Gson().fromJson(json, mutableListTutorialType)
+        return gson.fromJson(json, mutableListTutorialType)
     }
 }

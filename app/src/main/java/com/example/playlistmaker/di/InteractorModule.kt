@@ -1,5 +1,6 @@
 package com.example.playlistmaker.di
 
+import android.media.MediaPlayer
 import com.example.playlistmaker.data.player.PlayerRepositoryImpl
 import com.example.playlistmaker.data.search.SearchRepositoryImpl
 import com.example.playlistmaker.data.settings.SettingsRepositoryImpl
@@ -24,8 +25,12 @@ import org.koin.dsl.module
 val interactorModule = module {
 
     // audio player
+    single {
+        MediaPlayer()
+    }
+
     factory<PlayerRepository> {
-        PlayerRepositoryImpl()
+        PlayerRepositoryImpl(get())
     }
 
     factory<PlayerInteractor> {
@@ -34,7 +39,7 @@ val interactorModule = module {
 
     // search
     factory<SearchRepository> {
-        SearchRepositoryImpl(androidContext())
+        SearchRepositoryImpl(get(), get())
     }
 
     factory<SearchInteractor> {
@@ -43,7 +48,7 @@ val interactorModule = module {
 
     // theme
     factory<SettingsRepository> {
-        SettingsRepositoryImpl(androidContext())
+        SettingsRepositoryImpl(get())
     }
 
     factory<SettingsInteractor> {
