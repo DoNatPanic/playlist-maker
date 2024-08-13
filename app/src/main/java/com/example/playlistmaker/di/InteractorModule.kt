@@ -25,7 +25,7 @@ import org.koin.dsl.module
 val interactorModule = module {
 
     // audio player
-    single {
+    factory {
         MediaPlayer()
     }
 
