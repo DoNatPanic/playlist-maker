@@ -5,19 +5,20 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.domain.player.api.PlayerInteractor
 import com.example.playlistmaker.domain.player.entity.PlayerState
 import com.example.playlistmaker.domain.search.consumer.Consumer
 import com.example.playlistmaker.domain.search.consumer.ConsumerData
 import com.example.playlistmaker.domain.search.entity.Track
 import com.example.playlistmaker.domain.search.entity.TracksResponse
+import com.example.playlistmaker.domain.search.use_case.GetTrackDetailsUseCase
+import org.koin.core.component.KoinComponent
 
 class PlayerViewModel(
     trackId: Long,
     private val tracksInteractor: PlayerInteractor,
-) : ViewModel() {
+
+    ) : ViewModel(), KoinComponent {
 
     private var mainThreadHandler: Handler? = null
 
@@ -31,7 +32,7 @@ class PlayerViewModel(
     fun elapsedTimeLiveData(): LiveData<Long> = elapsedTimeState
 
     init {
-        val getTrackDetailsUseCase = Creator.provideGetTrackDetailsUseCase()
+        val getTrackDetailsUseCase: GetTrackDetailsUseCase = getKoin().get()
         getTrackDetailsUseCase.execute(trackId,
             consumer = object : Consumer<TracksResponse> {
                 override fun consume(data: ConsumerData<TracksResponse>) {
@@ -117,16 +118,5 @@ class PlayerViewModel(
     companion object {
         private const val DELAY = 1000L
         private const val PREVIEW_TIME = 30_000L
-
-        fun getPlayerViewModelFactory(trackId: Long): ViewModelProvider.Factory =
-            object : ViewModelProvider.Factory {
-                @Suppress("UNCHECKED_CAST")
-                override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return PlayerViewModel(
-                        trackId,
-                        Creator.provideAudioPlayerInteractor(),
-                    ) as T
-                }
-            }
     }
 }

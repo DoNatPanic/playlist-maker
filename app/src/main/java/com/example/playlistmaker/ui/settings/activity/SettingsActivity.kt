@@ -2,26 +2,25 @@ package com.example.playlistmaker.ui.settings.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySettingsBinding
 import com.example.playlistmaker.domain.settings.entity.ThemeSettings
 import com.example.playlistmaker.ui.settings.view_model.SettingsViewModel
 import com.google.android.material.switchmaterial.SwitchMaterial
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsBinding
-    private lateinit var viewModel: SettingsViewModel
+    private val viewModel: SettingsViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivitySettingsBinding.inflate(layoutInflater)
-        viewModel = ViewModelProvider(this, SettingsViewModel.getSettingsViewModelFactory())[SettingsViewModel::class.java]
         setContentView(binding.root)
 
-        viewModel.darkThemeLiveData().observe(this) {
-            themeSettings -> observeDarkTheme(themeSettings)
+        viewModel.darkThemeLiveData().observe(this) { themeSettings ->
+            observeDarkTheme(themeSettings)
         }
 
         binding.themeSwitcher.setOnClickListener { _ -> onDarkThemeSwitched() }

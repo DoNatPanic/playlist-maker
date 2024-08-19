@@ -10,7 +10,6 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySearchBinding
@@ -19,11 +18,12 @@ import com.example.playlistmaker.domain.search.entity.Track
 import com.example.playlistmaker.domain.search.entity.TrackSearchHistory
 import com.example.playlistmaker.ui.audioplayer.activity.AudioPlayerActivity
 import com.example.playlistmaker.ui.search.view_model.SearchViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySearchBinding
-    private lateinit var viewModel: SearchViewModel
+    private val viewModel: SearchViewModel by viewModel()
 
     private lateinit var trackAdapter: TrackAdapter
     private lateinit var trackHistoryAdapter: TrackAdapter
@@ -46,7 +46,7 @@ class SearchActivity : AppCompatActivity() {
 
     private val handler = Handler(Looper.getMainLooper())
 
-    private fun clickDebounce() : Boolean {
+    private fun clickDebounce(): Boolean {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
@@ -71,7 +71,7 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
-        viewModel = ViewModelProvider(this, SearchViewModel.getSearchViewModelFactory())[SearchViewModel::class.java]
+
         setContentView(binding.root)
 
         trackAdapter = TrackAdapter { track -> viewModel.onSearchTrackClicked(track) }
@@ -85,13 +85,15 @@ class SearchActivity : AppCompatActivity() {
         viewModel.getOpenMediaPlayerTrigger().observe(this) { track ->
             openAudioPlayer(track)
         }
-        viewModel.searchResultLiveData().observe(this) { searchResult -> renderSearchResult(searchResult) }
+        viewModel.searchResultLiveData()
+            .observe(this) { searchResult -> renderSearchResult(searchResult) }
         viewModel.searchHistoryLiveData().observe(this) { trackHistory ->
-            when(trackHistory) {
+            when (trackHistory) {
                 is TrackSearchHistory.Empty -> {
                     trackHistoryAdapter.setItems(listOf())
                     showHistory(false)
                 }
+
                 is TrackSearchHistory.Content -> {
                     trackHistoryAdapter.setItems(trackHistory.results)
                 }
@@ -187,7 +189,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun renderSearchResult(result: SearchResult) {
-        when(result) {
+        when (result) {
             is SearchResult.Error -> {
                 val message = getString(R.string.something_went_wrong)
                 setMessage(message)
@@ -199,6 +201,7 @@ class SearchActivity : AppCompatActivity() {
                 binding.recyclerView.visibility = View.VISIBLE
                 binding.historyRecyclerView.visibility = View.VISIBLE
             }
+
             is SearchResult.Content -> {
                 setMessage("")
                 trackAdapter.setItems(result.results)
@@ -211,6 +214,7 @@ class SearchActivity : AppCompatActivity() {
                 binding.recyclerView.visibility = View.VISIBLE
                 binding.historyRecyclerView.visibility = View.VISIBLE
             }
+
             SearchResult.Loading -> {
                 setMessage("")
 
@@ -221,6 +225,7 @@ class SearchActivity : AppCompatActivity() {
                 binding.recyclerView.visibility = View.GONE
                 binding.historyRecyclerView.visibility = View.GONE
             }
+
             SearchResult.NotFound -> {
                 setMessage(getString(R.string.nothing_found))
                 trackAdapter.setItems(listOf())
@@ -233,6 +238,7 @@ class SearchActivity : AppCompatActivity() {
                 binding.recyclerView.visibility = View.VISIBLE
                 binding.historyRecyclerView.visibility = View.VISIBLE
             }
+
             SearchResult.Empty -> {
                 setMessage("")
                 trackAdapter.setItems(listOf())

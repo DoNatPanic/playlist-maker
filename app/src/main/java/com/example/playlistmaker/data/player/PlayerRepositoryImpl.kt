@@ -5,9 +5,10 @@ import com.example.playlistmaker.domain.player.api.PlayerInteractor
 import com.example.playlistmaker.domain.player.api.PlayerRepository
 import com.example.playlistmaker.domain.player.entity.PlayerState
 
-class PlayerRepositoryImpl() : PlayerRepository {
+class PlayerRepositoryImpl(
+    private val player: MediaPlayer
+) : PlayerRepository {
 
-    private val player = MediaPlayer()
     private lateinit var listener: PlayerInteractor.OnStateChangeListener
 
     override fun prepare(source: String, listener: PlayerInteractor.OnStateChangeListener) {
