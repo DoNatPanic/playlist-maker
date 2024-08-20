@@ -58,4 +58,10 @@ dependencies {
     implementation("androidx.core:core-ktx:1.9.0") // подключает все семейство библиотек
     // implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1") // только mvvm
     implementation("io.insert-koin:koin-android:3.3.0")
+
+    var fragmentVersion = "1.5.5"
+    implementation("androidx.fragment:fragment-ktx:$fragmentVersion")
+
+    implementation("androidx.viewpager2:viewpager2:1.0.0") // view pager
+    implementation("com.google.android.material:material:1.8.0") // tab layout
 }
