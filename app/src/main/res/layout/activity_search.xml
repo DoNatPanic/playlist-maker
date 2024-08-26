@@ -74,6 +74,7 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/clearHistoryBtn"
             style="@style/SimpleButtonStyle"
+            android:layout_gravity="center"
             android:text="@string/clear_history_button"
             app:cornerRadius="@dimen/buttons_radius" />
     </LinearLayout>
@@ -87,11 +88,13 @@
         <ImageView
             android:id="@+id/notFoundImage"
             style="@style/NotFoundImageStyle"
+            android:layout_marginTop="@dimen/not_found_image_margin_top"
             android:visibility="gone" />
 
         <ImageView
             android:id="@+id/wentWrongImage"
             style="@style/WentWrongStyle"
+            android:layout_marginTop="@dimen/not_found_image_margin_top"
             android:visibility="gone" />
     </FrameLayout>
 
@@ -105,6 +108,7 @@
         android:id="@+id/updateBtn"
         style="@style/SimpleButtonStyle"
         android:text="@string/update_button_str"
+        android:layout_gravity="center"
         android:visibility="gone"
         app:cornerRadius="@dimen/buttons_radius" />
 

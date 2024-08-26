@@ -13,7 +13,7 @@
     <dimen name="card_image_size">45dp</dimen>
     <dimen name="album_image_radius">2dp</dimen>
     <dimen name="track_time_width">40dp</dimen>
-    <dimen name="search_image_padding_top">102dp</dimen>
+    <dimen name="search_image_padding_top">16dp</dimen>
     <dimen name="search_image_padding_bottom">16dp</dimen>
     <dimen name="search_placeholder_text_padding_horizontal">40dp</dimen>
     <dimen name="search_placeholder_text_padding_vertical">16dp</dimen>
@@ -29,4 +29,7 @@
     <dimen name="album_large_image_radius">8dp</dimen>
     <dimen name="progress_bar_size">44dp</dimen>
     <dimen name="progress_bar_margin_top">100dp</dimen>
+    <dimen name="media_library_empty_string_margin_horizontal">24dp</dimen>
+    <dimen name="media_library_empty_string_margin_vertical">10dp</dimen>
+    <dimen name="not_found_image_margin_top">86dp</dimen>
 </resources>

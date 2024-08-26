@@ -32,4 +32,9 @@
     <string name="year_val_str">1965</string>
     <string name="genre_val_str">Rock</string>
     <string name="country_val_str">Великобритания</string>
+    <string name="favourites_empty">Ваша медиатека пуста</string>
+    <string name="playlists_empty">Вы не создали ни одного плейлиста</string>
+    <string name="new_playlist_button_str">Новый плейлист</string>
+    <string name="favourites_tab_title">Избранные треки</string>
+    <string name="playlists_tab_title">Плейлисты</string>
 </resources>

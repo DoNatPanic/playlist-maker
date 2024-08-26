@@ -4,7 +4,6 @@
     <style name="SimpleButtonStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_gravity">center</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">@font/ys_display_medium</item>
@@ -13,12 +12,36 @@
         <item name="android:fontWeight">500</item>
     </style>
 
-    <style name="SimpleToolbar">
+    <style name="SimpleToolbar" parent="Widget.MaterialComponents.Toolbar">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/black_light</item>
         <item name="android:background">@color/white</item>
         <item name="navigationIconTint">@color/black_light</item>
+        <item name="titleTextAppearance">@style/ToolbarTextStyle</item>
+    </style>
+
+    <style name="ToolbarTextStyle" parent="@style/TextAppearance.MaterialComponents.Headline6">
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:fontWeight">500</item>
+        <item name="android:textSize">22sp</item>
+    </style>
+
+    <style name="SimpleTabLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="tabTextColor">@color/black_light</item>
+        <item name="tabIndicatorColor">@color/black_light</item>
+        <item name="android:background">@color/white</item>
+        <item name="tabIndicator">@drawable/tab_indicator</item>
+        <item name="tabTextAppearance">@style/TabTextAppearance</item>
+    </style>
+
+    <style name="TabTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="textAllCaps">false</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:fontWeight">500</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
     <style name="ProgressBarStyle">
@@ -246,6 +269,16 @@
         <item name="android:background">@drawable/ellipse_1</item>
         <item name="android:elevation">@dimen/audio_player_button_elevation</item>
         <item name="android:src">@drawable/pause</item>
+    </style>
+
+    <!--    AudioPlayer activity style    -->
+    <style name="MediaLibraryTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textColor">@color/black_light</item>
+        <item name="android:fontWeight">500</item>
+        <item name="android:textSize">19sp</item>
     </style>
 
     <!--    Other activities styles    -->
