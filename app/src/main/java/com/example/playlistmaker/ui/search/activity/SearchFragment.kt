@@ -1,18 +1,21 @@
 package com.example.playlistmaker.ui.search.activity
 
-import android.content.Intent
+import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
-import com.example.playlistmaker.databinding.ActivitySearchBinding
+import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.domain.search.entity.SearchResult
 import com.example.playlistmaker.domain.search.entity.Track
 import com.example.playlistmaker.domain.search.entity.TrackSearchHistory
@@ -20,9 +23,18 @@ import com.example.playlistmaker.ui.audioplayer.activity.AudioPlayerActivity
 import com.example.playlistmaker.ui.search.view_model.SearchViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivitySearchBinding
+class SearchFragment : Fragment() {
+
+    companion object {
+        const val INPUT_TEXT = "INPUT_TEXT"
+        const val TEXT_VALUE = ""
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
+    }
+
+    private lateinit var binding: FragmentSearchBinding
+
     private val viewModel: SearchViewModel by viewModel()
 
     private lateinit var trackAdapter: TrackAdapter
@@ -33,13 +45,6 @@ class SearchActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(INPUT_TEXT, TEXT_VALUE)
-    }
-
-    companion object {
-        const val INPUT_TEXT = "INPUT_TEXT"
-        const val TEXT_VALUE = ""
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
-        private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 
     private var isClickAllowed = true
@@ -62,32 +67,41 @@ class SearchActivity : AppCompatActivity() {
         handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
     }
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        // восстанавливаем сохраненное значение
-        searchText = savedInstanceState.getString(INPUT_TEXT, TEXT_VALUE)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivitySearchBinding.inflate(layoutInflater)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        setContentView(binding.root)
+        // восстанавливаем сохраненное значение
+        if (savedInstanceState != null) {
+            searchText = savedInstanceState.getString(
+                INPUT_TEXT,
+                TEXT_VALUE
+            )
+        }
+
+        var owner = getViewLifecycleOwner()
 
         trackAdapter = TrackAdapter { track -> viewModel.onSearchTrackClicked(track) }
-        binding.recyclerView.layoutManager = LinearLayoutManager(this)
+        binding.recyclerView.layoutManager = LinearLayoutManager(context)
         binding.recyclerView.adapter = trackAdapter
 
         trackHistoryAdapter = TrackAdapter { track -> viewModel.onHistoryTrackClicked(track) }
-        binding.historyRecyclerView.layoutManager = LinearLayoutManager(this)
+        binding.historyRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.historyRecyclerView.adapter = trackHistoryAdapter
 
-        viewModel.getOpenMediaPlayerTrigger().observe(this) { track ->
+        viewModel.getOpenMediaPlayerTrigger().observe(owner) { track ->
             openAudioPlayer(track)
         }
         viewModel.searchResultLiveData()
-            .observe(this) { searchResult -> renderSearchResult(searchResult) }
-        viewModel.searchHistoryLiveData().observe(this) { trackHistory ->
+            .observe(owner) { searchResult -> renderSearchResult(searchResult) }
+        viewModel.searchHistoryLiveData().observe(owner) { trackHistory ->
             when (trackHistory) {
                 is TrackSearchHistory.Empty -> {
                     trackHistoryAdapter.setItems(listOf())
@@ -98,11 +112,6 @@ class SearchActivity : AppCompatActivity() {
                     trackHistoryAdapter.setItems(trackHistory.results)
                 }
             }
-        }
-
-        // переход на главный экран
-        binding.toolbar.setNavigationOnClickListener {
-            finish()
         }
 
         // восстановленное значение глобальной переменной выводим в inputEditText
@@ -143,13 +152,12 @@ class SearchActivity : AppCompatActivity() {
         binding.clearIcon.setOnClickListener {
             binding.inputEditText.setText("")
             viewModel.clearSearchResults()
-            val view: View? = this.currentFocus
+            val view: View? = requireActivity().currentFocus
 
             if (view != null) {
                 val inputMethodManager =
-                    getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-
-                inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0)
+                    requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
             }
             binding.inputEditText.clearFocus()
         }
@@ -177,12 +185,12 @@ class SearchActivity : AppCompatActivity() {
     // перейти на экран аудиоплеера
     private fun openAudioPlayer(track: Track) {
         if (clickDebounce()) {
-            val displayIntent = Intent(this, AudioPlayerActivity::class.java)
-            displayIntent.putExtra("trackId", track.trackId)
-            startActivity(displayIntent)
+            findNavController().navigate(
+                R.id.action_searchFragment_to_audioPlayerActivity,
+                AudioPlayerActivity.createArgs(track.trackId)
+            )
         }
     }
-
 
     private fun enterSearch() {
         viewModel.searchTracks(binding.inputEditText.text.toString())
