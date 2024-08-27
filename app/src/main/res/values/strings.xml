@@ -37,4 +37,9 @@
     <string name="new_playlist_button_str">Новый плейлист</string>
     <string name="favourites_tab_title">Избранные треки</string>
     <string name="playlists_tab_title">Плейлисты</string>
+
+    // bottom menu labels
+    <string name="menu_search_label">Поиск</string>
+    <string name="menu_media_label">Медиатека</string>
+    <string name="menu_settings_label">Настройки</string>
 </resources>

@@ -3,12 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/SearchScreenBgStyle"
-    tools:context=".ui.search.activity.SearchActivity">
+    tools:context=".ui.search.activity.SearchFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         style="@style/SimpleToolbar"
-        app:navigationIcon="@drawable/back"
         app:title="@string/search_str" />
 
     <FrameLayout
@@ -46,13 +45,14 @@
         style="@style/ProgressBarStyle"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/progress_bar_margin_top"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/historyMessage"
         style="@style/PlaceholderMessageStyle"
         android:text="@string/history_message"
         android:visibility="gone" />
+
     <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/historyScrollView"
         android:layout_width="match_parent"
@@ -64,20 +64,20 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/historyRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:itemCount="10" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/historyRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="10" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/clearHistoryBtn"
-            style="@style/SimpleButtonStyle"
-            android:layout_gravity="center"
-            android:text="@string/clear_history_button"
-            app:cornerRadius="@dimen/buttons_radius" />
-    </LinearLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/clearHistoryBtn"
+                style="@style/SimpleButtonStyle"
+                android:layout_gravity="center"
+                android:text="@string/clear_history_button"
+                app:cornerRadius="@dimen/buttons_radius" />
+        </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
     <FrameLayout
@@ -107,8 +107,8 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/updateBtn"
         style="@style/SimpleButtonStyle"
-        android:text="@string/update_button_str"
         android:layout_gravity="center"
+        android:text="@string/update_button_str"
         android:visibility="gone"
         app:cornerRadius="@dimen/buttons_radius" />
 

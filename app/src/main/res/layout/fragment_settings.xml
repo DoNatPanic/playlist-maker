@@ -3,12 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/SettingsScreenBgStyle"
-    tools:context=".ui.settings.activity.SettingsActivity">
+    tools:context=".ui.settings.activity.SettingsFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         style="@style/SimpleToolbar"
-        app:navigationIcon="@drawable/back"
         app:title="@string/settings_str" />
 
     <!-- List -->
