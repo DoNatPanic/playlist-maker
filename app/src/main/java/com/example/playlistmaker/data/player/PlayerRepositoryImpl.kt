@@ -17,22 +17,22 @@ class PlayerRepositoryImpl(
         player.setDataSource(source)
         player.prepareAsync()
         player.setOnPreparedListener {
-            listener.onChange(PlayerState.PREPARED)
+            listener.onChange(PlayerState.Prepared())
         }
     }
 
     override fun play() {
         player.start()
-        listener.onChange(PlayerState.PLAYING)
-
+        listener.onChange(PlayerState.Playing())
     }
 
     override fun pause() {
         player.pause()
-        listener.onChange(PlayerState.PAUSED)
+        listener.onChange(PlayerState.Paused())
     }
 
     override fun destroy() {
+        player.stop()
         player.release()
     }
 }

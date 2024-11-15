@@ -1,10 +1,9 @@
 package com.example.playlistmaker.ui.audioplayer.view_model
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.player.api.PlayerInteractor
 import com.example.playlistmaker.domain.player.entity.PlayerState
 import com.example.playlistmaker.domain.search.consumer.Consumer
@@ -12,6 +11,13 @@ import com.example.playlistmaker.domain.search.consumer.ConsumerData
 import com.example.playlistmaker.domain.search.entity.Track
 import com.example.playlistmaker.domain.search.entity.TracksResponse
 import com.example.playlistmaker.domain.search.use_case.GetTrackDetailsUseCase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 
 class PlayerViewModel(
@@ -20,15 +26,17 @@ class PlayerViewModel(
 
     ) : ViewModel(), KoinComponent {
 
-    private var mainThreadHandler: Handler? = null
+    private var timerJob: Job? = null
 
-    private val playerState = MutableLiveData(PlayerState.DEFAULT)
-    fun playerStateLiveData(): LiveData<PlayerState> = playerState
+    private var isPlaying: Boolean = false
+
+    private val playerState = MutableLiveData<PlayerState>(PlayerState.Default())
+    fun observePlayerState(): LiveData<PlayerState> = playerState
 
     private val trackState: MutableLiveData<Track?> = MutableLiveData()
     fun trackLiveData(): LiveData<Track?> = trackState
 
-    private val elapsedTimeState = MutableLiveData(0L)
+    private val elapsedTimeState = MutableLiveData<Long>(0L)
     fun elapsedTimeLiveData(): LiveData<Long> = elapsedTimeState
 
     init {
@@ -59,64 +67,66 @@ class PlayerViewModel(
                 }
             }
         )
+    }
 
-        // Создаём Handler, привязанный к ГЛАВНОМУ потоку
-        mainThreadHandler = Handler(Looper.getMainLooper())
+    fun onPlayButtonClicked() {
+        when (playerState.value) {
+            is PlayerState.Playing -> {
+                pausePlayer()
+            }
+
+            is PlayerState.Prepared, is PlayerState.Paused -> {
+                startPlayer()
+            }
+
+            else -> {}
+        }
+    }
+
+    fun startPlayer() {
+        tracksInteractor.play()
+        isPlaying = true
+        playerState.postValue(PlayerState.Playing())
+        startTimer() // запускаем таймер
+    }
+
+    fun pausePlayer() {
+        tracksInteractor.pause()
+        isPlaying = false
+        timerJob?.cancel()
+        playerState.postValue(PlayerState.Paused())
+    }
+
+    private fun releasePlayer() {
+        tracksInteractor.destroy()
+        isPlaying = false
+        playerState.value = PlayerState.Default()
     }
 
     private fun startTimer() {
-        // Запоминаем время начала таймера
-        val startTime = System.currentTimeMillis()
-
-        // И отправляем задачу в Handler
-        // Число секунд переводим в миллисекунды
-        mainThreadHandler?.post(
-            createUpdateTimerTask(startTime, PREVIEW_TIME, elapsedTimeState.value!!)
-        )
-    }
-
-    private fun createUpdateTimerTask(startTime: Long, duration: Long, elTime: Long): Runnable {
-        return object : Runnable {
-            override fun run() {
-                // Сколько прошло времени с момента запуска таймера
-                var elapsedTime = System.currentTimeMillis() - startTime + elTime
-
-                if (elapsedTime <= duration) {
-                    if (playerState.value == PlayerState.PLAYING) {
-                        // Если всё ещё отсчитываем секунды —
-                        // обновляем UI и снова планируем задачу
-                        elapsedTimeState.postValue(elapsedTime)
-                        mainThreadHandler?.postDelayed(this, DELAY)
-                    }
-                } else {
-                    // Если таймер окончен, останавливаем воспроизведение
-                    tracksInteractor.pause()
-                    elapsedTime = 0L
-                    elapsedTimeState.postValue(elapsedTime)
+        timerJob = viewModelScope.launch {
+            timerFlow(elapsedTimeState.value!!)
+                .collect { value ->
+                    elapsedTimeState.postValue(value)
                 }
-            }
+            pausePlayer()
+            elapsedTimeState.postValue(0L)
         }
     }
 
-    fun play() {
-        if (playerState.value == PlayerState.PREPARED || playerState.value == PlayerState.PAUSED) {
-            tracksInteractor.play()
-            startTimer() // запускаем таймер
+    private fun timerFlow(elTime: Long): Flow<Long> = flow {
+        (elTime until PREVIEW_TIME step DELAY).forEach {
+            delay(DELAY)
+            emit(it)
         }
-    }
-
-    fun pause() {
-        if (playerState.value == PlayerState.PLAYING) {
-            tracksInteractor.pause()
-        }
-    }
+    }.flowOn(Dispatchers.IO)
 
     fun onDestroy() {
-        tracksInteractor.destroy()
+        releasePlayer()
     }
 
     companion object {
-        private const val DELAY = 1000L
+        private const val DELAY = 100L
         private const val PREVIEW_TIME = 30_000L
     }
 }

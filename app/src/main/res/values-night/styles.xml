@@ -199,17 +199,10 @@
     <style name="PlayImageButtonStyle">
         <item name="android:layout_width">@dimen/audio_player_large_button_size</item>
         <item name="android:layout_height">@dimen/audio_player_large_button_size</item>
-        <item name="android:background">@drawable/ellipse_1</item>
         <item name="android:elevation">@dimen/audio_player_button_elevation</item>
-        <item name="android:src">@drawable/play_night</item>
-    </style>
-
-    <style name="PauseImageButtonStyle">
-        <item name="android:layout_width">@dimen/audio_player_large_button_size</item>
-        <item name="android:layout_height">@dimen/audio_player_large_button_size</item>
-        <item name="android:background">@drawable/ellipse_1</item>
-        <item name="android:elevation">@dimen/audio_player_button_elevation</item>
-        <item name="android:src">@drawable/pause_night</item>
+        <item name="android:background">@drawable/play_pause_night</item>
+        <item name="android:textOn"></item>
+        <item name="android:textOff"></item>
     </style>
 
     <!--    AudioPlayer activity style    -->

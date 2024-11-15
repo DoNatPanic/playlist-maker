@@ -8,7 +8,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityAudioPlayerBinding
-import com.example.playlistmaker.domain.player.entity.PlayerState
 import com.example.playlistmaker.domain.search.entity.Track
 import com.example.playlistmaker.ui.audioplayer.view_model.PlayerViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -50,10 +49,6 @@ class AudioPlayerActivity : AppCompatActivity() {
             trackId = arguments.getLong(ARGS_FACT)
         }
 
-        viewModel.playerStateLiveData().observe(this) { state ->
-            renderState(state)
-        }
-
         viewModel.trackLiveData().observe(this) { track ->
             track?.let { render(track) }
         }
@@ -63,31 +58,12 @@ class AudioPlayerActivity : AppCompatActivity() {
             binding.time.text = String.format("%d:%02d", seconds / 60, seconds % 60)
         }
 
-        binding.playButton.setOnClickListener { _ ->
-            onPlayerPlay()
+        binding.playButton.setOnClickListener {
+            viewModel.onPlayButtonClicked()
         }
 
-        binding.pauseButton.setOnClickListener { _ ->
-            onPlayerPause()
-        }
-    }
-
-    private fun renderState(state: PlayerState) {
-        when (state) {
-            PlayerState.PLAYING -> {
-                binding.playButton.visibility = View.GONE
-                binding.pauseButton.visibility = View.VISIBLE
-            }
-
-            PlayerState.PAUSED -> {
-                binding.playButton.visibility = View.VISIBLE
-                binding.pauseButton.visibility = View.GONE
-            }
-
-            else -> {
-                binding.playButton.visibility = View.VISIBLE
-                binding.pauseButton.visibility = View.GONE
-            }
+        viewModel.observePlayerState().observe(this) {
+            binding.playButton.isChecked = it.isPlayButtonChecked
         }
     }
 
@@ -126,17 +102,13 @@ class AudioPlayerActivity : AppCompatActivity() {
             .into(binding.trackImage)
     }
 
-    private fun onPlayerPlay() {
-        viewModel.play()
-    }
-
     private fun onPlayerPause() {
-        viewModel.pause()
+        viewModel.pausePlayer()
     }
 
     override fun onPause() {
         super.onPause()
-        viewModel.pause()
+        viewModel.pausePlayer()
     }
 
     override fun onDestroy() {
