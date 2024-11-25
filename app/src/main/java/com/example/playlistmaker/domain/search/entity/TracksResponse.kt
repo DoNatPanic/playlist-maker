@@ -11,7 +11,7 @@ sealed interface SearchResult {
         val results: List<Track>
     ) : SearchResult
 
-    data object Error: SearchResult
+    data object Error : SearchResult
 }
 
 

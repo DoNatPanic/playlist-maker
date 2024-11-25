@@ -2,27 +2,27 @@ package com.example.playlistmaker.domain.search.use_case
 
 import com.example.playlistmaker.domain.search.api.ApiResponse
 import com.example.playlistmaker.domain.search.api.TracksRepository
-import com.example.playlistmaker.domain.search.consumer.Consumer
-import com.example.playlistmaker.domain.search.consumer.ConsumerData
 import com.example.playlistmaker.domain.search.entity.TracksResponse
-import java.util.concurrent.Executors
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
 
 class GetTrackDetailsUseCase(
     private val tracksRepository: TracksRepository
 ) {
-    private val executor = Executors.newCachedThreadPool()
-    fun execute(
-        trackId: Long?,
-        consumer: Consumer<TracksResponse>
-    ) {
-        executor.execute {
-            val track = trackId?.let { tracksRepository.getTrackById(trackId) }
+    fun execute(trackId: Long?): Flow<TracksResponse?> {
 
+        return tracksRepository.getTrackById(trackId!!).map { track ->
             when (track) {
-                null -> consumer.consume(ConsumerData.Error())
-                is ApiResponse.Error -> consumer.consume(ConsumerData.Error())
-                is ApiResponse.Success -> consumer.consume(ConsumerData.Data(track.data))
+                is ApiResponse.Success -> {
+                    track.data
+                }
+
+                is ApiResponse.Error -> {
+                    null
+                }
             }
-        }
+
+        }.catch { null }
     }
 }

@@ -6,10 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.player.api.PlayerInteractor
 import com.example.playlistmaker.domain.player.entity.PlayerState
-import com.example.playlistmaker.domain.search.consumer.Consumer
-import com.example.playlistmaker.domain.search.consumer.ConsumerData
 import com.example.playlistmaker.domain.search.entity.Track
-import com.example.playlistmaker.domain.search.entity.TracksResponse
 import com.example.playlistmaker.domain.search.use_case.GetTrackDetailsUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -41,32 +38,29 @@ class PlayerViewModel(
 
     init {
         val getTrackDetailsUseCase: GetTrackDetailsUseCase = getKoin().get()
-        getTrackDetailsUseCase.execute(trackId,
-            consumer = object : Consumer<TracksResponse> {
-                override fun consume(data: ConsumerData<TracksResponse>) {
-                    when (data) {
-                        is ConsumerData.Data -> {
-                            if (data.value.resultCount == 1) {
-                                val track = data.value.results[0]
-                                trackState.postValue(track)
-                                tracksInteractor.prepare(
-                                    track.previewUrl,
-                                    object : PlayerInteractor.OnStateChangeListener {
-                                        override fun onChange(state: PlayerState) {
-                                            playerState.postValue(state)
-                                        }
-                                    })
-                            }
-                            // else do nothing
-                        }
 
-                        is ConsumerData.Error -> {
-                            // do nothing
+        viewModelScope.launch {
+            getTrackDetailsUseCase
+                .execute(trackId)
+                .collect { result ->
+                    if (result != null) {
+                        if (result.resultCount == 1) {
+                            val track = result.results[0]
+                            trackState.postValue(track)
+                            tracksInteractor.prepare(
+                                track.previewUrl,
+                                object : PlayerInteractor.OnStateChangeListener {
+                                    override fun onChange(state: PlayerState) {
+                                        playerState.postValue(state)
+                                    }
+                                })
                         }
+                        // else do nothing
+                    } else {
+                        // do nothing
                     }
                 }
-            }
-        )
+        }
     }
 
     fun onPlayButtonClicked() {
