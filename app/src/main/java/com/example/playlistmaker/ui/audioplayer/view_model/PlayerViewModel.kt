@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
+import org.koin.core.parameter.parametersOf
 
 class PlayerViewModel(
     trackId: Long,
@@ -37,11 +38,13 @@ class PlayerViewModel(
     fun elapsedTimeLiveData(): LiveData<Long> = elapsedTimeState
 
     init {
-        val getTrackDetailsUseCase: GetTrackDetailsUseCase = getKoin().get()
+        val getTrackDetailsUseCase: GetTrackDetailsUseCase = getKoin().get() {
+            parametersOf(trackId)
+        }
 
         viewModelScope.launch {
             getTrackDetailsUseCase
-                .execute(trackId)
+                .execute()
                 .collect { result ->
                     if (result != null) {
                         if (result.resultCount == 1) {
@@ -120,7 +123,7 @@ class PlayerViewModel(
     }
 
     companion object {
-        private const val DELAY = 100L
+        private const val DELAY = 300L
         private const val PREVIEW_TIME = 30_000L
     }
 }

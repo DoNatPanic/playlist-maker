@@ -1,12 +1,16 @@
-package com.example.playlistmaker.data.network
+package com.example.playlistmaker.data.search
 
+import com.example.playlistmaker.data.network.RetrofitClient
+import com.example.playlistmaker.data.search.converters.TrackConverter
 import com.example.playlistmaker.domain.search.api.ApiResponse
 import com.example.playlistmaker.domain.search.api.TracksRepository
 import com.example.playlistmaker.domain.search.entity.TracksResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class TracksRepositoryImpl : TracksRepository {
+class TracksRepositoryImpl(
+    private val trackConverter: TrackConverter,
+) : TracksRepository {
 
     override fun getTracks(query: String): Flow<ApiResponse<TracksResponse>> = flow {
 
@@ -16,7 +20,7 @@ class TracksRepositoryImpl : TracksRepository {
             }
 
             else -> {
-                emit(ApiResponse.Success(response))
+                emit(ApiResponse.Success(data = trackConverter.convert(response)))
 
             }
         }
@@ -29,7 +33,7 @@ class TracksRepositoryImpl : TracksRepository {
             }
 
             else -> {
-                emit(ApiResponse.Success(response))
+                emit(ApiResponse.Success(data = trackConverter.convert(response)))
 
             }
         }

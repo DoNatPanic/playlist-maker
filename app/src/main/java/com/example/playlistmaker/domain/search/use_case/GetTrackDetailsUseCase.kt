@@ -8,9 +8,10 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 
 class GetTrackDetailsUseCase(
+    private val trackId: Long?,
     private val tracksRepository: TracksRepository
 ) {
-    fun execute(trackId: Long?): Flow<TracksResponse?> {
+    fun execute(): Flow<TracksResponse?> {
 
         return tracksRepository.getTrackById(trackId!!).map { track ->
             when (track) {

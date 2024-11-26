@@ -1,6 +1,6 @@
 package com.example.playlistmaker.data.network
 
-import com.example.playlistmaker.domain.search.entity.TracksResponse
+import com.example.playlistmaker.data.search.dto.TracksResponseDto
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
@@ -19,7 +19,7 @@ object RetrofitClient {
         client.create(RetrofitApi::class.java)
     }
 
-    suspend fun doRequest(dto: String): TracksResponse? {
+    suspend fun doRequest(dto: String): TracksResponseDto? {
 
         return withContext(Dispatchers.IO) {
             try {
@@ -30,7 +30,7 @@ object RetrofitClient {
         }
     }
 
-    suspend fun doRequestById(dto: Long): TracksResponse? {
+    suspend fun doRequestById(dto: Long): TracksResponseDto? {
 
         return withContext(Dispatchers.IO) {
             try {
