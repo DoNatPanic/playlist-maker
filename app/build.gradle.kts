@@ -75,4 +75,8 @@ dependencies {
     // corutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
     // implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+
+    // parceler
+    implementation("org.parceler:parceler-api:1.1.12")
+    annotationProcessor("org.parceler:parceler:1.1.12")
 }

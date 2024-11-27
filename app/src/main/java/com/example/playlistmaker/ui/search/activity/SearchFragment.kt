@@ -194,7 +194,7 @@ class SearchFragment : Fragment() {
         if (clickDebounce()) {
             findNavController().navigate(
                 R.id.action_searchFragment_to_audioPlayerActivity,
-                AudioPlayerActivity.createArgs(track.trackId)
+                AudioPlayerActivity.createArgs(track)
             )
         }
     }

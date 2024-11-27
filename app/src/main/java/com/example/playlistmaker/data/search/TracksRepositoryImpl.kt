@@ -25,17 +25,4 @@ class TracksRepositoryImpl(
             }
         }
     }
-
-    override fun getTrackById(trackId: Long): Flow<ApiResponse<TracksResponse>> = flow {
-        when (val response = RetrofitClient.doRequestById(trackId)) {
-            null -> {
-                emit(ApiResponse.Error())
-            }
-
-            else -> {
-                emit(ApiResponse.Success(data = trackConverter.convert(response)))
-
-            }
-        }
-    }
 }

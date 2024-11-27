@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.player.api.PlayerInteractor
 import com.example.playlistmaker.domain.player.entity.PlayerState
 import com.example.playlistmaker.domain.search.entity.Track
-import com.example.playlistmaker.domain.search.use_case.GetTrackDetailsUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -16,10 +15,9 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
-import org.koin.core.parameter.parametersOf
 
 class PlayerViewModel(
-    trackId: Long,
+    track: Track,
     private val tracksInteractor: PlayerInteractor,
 
     ) : ViewModel(), KoinComponent {
@@ -31,39 +29,17 @@ class PlayerViewModel(
     private val playerState = MutableLiveData<PlayerState>(PlayerState.Default())
     fun observePlayerState(): LiveData<PlayerState> = playerState
 
-    private val trackState: MutableLiveData<Track?> = MutableLiveData()
-    fun trackLiveData(): LiveData<Track?> = trackState
-
     private val elapsedTimeState = MutableLiveData<Long>(0L)
     fun elapsedTimeLiveData(): LiveData<Long> = elapsedTimeState
 
     init {
-        val getTrackDetailsUseCase: GetTrackDetailsUseCase = getKoin().get() {
-            parametersOf(trackId)
-        }
-
-        viewModelScope.launch {
-            getTrackDetailsUseCase
-                .execute()
-                .collect { result ->
-                    if (result != null) {
-                        if (result.resultCount == 1) {
-                            val track = result.results[0]
-                            trackState.postValue(track)
-                            tracksInteractor.prepare(
-                                track.previewUrl,
-                                object : PlayerInteractor.OnStateChangeListener {
-                                    override fun onChange(state: PlayerState) {
-                                        playerState.postValue(state)
-                                    }
-                                })
-                        }
-                        // else do nothing
-                    } else {
-                        // do nothing
-                    }
+        tracksInteractor.prepare(
+            track.previewUrl!!,
+            object : PlayerInteractor.OnStateChangeListener {
+                override fun onChange(state: PlayerState) {
+                    playerState.postValue(state)
                 }
-        }
+            })
     }
 
     fun onPlayButtonClicked() {

@@ -29,15 +29,4 @@ object RetrofitClient {
             }
         }
     }
-
-    suspend fun doRequestById(dto: Long): TracksResponseDto? {
-
-        return withContext(Dispatchers.IO) {
-            try {
-                api.searchById(dto)
-            } catch (e: Throwable) {
-                null
-            }
-        }
-    }
 }
