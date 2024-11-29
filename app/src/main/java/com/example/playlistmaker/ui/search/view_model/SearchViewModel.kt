@@ -12,10 +12,10 @@ import com.example.playlistmaker.domain.search.use_case.GetTrackListUseCase
 import com.example.playlistmaker.presentation.utils.SingleEventLiveData
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
-import org.koin.core.parameter.parametersOf
 
 class SearchViewModel(
 //    application: Application,
+    private val getTrackListUseCase: GetTrackListUseCase,
     private val searchInteractor: SearchInteractor
 ) : ViewModel(), KoinComponent {
 
@@ -50,9 +50,6 @@ class SearchViewModel(
     }
 
     fun searchTracks(query: String) {
-        val getTrackListUseCase: GetTrackListUseCase = getKoin().get() {
-            parametersOf(query)
-        }
         if (query.isEmpty()) {
             return
         }
@@ -62,7 +59,7 @@ class SearchViewModel(
 
         viewModelScope.launch {
             getTrackListUseCase
-                .execute()
+                .execute(query)
                 .collect { result ->
                     if (result != null) {
                         if (result.resultCount == 0) {

@@ -7,11 +7,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class GetTrackListUseCase(
-    private val query: String,
     private val tracksRepository: TracksRepository
 ) {
 
-    fun execute(): Flow<TracksResponse?> {
+    fun execute(query: String): Flow<TracksResponse?> {
         return tracksRepository.getTracks(query).map { result ->
             when (result) {
                 is ApiResponse.Success -> {

@@ -77,6 +77,7 @@ class PlayerViewModel(
     }
 
     private fun startTimer() {
+        timerJob?.cancel()
         timerJob = viewModelScope.launch {
             timerFlow(elapsedTimeState.value!!)
                 .collect { value ->

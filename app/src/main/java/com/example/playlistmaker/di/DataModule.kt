@@ -24,7 +24,7 @@ val dataModule = module {
         TracksRepositoryImpl(get())
     }
 
-    factory<GetTrackListUseCase> { (query: String) ->
-        GetTrackListUseCase(query, get())
+    factory<GetTrackListUseCase> {
+        GetTrackListUseCase(get())
     }
 }
