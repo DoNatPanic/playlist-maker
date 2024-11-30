@@ -1,6 +1,7 @@
 package com.example.playlistmaker.ui.audioplayer.activity
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
@@ -8,7 +9,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityAudioPlayerBinding
-import com.example.playlistmaker.domain.player.entity.PlayerState
 import com.example.playlistmaker.domain.search.entity.Track
 import com.example.playlistmaker.ui.audioplayer.view_model.PlayerViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -19,16 +19,16 @@ import java.util.Locale
 class AudioPlayerActivity : AppCompatActivity() {
 
     companion object {
-        private const val ARGS_FACT = "trackId"
+        private const val ARGS_FACT = "track"
 
-        fun createArgs(trackId: Long): Bundle =
-            bundleOf(ARGS_FACT to trackId)
+        fun createArgs(track: Track): Bundle =
+            bundleOf(ARGS_FACT to track)
     }
 
-    private var trackId: Long = -1
+    private var track: Track? = null
 
     private val viewModel: PlayerViewModel by viewModel {
-        parametersOf(trackId)
+        parametersOf(track)
     }
     private lateinit var binding: ActivityAudioPlayerBinding
 
@@ -46,48 +46,23 @@ class AudioPlayerActivity : AppCompatActivity() {
 
         // получаем информацию о треке
         val arguments = intent.extras
+
         if (arguments != null) {
-            trackId = arguments.getLong(ARGS_FACT)
+            track = arguments.getParcelable<Parcelable>(ARGS_FACT) as Track?
         }
-
-        viewModel.playerStateLiveData().observe(this) { state ->
-            renderState(state)
-        }
-
-        viewModel.trackLiveData().observe(this) { track ->
-            track?.let { render(track) }
-        }
+        track?.let { render(track as Track) }
 
         viewModel.elapsedTimeLiveData().observe(this) { elapsedTime ->
             val seconds = elapsedTime / 1000L  // ms -> s
             binding.time.text = String.format("%d:%02d", seconds / 60, seconds % 60)
         }
 
-        binding.playButton.setOnClickListener { _ ->
-            onPlayerPlay()
+        binding.playButton.setOnClickListener {
+            viewModel.onPlayButtonClicked()
         }
 
-        binding.pauseButton.setOnClickListener { _ ->
-            onPlayerPause()
-        }
-    }
-
-    private fun renderState(state: PlayerState) {
-        when (state) {
-            PlayerState.PLAYING -> {
-                binding.playButton.visibility = View.GONE
-                binding.pauseButton.visibility = View.VISIBLE
-            }
-
-            PlayerState.PAUSED -> {
-                binding.playButton.visibility = View.VISIBLE
-                binding.pauseButton.visibility = View.GONE
-            }
-
-            else -> {
-                binding.playButton.visibility = View.VISIBLE
-                binding.pauseButton.visibility = View.GONE
-            }
+        viewModel.observePlayerState().observe(this) {
+            binding.playButton.isChecked = it.isPlayButtonChecked
         }
     }
 
@@ -113,7 +88,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         binding.genre.text = track.primaryGenreName
         binding.country.text = track.country
 
-        fun getCoverArtwork() = track.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
+        fun getCoverArtwork() = track.artworkUrl100?.replaceAfterLast('/', "512x512bb.jpg")
 
         val radius = resources.getDimensionPixelSize(R.dimen.album_large_image_radius)
 
@@ -126,17 +101,13 @@ class AudioPlayerActivity : AppCompatActivity() {
             .into(binding.trackImage)
     }
 
-    private fun onPlayerPlay() {
-        viewModel.play()
-    }
-
     private fun onPlayerPause() {
-        viewModel.pause()
+        viewModel.pausePlayer()
     }
 
     override fun onPause() {
         super.onPause()
-        viewModel.pause()
+        viewModel.pausePlayer()
     }
 
     override fun onDestroy() {

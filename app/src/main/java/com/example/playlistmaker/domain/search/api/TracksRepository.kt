@@ -1,8 +1,8 @@
 package com.example.playlistmaker.domain.search.api
 
 import com.example.playlistmaker.domain.search.entity.TracksResponse
+import kotlinx.coroutines.flow.Flow
 
 interface TracksRepository {
-    fun getTracks(query: String): ApiResponse<TracksResponse>
-    fun getTrackById(trackId: Long): ApiResponse<TracksResponse>
+    fun getTracks(query: String): Flow<ApiResponse<TracksResponse>>
 }

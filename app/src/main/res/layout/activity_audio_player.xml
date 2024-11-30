@@ -76,7 +76,7 @@
                 app:layout_constraintStart_toStartOf="@id/leftGuideline"
                 app:layout_constraintTop_toBottomOf="@id/artistName" />
 
-            <ImageButton
+            <ToggleButton
                 android:id="@+id/playButton"
                 style="@style/PlayImageButtonStyle"
                 app:layout_constraintBottom_toBottomOf="@+id/leftButton"
@@ -91,15 +91,6 @@
                 app:layout_constraintEnd_toEndOf="@id/rightGuideline"
                 app:layout_constraintStart_toEndOf="@+id/playButton"
                 app:layout_constraintTop_toTopOf="@+id/playButton" />
-
-            <ImageButton
-                android:id="@+id/pauseButton"
-                style="@style/PauseImageButtonStyle"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@+id/leftButton"
-                app:layout_constraintEnd_toStartOf="@+id/rightButton"
-                app:layout_constraintStart_toEndOf="@+id/leftButton"
-                app:layout_constraintTop_toTopOf="@+id/leftButton" />
 
             <TextView
                 android:id="@+id/time"

@@ -1,10 +1,10 @@
 package com.example.playlistmaker.di
 
-import com.example.playlistmaker.data.network.TracksRepositoryImpl
+import com.example.playlistmaker.data.search.TracksRepositoryImpl
+import com.example.playlistmaker.data.search.converters.TrackConverter
 import com.example.playlistmaker.data.shared_prefs.SharedPrefs
 import com.example.playlistmaker.data.shared_prefs.SharedPrefsImpl
 import com.example.playlistmaker.domain.search.api.TracksRepository
-import com.example.playlistmaker.domain.search.use_case.GetTrackDetailsUseCase
 import com.example.playlistmaker.domain.search.use_case.GetTrackListUseCase
 import com.google.gson.Gson
 import org.koin.android.ext.koin.androidContext
@@ -18,15 +18,13 @@ val dataModule = module {
 
     factory { Gson() }
 
+    factory { TrackConverter() }
+
     single<TracksRepository> {
-        TracksRepositoryImpl()
+        TracksRepositoryImpl(get())
     }
 
-    factory<GetTrackListUseCase> { (query: String) ->
-        GetTrackListUseCase(query, get())
-    }
-
-    factory<GetTrackDetailsUseCase> {
-        GetTrackDetailsUseCase(get())
+    factory<GetTrackListUseCase> {
+        GetTrackListUseCase(get())
     }
 }

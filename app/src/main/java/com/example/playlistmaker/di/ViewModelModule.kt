@@ -1,5 +1,6 @@
 package com.example.playlistmaker.di
 
+import com.example.playlistmaker.domain.search.entity.Track
 import com.example.playlistmaker.ui.audioplayer.view_model.PlayerViewModel
 import com.example.playlistmaker.ui.media.view_model.FavouritesViewModel
 import com.example.playlistmaker.ui.media.view_model.PlaylistsViewModel
@@ -10,12 +11,12 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
 
-    viewModel { (trackId: Long) ->
-        PlayerViewModel(trackId, get())
+    viewModel { (track: Track) ->
+        PlayerViewModel(track, get())
     }
 
     viewModel {
-        SearchViewModel(get())
+        SearchViewModel(get(), get())
     }
 
     viewModel {

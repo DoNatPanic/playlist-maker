@@ -2,8 +2,6 @@ package com.example.playlistmaker.ui.search.activity
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -12,6 +10,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
@@ -21,6 +20,9 @@ import com.example.playlistmaker.domain.search.entity.Track
 import com.example.playlistmaker.domain.search.entity.TrackSearchHistory
 import com.example.playlistmaker.ui.audioplayer.activity.AudioPlayerActivity
 import com.example.playlistmaker.ui.search.view_model.SearchViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -47,24 +49,29 @@ class SearchFragment : Fragment() {
         outState.putString(INPUT_TEXT, TEXT_VALUE)
     }
 
-    private var isClickAllowed = true
+    private val searchRunnable = Runnable { enterSearch() }
 
-    private val handler = Handler(Looper.getMainLooper())
+    private var isClickAllowed = true
 
     private fun clickDebounce(): Boolean {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+            viewLifecycleOwner.lifecycleScope.launch {
+                delay(CLICK_DEBOUNCE_DELAY)
+                isClickAllowed = true
+            }
         }
         return current
     }
 
-    private val searchRunnable = Runnable { enterSearch() }
-
+    private var searchJob: Job? = null
     private fun searchDebounce() {
-        handler.removeCallbacks(searchRunnable)
-        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+        searchJob?.cancel()
+        searchJob = viewLifecycleOwner.lifecycleScope.launch {
+            delay(SEARCH_DEBOUNCE_DELAY)
+            enterSearch()
+        }
     }
 
     override fun onCreateView(
@@ -187,7 +194,7 @@ class SearchFragment : Fragment() {
         if (clickDebounce()) {
             findNavController().navigate(
                 R.id.action_searchFragment_to_audioPlayerActivity,
-                AudioPlayerActivity.createArgs(track.trackId)
+                AudioPlayerActivity.createArgs(track)
             )
         }
     }

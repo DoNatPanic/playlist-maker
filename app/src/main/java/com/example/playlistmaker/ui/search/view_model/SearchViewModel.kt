@@ -3,20 +3,19 @@ package com.example.playlistmaker.ui.search.view_model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.search.api.SearchInteractor
-import com.example.playlistmaker.domain.search.consumer.Consumer
-import com.example.playlistmaker.domain.search.consumer.ConsumerData
 import com.example.playlistmaker.domain.search.entity.SearchResult
 import com.example.playlistmaker.domain.search.entity.Track
 import com.example.playlistmaker.domain.search.entity.TrackSearchHistory
-import com.example.playlistmaker.domain.search.entity.TracksResponse
 import com.example.playlistmaker.domain.search.use_case.GetTrackListUseCase
 import com.example.playlistmaker.presentation.utils.SingleEventLiveData
+import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
-import org.koin.core.parameter.parametersOf
 
 class SearchViewModel(
 //    application: Application,
+    private val getTrackListUseCase: GetTrackListUseCase,
     private val searchInteractor: SearchInteractor
 ) : ViewModel(), KoinComponent {
 
@@ -51,9 +50,6 @@ class SearchViewModel(
     }
 
     fun searchTracks(query: String) {
-        val getTrackListUseCase: GetTrackListUseCase = getKoin().get() {
-            parametersOf(query)
-        }
         if (query.isEmpty()) {
             return
         }
@@ -61,32 +57,28 @@ class SearchViewModel(
         var searchResult: SearchResult = SearchResult.Loading
         searchResultData.postValue(searchResult)
 
-        getTrackListUseCase.execute(
-            consumer = object : Consumer<TracksResponse> {
-                override fun consume(data: ConsumerData<TracksResponse>) {
-                    when (data) {
-                        is ConsumerData.Error -> {
+        viewModelScope.launch {
+            getTrackListUseCase
+                .execute(query)
+                .collect { result ->
+                    if (result != null) {
+                        if (result.resultCount == 0) {
+                            searchResult = SearchResult.NotFound
+                        } else {
                             searchResult =
-                                SearchResult.Error
-                        }
+                                SearchResult.Content(
+                                    result.resultCount,
+                                    result.results
+                                )
 
-                        is ConsumerData.Data -> {
-                            val result = data.value
-                            if (result.resultCount == 0) {
-                                searchResult = SearchResult.NotFound
-                            } else {
-                                searchResult =
-                                    SearchResult.Content(
-                                        data.value.resultCount,
-                                        data.value.results
-                                    )
-                            }
                         }
+                    } else {
+                        searchResult =
+                            SearchResult.Error
                     }
                     searchResultData.postValue(searchResult)
                 }
-            }
-        )
+        }
     }
 
     fun onClearHistory() {
