@@ -1,12 +1,12 @@
 package com.example.playlistmaker.domain.player.entity
 
-sealed class PlayerState(val isPlayButtonChecked: Boolean) {
+sealed class PlayerState(val isPlayButtonChecked: Boolean, val progress: String) {
 
-    class Default : PlayerState(false )
+    class Default : PlayerState(false, "00:00")
 
-    class Prepared : PlayerState(false)
+    class Prepared : PlayerState(false, "00:00")
 
-    class Playing : PlayerState(true)
+    class Playing(progress: String) : PlayerState(true, progress)
 
-    class Paused : PlayerState(false)
+    class Paused(progress: String) : PlayerState(false, progress)
 }

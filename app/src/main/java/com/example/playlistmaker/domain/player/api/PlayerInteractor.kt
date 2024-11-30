@@ -10,4 +10,6 @@ interface PlayerInteractor {
     interface OnStateChangeListener {
         fun onChange(state: PlayerState)
     }
+
+    fun currentPosition(): Int
 }

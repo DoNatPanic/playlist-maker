@@ -5,4 +5,5 @@ interface PlayerRepository {
     fun play()
     fun pause()
     fun destroy()
+    fun currentPosition(): Int
 }

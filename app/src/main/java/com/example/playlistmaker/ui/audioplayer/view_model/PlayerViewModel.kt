@@ -15,6 +15,8 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class PlayerViewModel(
     track: Track,
@@ -59,7 +61,7 @@ class PlayerViewModel(
     fun startPlayer() {
         tracksInteractor.play()
         isPlaying = true
-        playerState.postValue(PlayerState.Playing())
+        playerState.postValue(PlayerState.Playing(getCurrentPlayerPosition()))
         startTimer() // запускаем таймер
     }
 
@@ -67,7 +69,7 @@ class PlayerViewModel(
         tracksInteractor.pause()
         isPlaying = false
         timerJob?.cancel()
-        playerState.postValue(PlayerState.Paused())
+        playerState.postValue(PlayerState.Paused(getCurrentPlayerPosition()))
     }
 
     private fun releasePlayer() {
@@ -79,7 +81,7 @@ class PlayerViewModel(
     private fun startTimer() {
         timerJob?.cancel()
         timerJob = viewModelScope.launch {
-            timerFlow(elapsedTimeState.value!!)
+            timerFlow()
                 .collect { value ->
                     elapsedTimeState.postValue(value)
                 }
@@ -88,12 +90,19 @@ class PlayerViewModel(
         }
     }
 
-    private fun timerFlow(elTime: Long): Flow<Long> = flow {
-        (elTime until PREVIEW_TIME step DELAY).forEach {
+    private fun timerFlow(): Flow<Long> = flow {
+        while (tracksInteractor.currentPosition() < PREVIEW_TIME) {
             delay(DELAY)
-            emit(it)
+            emit(tracksInteractor.currentPosition().toLong())
         }
-    }.flowOn(Dispatchers.IO)
+    }.flowOn(Dispatchers.Default)
+
+    private fun getCurrentPlayerPosition(): String {
+        return SimpleDateFormat(
+            "mm:ss",
+            Locale.getDefault()
+        ).format(tracksInteractor.currentPosition()) ?: "00:00"
+    }
 
     fun onDestroy() {
         releasePlayer()

@@ -10,6 +10,10 @@ class PlayerInteractorImpl(
         playerRepository.prepare(source, listener)
     }
 
+    override fun currentPosition(): Int {
+        return playerRepository.currentPosition()
+    }
+
     override fun play() {
         playerRepository.play()
     }
