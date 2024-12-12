@@ -61,12 +61,22 @@ class AudioPlayerActivity : AppCompatActivity() {
             viewModel.onPlayButtonClicked()
         }
 
+        binding.isFavouriteButton.setOnClickListener {
+            viewModel.onFavoriteClicked()
+        }
+
         viewModel.observePlayerState().observe(this) {
             binding.playButton.isChecked = it.isPlayButtonChecked
+        }
+
+        viewModel.isFavouriteLiveData().observe(this) { isFavourite ->
+            binding.isFavouriteButton.isChecked = isFavourite
         }
     }
 
     private fun render(track: Track) {
+        binding.isFavouriteButton.isChecked = track.isFavorite
+
         binding.trackName.text = track.trackName
         binding.artistName.text = track.artistName
 

@@ -1,11 +1,17 @@
 package com.example.playlistmaker.di
 
 import android.media.MediaPlayer
+import com.example.playlistmaker.data.db.FavouriteRepositoryImpl
+import com.example.playlistmaker.data.db.converters.FavouriteDbConverter
 import com.example.playlistmaker.data.player.PlayerRepositoryImpl
 import com.example.playlistmaker.data.search.SearchRepositoryImpl
 import com.example.playlistmaker.data.settings.SettingsRepositoryImpl
 import com.example.playlistmaker.data.sharing.ContactProviderImpl
 import com.example.playlistmaker.data.sharing.ExternalNavigatorImpl
+import com.example.playlistmaker.domain.db.api.FavouriteInteractor
+import com.example.playlistmaker.domain.db.api.FavouriteRepository
+import com.example.playlistmaker.domain.db.impl.FavouriteInteractorImpl
+import com.example.playlistmaker.domain.db.use_case.FavouriteEntitiesUseCase
 import com.example.playlistmaker.domain.player.api.PlayerInteractor
 import com.example.playlistmaker.domain.player.api.PlayerRepository
 import com.example.playlistmaker.domain.player.impl.PlayerInteractorImpl
@@ -67,5 +73,20 @@ val interactorModule = module {
     // contact
     factory<ContactProvider> {
         ContactProviderImpl(androidContext())
+    }
+
+    // data
+    factory { FavouriteDbConverter() }
+
+    single<FavouriteRepository> {
+        FavouriteRepositoryImpl(get(), get(), get())
+    }
+
+    factory<FavouriteInteractor> {
+        FavouriteInteractorImpl(get())
+    }
+
+    factory<FavouriteEntitiesUseCase> {
+        FavouriteEntitiesUseCase(get())
     }
 }
