@@ -1,5 +1,7 @@
 package com.example.playlistmaker.di
 
+import androidx.room.Room
+import com.example.playlistmaker.data.db.AppDatabase
 import com.example.playlistmaker.data.search.TracksRepositoryImpl
 import com.example.playlistmaker.data.search.converters.TrackConverter
 import com.example.playlistmaker.data.shared_prefs.SharedPrefs
@@ -21,10 +23,16 @@ val dataModule = module {
     factory { TrackConverter() }
 
     single<TracksRepository> {
-        TracksRepositoryImpl(get())
+        TracksRepositoryImpl(get(), get())
     }
 
     factory<GetTrackListUseCase> {
         GetTrackListUseCase(get())
+    }
+
+    single {
+        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
+            .fallbackToDestructiveMigration()
+            .build()
     }
 }

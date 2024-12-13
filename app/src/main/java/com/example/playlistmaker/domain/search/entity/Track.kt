@@ -14,7 +14,8 @@ data class Track(
     val releaseDate: String?, // Год релиза трека
     val primaryGenreName: String?, // Жанр трека
     val country: String?,  // Страна исполнителя
-    val previewUrl: String? // Ссылка на отрывок трека
+    val previewUrl: String?, // Ссылка на отрывок трека
+    var isFavorite: Boolean
 ) : Parcelable {
     constructor(parcel: android.os.Parcel) : this(
         parcel.readLong(),
@@ -26,9 +27,9 @@ data class Track(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
-        parcel.readString()
-    ) {
-    }
+        parcel.readString(),
+        parcel.readBoolean()
+    )
 
     override fun writeToParcel(parcel: android.os.Parcel, flags: Int) {
         parcel.writeLong(trackId)
@@ -41,6 +42,7 @@ data class Track(
         parcel.writeString(primaryGenreName)
         parcel.writeString(country)
         parcel.writeString(previewUrl)
+        parcel.writeBoolean(isFavorite)
     }
 
     override fun describeContents(): Int {

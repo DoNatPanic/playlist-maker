@@ -1,6 +1,9 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+
+    // добавили, чтобы работал kotlin-kapt
+    id("kotlin-kapt")
 }
 
 android {
@@ -68,9 +71,9 @@ dependencies {
     implementation("com.google.android.material:material:1.8.0") // tab layout
 
     // jetpack nav component
-    implementation ("androidx.navigation:navigation-fragment-ktx:2.5.3")
-    implementation ("androidx.navigation:navigation-ui-ktx:2.5.3")
-    implementation ("androidx.fragment:fragment-ktx:1.5.6")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.5.3")
+    implementation("androidx.navigation:navigation-ui-ktx:2.5.3")
+    implementation("androidx.fragment:fragment-ktx:1.5.6")
 
     // corutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
@@ -79,4 +82,10 @@ dependencies {
     // parceler
     implementation("org.parceler:parceler-api:1.1.12")
     annotationProcessor("org.parceler:parceler:1.1.12")
+
+    // db
+    var room_version = "2.5.1" // текущая стабильная версия
+    implementation("androidx.room:room-runtime:$room_version") // библиотека Room
+    kapt("androidx.room:room-compiler:$room_version") // Kotlin-кодогенератор
+    implementation("androidx.room:room-ktx:$room_version") // поддержка корутин
 }

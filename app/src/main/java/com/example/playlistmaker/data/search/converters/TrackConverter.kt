@@ -27,7 +27,24 @@ class TrackConverter {
             releaseDate = this.releaseDate,
             primaryGenreName = this.primaryGenreName,
             country = this.country,
-            previewUrl = this.previewUrl
+            previewUrl = this.previewUrl,
+            isFavorite = this.isFavorite
+        )
+    }
+
+    fun map(track: Track): TrackDto {
+        return TrackDto(
+            track.trackId,
+            track.trackName,
+            track.artistName,
+            track.trackTime,
+            track.artworkUrl100,
+            track.collectionName,
+            track.releaseDate,
+            track.primaryGenreName,
+            track.country,
+            track.previewUrl,
+            track.isFavorite
         )
     }
 }

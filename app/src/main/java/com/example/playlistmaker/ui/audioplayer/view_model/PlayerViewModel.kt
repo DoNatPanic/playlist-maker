@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.domain.db.use_case.FavouriteEntitiesUseCase
 import com.example.playlistmaker.domain.player.api.PlayerInteractor
 import com.example.playlistmaker.domain.player.entity.PlayerState
 import com.example.playlistmaker.domain.search.entity.Track
@@ -11,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
@@ -19,10 +21,10 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class PlayerViewModel(
-    track: Track,
+    val track: Track,
     private val tracksInteractor: PlayerInteractor,
-
-    ) : ViewModel(), KoinComponent {
+    private val favouriteEntitiesUseCase: FavouriteEntitiesUseCase
+) : ViewModel(), KoinComponent {
 
     private var timerJob: Job? = null
 
@@ -34,6 +36,9 @@ class PlayerViewModel(
     private val elapsedTimeState = MutableLiveData<Long>(0L)
     fun elapsedTimeLiveData(): LiveData<Long> = elapsedTimeState
 
+    private val isFavourite = MutableLiveData<Boolean>()
+    fun isFavouriteLiveData(): LiveData<Boolean> = isFavourite
+
     init {
         tracksInteractor.prepare(
             track.previewUrl!!,
@@ -42,6 +47,14 @@ class PlayerViewModel(
                     playerState.postValue(state)
                 }
             })
+    }
+
+    fun onFavoriteClicked() {
+        track.isFavorite = !track.isFavorite
+        viewModelScope.launch {
+            favouriteEntitiesUseCase.executeUpdate(track).collect()
+        }
+        isFavourite.postValue(track.isFavorite)
     }
 
     fun onPlayButtonClicked() {
@@ -110,6 +123,6 @@ class PlayerViewModel(
 
     companion object {
         private const val DELAY = 300L
-        private const val PREVIEW_TIME = 30_000L
+        private const val PREVIEW_TIME = 29_900L
     }
 }

@@ -80,12 +80,12 @@
                 android:id="@+id/playButton"
                 style="@style/PlayImageButtonStyle"
                 app:layout_constraintBottom_toBottomOf="@+id/leftButton"
-                app:layout_constraintEnd_toStartOf="@+id/rightButton"
+                app:layout_constraintEnd_toStartOf="@+id/isFavouriteButton"
                 app:layout_constraintStart_toEndOf="@+id/leftButton"
                 app:layout_constraintTop_toTopOf="@+id/leftButton" />
 
-            <ImageButton
-                android:id="@+id/rightButton"
+            <ToggleButton
+                android:id="@+id/isFavouriteButton"
                 style="@style/EmptyLikeImageButtonStyle"
                 app:layout_constraintBottom_toBottomOf="@+id/playButton"
                 app:layout_constraintEnd_toEndOf="@id/rightGuideline"

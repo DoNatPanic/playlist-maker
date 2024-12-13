@@ -98,6 +98,11 @@
         <item name="android:background">@drawable/card</item>
         <item name="fontFamily">@font/ys_display_regular</item>
         <item name="android:textSize">16sp</item>
+        <item name="android:drawableStart">@drawable/et_search</item>
+    </style>
+
+    <style name="ClearImageStyle">
+        <item name="android:src">@drawable/clear</item>
     </style>
 
     <style name="TrackNameTextStyle">
@@ -220,9 +225,10 @@
     <style name="EmptyLikeImageButtonStyle">
         <item name="android:layout_width">@dimen/audio_player_small_button_size</item>
         <item name="android:layout_height">@dimen/audio_player_small_button_size</item>
-        <item name="android:background">@drawable/ellipse_1</item>
         <item name="android:elevation">@dimen/audio_player_button_elevation</item>
-        <item name="android:src">@drawable/empty_like</item>
+        <item name="android:background">@drawable/like_unlike</item>
+        <item name="android:textOn"></item>
+        <item name="android:textOff"></item>
     </style>
 
     <style name="PlayImageButtonStyle">
@@ -234,7 +240,12 @@
         <item name="android:textOff"></item>
     </style>
 
-    <!--    AudioPlayer activity style    -->
+    <!--    Favourites fragment style    -->
+    <style name="FavouritesFragmentBgStyle">
+        <item name="android:background">@color/white</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
     <style name="MediaLibraryTextStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
