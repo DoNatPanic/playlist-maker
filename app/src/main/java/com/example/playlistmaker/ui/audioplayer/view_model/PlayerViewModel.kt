@@ -123,6 +123,6 @@ class PlayerViewModel(
 
     companion object {
         private const val DELAY = 300L
-        private const val PREVIEW_TIME = 30_000L
+        private const val PREVIEW_TIME = 29_900L
     }
 }
