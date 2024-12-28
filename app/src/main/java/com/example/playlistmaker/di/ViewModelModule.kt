@@ -2,6 +2,7 @@ package com.example.playlistmaker.di
 
 import com.example.playlistmaker.domain.search.entity.Track
 import com.example.playlistmaker.ui.audioplayer.view_model.PlayerViewModel
+import com.example.playlistmaker.ui.media.view_model.CreatePlaylistViewModel
 import com.example.playlistmaker.ui.media.view_model.FavouritesViewModel
 import com.example.playlistmaker.ui.media.view_model.PlaylistsViewModel
 import com.example.playlistmaker.ui.search.view_model.SearchViewModel
@@ -29,5 +30,8 @@ val viewModelModule = module {
 
     viewModel {
         PlaylistsViewModel()
+    }
+    viewModel {
+        CreatePlaylistViewModel(get())
     }
 }

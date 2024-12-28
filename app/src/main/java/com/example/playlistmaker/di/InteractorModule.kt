@@ -2,7 +2,9 @@ package com.example.playlistmaker.di
 
 import android.media.MediaPlayer
 import com.example.playlistmaker.data.db.FavouriteRepositoryImpl
+import com.example.playlistmaker.data.db.PlaylistRepositoryImpl
 import com.example.playlistmaker.data.db.converters.FavouriteDbConverter
+import com.example.playlistmaker.data.db.converters.PlaylistDbConvertor
 import com.example.playlistmaker.data.player.PlayerRepositoryImpl
 import com.example.playlistmaker.data.search.SearchRepositoryImpl
 import com.example.playlistmaker.data.settings.SettingsRepositoryImpl
@@ -10,8 +12,12 @@ import com.example.playlistmaker.data.sharing.ContactProviderImpl
 import com.example.playlistmaker.data.sharing.ExternalNavigatorImpl
 import com.example.playlistmaker.domain.db.api.FavouriteInteractor
 import com.example.playlistmaker.domain.db.api.FavouriteRepository
+import com.example.playlistmaker.domain.db.api.PlaylistInteractor
+import com.example.playlistmaker.domain.db.api.PlaylistRepository
 import com.example.playlistmaker.domain.db.impl.FavouriteInteractorImpl
+import com.example.playlistmaker.domain.db.impl.PlaylistInteractorImpl
 import com.example.playlistmaker.domain.db.use_case.FavouriteEntitiesUseCase
+import com.example.playlistmaker.domain.db.use_case.PlaylistEntitiesUseCase
 import com.example.playlistmaker.domain.player.api.PlayerInteractor
 import com.example.playlistmaker.domain.player.api.PlayerRepository
 import com.example.playlistmaker.domain.player.impl.PlayerInteractorImpl
@@ -75,7 +81,7 @@ val interactorModule = module {
         ContactProviderImpl(androidContext())
     }
 
-    // data
+    // data favourites
     factory { FavouriteDbConverter() }
 
     single<FavouriteRepository> {
@@ -88,5 +94,20 @@ val interactorModule = module {
 
     factory<FavouriteEntitiesUseCase> {
         FavouriteEntitiesUseCase(get())
+    }
+
+    // data playlists
+    factory { PlaylistDbConvertor() }
+
+    single<PlaylistRepository> {
+        PlaylistRepositoryImpl(get(), get())
+    }
+
+    factory<PlaylistInteractor> {
+        PlaylistInteractorImpl(get())
+    }
+
+    factory<PlaylistEntitiesUseCase> {
+        PlaylistEntitiesUseCase(get())
     }
 }

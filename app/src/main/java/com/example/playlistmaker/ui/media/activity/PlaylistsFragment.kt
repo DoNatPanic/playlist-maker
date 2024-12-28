@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.example.playlistmaker.ui.media.view_model.PlaylistsViewModel
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
@@ -26,7 +28,17 @@ class PlaylistsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // TODO observe playlistsViewModel
+        binding.newPlaylistBtn.setOnClickListener {
+            openCreatePlaylistFragment()
+        }
+    }
+
+    // перейти на экран создания плейлиста
+    private fun openCreatePlaylistFragment() {
+        findNavController().navigate(
+            R.id.action_mediaFragment_to_createPlaylistFragment,
+
+            )
     }
 
     companion object {

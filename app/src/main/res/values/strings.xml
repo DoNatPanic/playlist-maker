@@ -37,6 +37,10 @@
     <string name="new_playlist_button_str">Новый плейлист</string>
     <string name="favourites_tab_title">Избранные треки</string>
     <string name="playlists_tab_title">Плейлисты</string>
+    <string name="create_playlist_str">Новый плейлист</string>
+    <string name="create_playlist_button_str">Создать</string>
+    <string name="new_playlist_name_hint">Название*</string>
+    <string name="new_playlist_info_hint">Описание</string>
 
     // bottom menu labels
     <string name="menu_search_label">Поиск</string>
