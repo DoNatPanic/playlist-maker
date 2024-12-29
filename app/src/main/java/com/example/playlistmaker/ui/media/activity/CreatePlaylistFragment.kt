@@ -16,6 +16,10 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentCreatePlaylistBinding
 import com.example.playlistmaker.domain.media.entity.Playlist
 import com.example.playlistmaker.presentation.utils.OnSwipeTouchListener
@@ -83,7 +87,15 @@ class CreatePlaylistFragment : Fragment() {
             registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
                 //обрабатываем событие выбора пользователем фотографии
                 if (uri != null) {
-                    binding.pickerImage.setImageURI(uri)
+                    val radius = resources.getDimensionPixelSize(R.dimen.album_large_image_radius)
+
+                    Glide.with(this)
+                        .load(uri)
+                        .placeholder(R.drawable.add_photo)
+                        .error(R.drawable.add_photo)
+                        .transform(CenterCrop(), RoundedCorners(radius))
+                        .into(binding.pickerImage)
+
                     saveImageToPrivateStorage(uri)
                     isPictureSelected = true
                 } else {
@@ -91,7 +103,7 @@ class CreatePlaylistFragment : Fragment() {
                 }
             }
 
-        // по нажатию на кнопку pickImage запускаем photo picker
+        // по нажатию запускаем photo picker
         binding.pickerImage.setOnClickListener {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
@@ -128,7 +140,7 @@ class CreatePlaylistFragment : Fragment() {
     private fun saveImageToPrivateStorage(uri: Uri) {
         //создаём экземпляр класса File, который указывает на нужный каталог
         val path =
-            File(activity?.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "myalbum")
+            File(activity?.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "playlistmaker")
         //создаем каталог, если он не создан
         if (!path.exists()) {
             path.mkdirs()

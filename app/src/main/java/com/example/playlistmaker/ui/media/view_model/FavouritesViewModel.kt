@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.domain.common.SearchResult
 import com.example.playlistmaker.domain.db.use_case.FavouriteEntitiesUseCase
-import com.example.playlistmaker.domain.search.entity.SearchResult
 import com.example.playlistmaker.domain.search.entity.Track
 import com.example.playlistmaker.presentation.utils.SingleEventLiveData
 import kotlinx.coroutines.launch
@@ -32,7 +32,7 @@ class FavouritesViewModel(
                         getResult = SearchResult.NotFound
                     } else {
                         getResult =
-                            SearchResult.Content(
+                            SearchResult.TrackContent(
                                 result.size,
                                 result
                             )

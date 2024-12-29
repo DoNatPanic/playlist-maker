@@ -12,4 +12,8 @@ class PlaylistInteractorImpl(
     override fun savePlaylist(playlist: Playlist): Flow<Unit> = flow {
         playlistRepository.savePlaylist(playlist)
     }
+
+    override fun getPlaylists(): Flow<List<Playlist>> {
+        return playlistRepository.getPlaylists()
+    }
 }

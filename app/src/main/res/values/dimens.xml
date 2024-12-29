@@ -40,4 +40,6 @@
     <dimen name="create_playlist_name_edit_text_margin_top">32dp</dimen>
     <dimen name="create_playlist_info_edit_text_margin_top">16dp</dimen>
     <dimen name="create_playlist_album_image_margin_top">16dp</dimen>
+    <dimen name="playlist_screen_guidelines_left_value">0.02</dimen>
+    <dimen name="playlist_screen_guidelines_right_value">0.98</dimen>
 </resources>

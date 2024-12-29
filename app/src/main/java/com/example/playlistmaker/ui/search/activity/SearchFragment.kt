@@ -15,7 +15,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
-import com.example.playlistmaker.domain.search.entity.SearchResult
+import com.example.playlistmaker.domain.common.SearchResult
 import com.example.playlistmaker.domain.search.entity.Track
 import com.example.playlistmaker.domain.search.entity.TrackSearchHistory
 import com.example.playlistmaker.ui.audioplayer.activity.AudioPlayerActivity
@@ -107,7 +107,7 @@ class SearchFragment : Fragment() {
             openAudioPlayer(track)
         }
         viewModel.searchResultLiveData()
-            .observe(owner) { searchResult -> renderSearchResult(searchResult) }
+            .observe(owner) { searchResult: SearchResult -> renderSearchResult(searchResult) }
         viewModel.searchHistoryLiveData().observe(owner) { trackHistory ->
             when (trackHistory) {
                 is TrackSearchHistory.Empty -> {
@@ -217,7 +217,7 @@ class SearchFragment : Fragment() {
                 binding.historyRecyclerView.visibility = View.VISIBLE
             }
 
-            is SearchResult.Content -> {
+            is SearchResult.TrackContent -> {
                 setMessage("")
                 trackAdapter.setItems(result.results)
                 trackAdapter.notifyDataSetChanged()
@@ -266,6 +266,8 @@ class SearchFragment : Fragment() {
                 binding.recyclerView.visibility = View.VISIBLE
                 binding.historyRecyclerView.visibility = View.VISIBLE
             }
+
+            else -> {}
         }
     }
 

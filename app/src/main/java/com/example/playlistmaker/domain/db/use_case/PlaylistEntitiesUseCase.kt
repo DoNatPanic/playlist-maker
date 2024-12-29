@@ -10,4 +10,8 @@ class PlaylistEntitiesUseCase(
     fun executeSave(playlist: Playlist): Flow<Unit> {
         return playlistRepository.savePlaylist(playlist)
     }
+
+    fun executeGet(): Flow<List<Playlist>> {
+        return playlistRepository.getPlaylists()
+    }
 }

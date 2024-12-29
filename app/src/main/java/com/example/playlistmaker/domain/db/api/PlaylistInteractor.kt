@@ -5,4 +5,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface PlaylistInteractor {
     fun savePlaylist(playlist: Playlist): Flow<Unit>
+
+    fun getPlaylists(): Flow<List<Playlist>>
 }

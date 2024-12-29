@@ -287,6 +287,24 @@
         <item name="android:background">@drawable/create_button_selector</item>
     </style>
 
+    <!--    Playlists fragment style    -->
+    <style name="PlaylistsFragmentBgStyle">
+        <item name="android:background">@color/white</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <!--    Playlist element style    -->
+    <style name="PlaylistElementTextStyle">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:textColor">@color/black_light</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontWeight">400</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
     <!--    Other activities styles    -->
     <style name="DefaultScreenBgStyle">
         <item name="android:background">@color/white</item>
