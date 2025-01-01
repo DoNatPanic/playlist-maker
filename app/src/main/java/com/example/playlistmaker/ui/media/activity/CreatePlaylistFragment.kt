@@ -178,6 +178,7 @@ class CreatePlaylistFragment : Fragment() {
 
     private fun createPlaylist() {
         val playlist = Playlist(
+            null,
             playlistName = binding.playlistNameInput.text.toString(),
             playlistInfo = binding.infoInput.text.toString(),
             playlistImgPath = filePath,

@@ -42,4 +42,8 @@
     <dimen name="create_playlist_album_image_margin_top">16dp</dimen>
     <dimen name="playlist_screen_guidelines_left_value">0.02</dimen>
     <dimen name="playlist_screen_guidelines_right_value">0.98</dimen>
+    <dimen name="rounded_dialog_radius">16dp</dimen>
+    <dimen name="player_bottom_sheet_title_padding">18dp</dimen>
+    <dimen name="bottom_sheet_delimeter_width">50dp</dimen>
+    <dimen name="bottom_sheet_delimeter_height">4dp</dimen>
 </resources>

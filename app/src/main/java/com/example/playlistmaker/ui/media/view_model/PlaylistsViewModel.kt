@@ -20,7 +20,7 @@ class PlaylistsViewModel(
         var getResult: SearchResult = SearchResult.NotFound
         getResultData.postValue(getResult)
         viewModelScope.launch {
-            playlistEntitiesUseCase.executeGet().collect { result ->
+            playlistEntitiesUseCase.executeGetPlaylists().collect { result ->
                 if (result != null) {
                     if (result.isEmpty()) {
                         getResult = SearchResult.NotFound

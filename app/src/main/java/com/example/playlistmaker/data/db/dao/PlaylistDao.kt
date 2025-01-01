@@ -8,7 +8,7 @@ import com.example.playlistmaker.data.db.PlaylistEntity
 
 @Dao
 interface PlaylistDao {
-    @Insert(entity = PlaylistEntity::class, onConflict = OnConflictStrategy.REPLACE)
+    @Insert(entity = PlaylistEntity::class, onConflict = OnConflictStrategy.IGNORE)
     fun insertPlaylist(playlistEntity: PlaylistEntity)
 
     @Query("SELECT * FROM playlists_table")

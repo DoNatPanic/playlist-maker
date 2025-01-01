@@ -13,7 +13,7 @@ class CreatePlaylistViewModel(
 
     fun onCreatePlaylistClicked(playlist: Playlist) {
         viewModelScope.launch {
-            playlistEntitiesUseCase.executeSave(playlist).collect()
+            playlistEntitiesUseCase.executeSavePlaylist(playlist).collect()
         }
     }
 }

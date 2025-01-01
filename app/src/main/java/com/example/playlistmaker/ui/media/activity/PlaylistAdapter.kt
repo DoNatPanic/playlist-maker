@@ -3,7 +3,7 @@ package com.example.playlistmaker.ui.media.activity
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.R
+import com.example.playlistmaker.databinding.PlaylistViewBinding
 import com.example.playlistmaker.domain.media.entity.Playlist
 
 class PlaylistAdapter : RecyclerView.Adapter<PlaylistViewHolder>() {
@@ -15,9 +15,13 @@ class PlaylistAdapter : RecyclerView.Adapter<PlaylistViewHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistViewHolder {
-        val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.playlist_view, parent, false)
-        return PlaylistViewHolder(view)
+        val binding = PlaylistViewBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+
+        return PlaylistViewHolder(binding)
     }
 
     override fun getItemCount(): Int {

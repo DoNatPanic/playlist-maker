@@ -5,8 +5,12 @@ import com.example.playlistmaker.domain.media.entity.Playlist
 
 class PlaylistDbConvertor {
     fun map(playlist: Playlist): PlaylistEntity {
+        var id = playlist.playlistId
+        if (id == null) {
+            id = 0
+        }
         return PlaylistEntity(
-            0,
+            id,
             playlist.playlistName,
             playlist.playlistInfo,
             playlist.playlistImgPath,
@@ -17,6 +21,7 @@ class PlaylistDbConvertor {
 
     fun map(entity: PlaylistEntity): Playlist {
         return Playlist(
+            entity.playlistId,
             entity.playlistName,
             entity.playlistInfo,
             entity.playlistImgPath,

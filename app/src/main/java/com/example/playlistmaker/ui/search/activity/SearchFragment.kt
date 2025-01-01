@@ -18,7 +18,7 @@ import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.domain.common.SearchResult
 import com.example.playlistmaker.domain.search.entity.Track
 import com.example.playlistmaker.domain.search.entity.TrackSearchHistory
-import com.example.playlistmaker.ui.audioplayer.activity.AudioPlayerActivity
+import com.example.playlistmaker.ui.audioplayer.activity.AudioPlayerFragment
 import com.example.playlistmaker.ui.search.view_model.SearchViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -193,8 +193,8 @@ class SearchFragment : Fragment() {
     private fun openAudioPlayer(track: Track) {
         if (clickDebounce()) {
             findNavController().navigate(
-                R.id.action_searchFragment_to_audioPlayerActivity,
-                AudioPlayerActivity.createArgs(track)
+                R.id.action_searchFragment_to_audioPlayerFragment,
+                AudioPlayerFragment.createArgs(track)
             )
         }
     }
