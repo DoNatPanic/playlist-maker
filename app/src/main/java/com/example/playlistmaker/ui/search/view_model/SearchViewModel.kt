@@ -14,7 +14,6 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 
 class SearchViewModel(
-//    application: Application,
     private val getTrackListUseCase: GetTrackListUseCase,
     private val searchInteractor: SearchInteractor
 ) : ViewModel(), KoinComponent {
@@ -28,7 +27,7 @@ class SearchViewModel(
     private var searchHistoryData: SingleEventLiveData<TrackSearchHistory> = SingleEventLiveData()
     fun searchHistoryLiveData(): LiveData<TrackSearchHistory> = searchHistoryData
 
-    init {
+    private fun trackHistoryListUpdate(){
         trackHistoryList = searchInteractor.loadHistory()
         if (trackHistoryList.size != 0) {
             searchHistoryData.postValue(
@@ -42,8 +41,16 @@ class SearchViewModel(
         }
     }
 
+    init {
+       trackHistoryListUpdate()
+    }
+
+    fun onReload() {
+        trackHistoryListUpdate()
+    }
+
     private val openMediaPlayerTrigger = SingleEventLiveData<Track>()
-    fun getOpenMediaPlayerTrigger(): LiveData<Track> = openMediaPlayerTrigger
+    fun getOpenMediaPlayerTrigger(): SingleEventLiveData<Track> = openMediaPlayerTrigger
 
     fun clearSearchResults() {
         searchResultData.postValue(SearchResult.Empty)

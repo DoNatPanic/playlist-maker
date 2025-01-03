@@ -1,12 +1,10 @@
 package com.example.playlistmaker.ui.media.activity
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.playlistmaker.R
@@ -52,10 +50,6 @@ class PlaylistsFragment : Fragment() {
             2
         ) //ориентация по умолчанию — вертикальная
         recyclerView.adapter = playlistAdapter
-
-        requireActivity().supportFragmentManager.addOnBackStackChangedListener {
-            getListener()
-        }
     }
 
     private fun renderSearchResult(result: SearchResult) {
@@ -94,20 +88,6 @@ class PlaylistsFragment : Fragment() {
         findNavController().navigate(
             R.id.action_mediaFragment_to_createPlaylistFragment
         )
-    }
-
-    private fun getListener(): FragmentManager.OnBackStackChangedListener {
-        return FragmentManager.OnBackStackChangedListener {
-            val manager: FragmentManager? = fragmentManager
-            if (manager != null) {
-                if (manager.backStackEntryCount >= 1) {
-                    val topOnStack: String? =
-                        manager.getBackStackEntryAt(manager.backStackEntryCount - 1)
-                            .name
-                    topOnStack?.let { Log.i("TOP ON BACK STACK", it) }
-                }
-            }
-        }
     }
 
     companion object {

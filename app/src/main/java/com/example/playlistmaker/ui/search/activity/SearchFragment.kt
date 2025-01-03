@@ -44,28 +44,27 @@ class SearchFragment : Fragment() {
 
     private var searchText: String = TEXT_VALUE
 
+    private var searchJob: Job? = null
+    private var job: Job? = null
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(INPUT_TEXT, TEXT_VALUE)
     }
 
-    private val searchRunnable = Runnable { enterSearch() }
-
-    private var isClickAllowed = true
-
-    private fun clickDebounce(): Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            viewLifecycleOwner.lifecycleScope.launch {
-                delay(CLICK_DEBOUNCE_DELAY)
-                isClickAllowed = true
-            }
-        }
-        return current
+    override fun onResume() {
+        super.onResume()
+        viewModel.onReload()
     }
 
-    private var searchJob: Job? = null
+    private fun clickDebounce() {
+        job?.cancel()
+        job = viewLifecycleOwner.lifecycleScope.launch {
+            delay(CLICK_DEBOUNCE_DELAY)
+        }
+    }
+
+
     private fun searchDebounce() {
         searchJob?.cancel()
         searchJob = viewLifecycleOwner.lifecycleScope.launch {
@@ -191,12 +190,11 @@ class SearchFragment : Fragment() {
 
     // перейти на экран аудиоплеера
     private fun openAudioPlayer(track: Track) {
-        if (clickDebounce()) {
-            findNavController().navigate(
-                R.id.action_searchFragment_to_audioPlayerFragment,
-                AudioPlayerFragment.createArgs(track)
-            )
-        }
+        clickDebounce()
+        findNavController().navigate(
+            R.id.action_searchFragment_to_audioPlayerFragment,
+            AudioPlayerFragment.createArgs(track)
+        )
     }
 
     private fun enterSearch() {
