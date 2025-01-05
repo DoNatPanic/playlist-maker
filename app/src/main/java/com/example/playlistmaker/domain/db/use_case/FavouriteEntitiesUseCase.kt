@@ -15,4 +15,8 @@ class FavouriteEntitiesUseCase(
     fun executeGet(): Flow<List<Track>> {
         return favouriteRepository.getFavourites()
     }
+
+    fun executeGetById(trackId: Long): Flow<Track?> {
+        return favouriteRepository.getFavouriteById(trackId)
+    }
 }

@@ -28,19 +28,36 @@ class FavouriteRepositoryImpl(
     }
 
     override fun getFavourites(): Flow<List<Track>> = flow {
-        var list = getRequest()
+        var list = getFavouritesRequest()
 
         // сортируем по времени добавления в список избранного (по убыванию)
         list = list.sortedByDescending { favourite -> LocalDateTime.parse(favourite.addedDateTime) }
         emit(convertToTrackEntity(list))
     }
 
-    private suspend fun getRequest(): List<FavouriteEntity> {
+    override fun getFavouriteById(trackId: Long): Flow<Track?> = flow {
+        var trackEntity = getFavouriteByIdRequest(trackId)
+        if (trackEntity != null) {
+            emit(favouriteDbConvertor.map(trackEntity))
+        } else emit(null)
+    }
+
+    private suspend fun getFavouritesRequest(): List<FavouriteEntity> {
         return withContext(Dispatchers.IO) {
             try {
                 appDatabase.favouriteDao().getFavourites()
             } catch (e: Throwable) {
                 listOf()
+            }
+        }
+    }
+
+    private suspend fun getFavouriteByIdRequest(trackId: Long): FavouriteEntity? {
+        return withContext(Dispatchers.IO) {
+            try {
+                appDatabase.favouriteDao().getFavouriteById(trackId)
+            } catch (e: Throwable) {
+                null
             }
         }
     }

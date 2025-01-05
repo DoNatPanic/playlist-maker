@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.common.SearchResult
+import com.example.playlistmaker.domain.db.use_case.FavouriteEntitiesUseCase
 import com.example.playlistmaker.domain.search.api.SearchInteractor
 import com.example.playlistmaker.domain.search.entity.Track
 import com.example.playlistmaker.domain.search.entity.TrackSearchHistory
@@ -15,6 +16,7 @@ import org.koin.core.component.KoinComponent
 
 class SearchViewModel(
     private val getTrackListUseCase: GetTrackListUseCase,
+    private val favouriteEntitiesUseCase: FavouriteEntitiesUseCase,
     private val searchInteractor: SearchInteractor
 ) : ViewModel(), KoinComponent {
 
@@ -27,7 +29,10 @@ class SearchViewModel(
     private var searchHistoryData: SingleEventLiveData<TrackSearchHistory> = SingleEventLiveData()
     fun searchHistoryLiveData(): LiveData<TrackSearchHistory> = searchHistoryData
 
-    private fun trackHistoryListUpdate(){
+    private val openMediaPlayerTrigger = SingleEventLiveData<Track>()
+    fun getOpenMediaPlayerTrigger(): SingleEventLiveData<Track> = openMediaPlayerTrigger
+
+    private fun trackHistoryListUpdate() {
         trackHistoryList = searchInteractor.loadHistory()
         if (trackHistoryList.size != 0) {
             searchHistoryData.postValue(
@@ -42,15 +47,12 @@ class SearchViewModel(
     }
 
     init {
-       trackHistoryListUpdate()
+        trackHistoryListUpdate()
     }
 
     fun onReload() {
         trackHistoryListUpdate()
     }
-
-    private val openMediaPlayerTrigger = SingleEventLiveData<Track>()
-    fun getOpenMediaPlayerTrigger(): SingleEventLiveData<Track> = openMediaPlayerTrigger
 
     fun clearSearchResults() {
         searchResultData.postValue(SearchResult.Empty)
@@ -111,7 +113,7 @@ class SearchViewModel(
                 )
             }
         }
-        openMediaPlayerTrigger.value = track
+        compareTrackWithFavouritesTable(track)
     }
 
     // пользователь выбрал песню из списка
@@ -143,7 +145,20 @@ class SearchViewModel(
                 trackHistoryList
             )
         )
-
         openMediaPlayerTrigger.value = track
     }
+
+
+    private fun compareTrackWithFavouritesTable(track: Track) {
+        viewModelScope.launch {
+            favouriteEntitiesUseCase.executeGetById(track.trackId).collect { result ->
+                if (result != null) {
+                    openMediaPlayerTrigger.postValue(result!!)
+                } else {
+                    openMediaPlayerTrigger.postValue(track)
+                }
+            }
+        }
+    }
+
 }
