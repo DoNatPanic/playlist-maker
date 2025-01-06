@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.example.playlistmaker.domain.common.SearchResult
+import com.example.playlistmaker.domain.media.entity.Playlist
 import com.example.playlistmaker.ui.media.view_model.PlaylistsViewModel
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
@@ -34,7 +35,11 @@ class PlaylistsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         var owner = getViewLifecycleOwner()
 
-        playlistAdapter = PlaylistAdapter()
+        playlistAdapter = PlaylistAdapter { playlist -> viewModel.onPlaylistClicked(playlist) }
+
+        viewModel.getOpenPlaylistInfoTrigger().observe(owner) { playlist ->
+            openPlaylistInfoFragment(playlist)
+        }
 
         binding.newPlaylistBtn.setOnClickListener {
             openCreatePlaylistFragment()
@@ -87,6 +92,14 @@ class PlaylistsFragment : Fragment() {
     private fun openCreatePlaylistFragment() {
         findNavController().navigate(
             R.id.action_mediaFragment_to_createPlaylistFragment
+        )
+    }
+
+    // перейти на экран информации о плейлисте
+    private fun openPlaylistInfoFragment(playlist: Playlist) {
+        findNavController().navigate(
+            R.id.action_mediaFragment_to_playlistInfoFragment,
+            PlaylistInfoFragment.createArgs(playlist.playlistId!!)
         )
     }
 

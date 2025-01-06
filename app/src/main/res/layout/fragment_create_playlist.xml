@@ -29,14 +29,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.07" />
+                app:layout_constraintGuide_percent="@dimen/left_guideline_default_value" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/rightGuideline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.93" />
+                app:layout_constraintGuide_percent="@dimen/right_guideline_default_value" />
 
             <ImageView
                 android:id="@+id/pickerImage"

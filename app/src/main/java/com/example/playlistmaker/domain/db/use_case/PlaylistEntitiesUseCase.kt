@@ -16,8 +16,16 @@ class PlaylistEntitiesUseCase(
         return playlistRepository.getPlaylists()
     }
 
+    fun executeGetPlaylistById(playlistId: Long): Flow<Playlist?> {
+        return playlistRepository.getPlaylistById(playlistId)
+    }
+
     fun executeGetTracks(): Flow<List<Track>> {
         return playlistRepository.getTracks()
+    }
+
+    fun executeGetTracksFromPlaylist(idsList: List<Long>): Flow<List<Track>> {
+        return playlistRepository.getTracksFromPlaylist(idsList)
     }
 
     fun executeUpdatePlaylist(playlist: Playlist, track: Track): Flow<Unit> {

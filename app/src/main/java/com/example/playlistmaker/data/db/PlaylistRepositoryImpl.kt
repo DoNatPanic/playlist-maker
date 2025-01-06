@@ -30,9 +30,30 @@ class PlaylistRepositoryImpl(
         emit(convertToPlaylist(list))
     }
 
+    override fun getPlaylistById(playlistId: Long): Flow<Playlist?> = flow {
+        var playlistEntity = getPlaylistByIdRequest(playlistId)
+
+        if (playlistEntity != null) {
+            emit(playlistDbConvertor.map(playlistEntity))
+        } else emit(null)
+    }
+
     override fun getTracks(): Flow<List<Track>> = flow {
         var list = getTracksRequest()
         emit(convertToTracksEntity(list))
+    }
+
+    override fun getTracksFromPlaylist(idsList: List<Long>): Flow<List<Track>> = flow {
+        var trackEntitiesList = getTracksRequest()
+        var sortedList = mutableListOf<TrackEntity>()
+        for (item in trackEntitiesList) {
+            for (id in idsList) {
+                if (id == item.trackId) {
+                    sortedList.add(item)
+                }
+            }
+        }
+        emit(convertToTracksEntity(sortedList))
     }
 
     override fun updatePlaylist(playlist: Playlist, track: Track): Flow<Unit> = flow {
@@ -84,6 +105,16 @@ class PlaylistRepositoryImpl(
                 appDatabase.playlistDao().getPlaylists()
             } catch (e: Throwable) {
                 listOf()
+            }
+        }
+    }
+
+    private suspend fun getPlaylistByIdRequest(playlistId: Long): PlaylistEntity? {
+        return withContext(Dispatchers.IO) {
+            try {
+                appDatabase.playlistDao().getPlaylistById(playlistId)
+            } catch (e: Throwable) {
+                null
             }
         }
     }

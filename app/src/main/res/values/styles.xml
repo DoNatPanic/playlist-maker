@@ -333,6 +333,36 @@
         <item name="android:ellipsize">end</item>
     </style>
 
+    <!--    Playlist info fragment style    -->
+    <style name="PlaylistInfoFragmentBgStyle">
+        <item name="android:background">@color/gray_light</item>
+    </style>
+
+    <style name="PlaylistInfoNameTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/ys_display_bold</item>
+        <item name="android:textColor">@color/black_light</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="PlaylistInfoTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textColor">@color/black_light</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="PlaylistInfoFragmentToolbar" parent="Widget.MaterialComponents.Toolbar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/black_light</item>
+        <item name="android:background">@color/white</item>
+        <item name="navigationIconTint">@color/black_light</item>
+        <item name="titleTextAppearance">@style/ToolbarTextStyle</item>
+    </style>
+
     <!--    Other activities styles    -->
     <style name="DefaultScreenBgStyle">
         <item name="android:background">@color/white</item>

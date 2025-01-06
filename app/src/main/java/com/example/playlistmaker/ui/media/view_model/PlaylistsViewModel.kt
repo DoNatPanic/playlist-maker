@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.common.SearchResult
 import com.example.playlistmaker.domain.db.use_case.PlaylistEntitiesUseCase
+import com.example.playlistmaker.domain.media.entity.Playlist
+import com.example.playlistmaker.presentation.utils.SingleEventLiveData
 import kotlinx.coroutines.launch
 
 class PlaylistsViewModel(
@@ -14,8 +16,11 @@ class PlaylistsViewModel(
 
     private val getResultData: MutableLiveData<SearchResult> =
         MutableLiveData(SearchResult.NotFound)
-
     fun getResultLiveData(): LiveData<SearchResult> = getResultData
+
+    private val openPlaylistInfoTrigger = SingleEventLiveData<Playlist>()
+    fun getOpenPlaylistInfoTrigger(): SingleEventLiveData<Playlist> = openPlaylistInfoTrigger
+
     fun onReload() {
         var getResult: SearchResult = SearchResult.NotFound
         getResultData.postValue(getResult)
@@ -38,5 +43,10 @@ class PlaylistsViewModel(
                 getResultData.postValue(getResult)
             }
         }
+    }
+
+    // пользователь выбрал плейлист из списка
+    fun onPlaylistClicked(playlist: Playlist) {
+        openPlaylistInfoTrigger.value = playlist
     }
 }

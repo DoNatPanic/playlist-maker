@@ -13,4 +13,7 @@ interface PlaylistDao {
 
     @Query("SELECT * FROM playlists_table")
     fun getPlaylists(): List<PlaylistEntity>
+
+    @Query("SELECT * FROM playlists_table WHERE playlist_id = :id")
+    fun getPlaylistById(id: Long): PlaylistEntity
 }
