@@ -16,7 +16,7 @@
         android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
         tools:targetApi="31">
         <activity
-            android:name=".ui.audioplayer.activity.AudioPlayerActivity"
+            android:name=".ui.audioplayer.activity.AudioPlayerFragment"
             android:exported="false" />
         <activity
             android:name=".ui.media.activity.MediaFragment"
@@ -30,7 +30,7 @@
         <activity
             android:name=".ui.main.activity.HostActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustNothing">
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

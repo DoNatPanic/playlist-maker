@@ -4,8 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.domain.common.SearchResult
+import com.example.playlistmaker.domain.db.use_case.FavouriteEntitiesUseCase
 import com.example.playlistmaker.domain.search.api.SearchInteractor
-import com.example.playlistmaker.domain.search.entity.SearchResult
 import com.example.playlistmaker.domain.search.entity.Track
 import com.example.playlistmaker.domain.search.entity.TrackSearchHistory
 import com.example.playlistmaker.domain.search.use_case.GetTrackListUseCase
@@ -14,8 +15,8 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 
 class SearchViewModel(
-//    application: Application,
     private val getTrackListUseCase: GetTrackListUseCase,
+    private val favouriteEntitiesUseCase: FavouriteEntitiesUseCase,
     private val searchInteractor: SearchInteractor
 ) : ViewModel(), KoinComponent {
 
@@ -28,7 +29,10 @@ class SearchViewModel(
     private var searchHistoryData: SingleEventLiveData<TrackSearchHistory> = SingleEventLiveData()
     fun searchHistoryLiveData(): LiveData<TrackSearchHistory> = searchHistoryData
 
-    init {
+    private val openMediaPlayerTrigger = SingleEventLiveData<Track>()
+    fun getOpenMediaPlayerTrigger(): SingleEventLiveData<Track> = openMediaPlayerTrigger
+
+    private fun trackHistoryListUpdate() {
         trackHistoryList = searchInteractor.loadHistory()
         if (trackHistoryList.size != 0) {
             searchHistoryData.postValue(
@@ -42,8 +46,13 @@ class SearchViewModel(
         }
     }
 
-    private val openMediaPlayerTrigger = SingleEventLiveData<Track>()
-    fun getOpenMediaPlayerTrigger(): LiveData<Track> = openMediaPlayerTrigger
+    init {
+        trackHistoryListUpdate()
+    }
+
+    fun onReload() {
+        trackHistoryListUpdate()
+    }
 
     fun clearSearchResults() {
         searchResultData.postValue(SearchResult.Empty)
@@ -66,7 +75,7 @@ class SearchViewModel(
                             searchResult = SearchResult.NotFound
                         } else {
                             searchResult =
-                                SearchResult.Content(
+                                SearchResult.TrackContent(
                                     result.resultCount,
                                     result.results
                                 )
@@ -104,7 +113,7 @@ class SearchViewModel(
                 )
             }
         }
-        openMediaPlayerTrigger.value = track
+        compareTrackWithFavouritesTable(track)
     }
 
     // пользователь выбрал песню из списка
@@ -136,7 +145,20 @@ class SearchViewModel(
                 trackHistoryList
             )
         )
-
         openMediaPlayerTrigger.value = track
     }
+
+
+    private fun compareTrackWithFavouritesTable(track: Track) {
+        viewModelScope.launch {
+            favouriteEntitiesUseCase.executeGetById(track.trackId).collect { result ->
+                if (result != null) {
+                    openMediaPlayerTrigger.postValue(result!!)
+                } else {
+                    openMediaPlayerTrigger.postValue(track)
+                }
+            }
+        }
+    }
+
 }

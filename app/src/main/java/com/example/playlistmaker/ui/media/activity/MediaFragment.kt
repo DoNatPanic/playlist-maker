@@ -7,14 +7,20 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentMediaBinding
+import com.example.playlistmaker.ui.media.view_model.FavouritesViewModel
 import com.example.playlistmaker.ui.media.view_model.MediaPagerAdapter
+import com.example.playlistmaker.ui.media.view_model.PlaylistsViewModel
 import com.google.android.material.tabs.TabLayoutMediator
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class MediaFragment : Fragment() {
 
     private lateinit var binding: FragmentMediaBinding
 
     private lateinit var tabMediator: TabLayoutMediator
+
+    private val playlistViewModel by activityViewModel<PlaylistsViewModel>()
+    private val favouritesViewModel by activityViewModel<FavouritesViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -23,6 +29,12 @@ class MediaFragment : Fragment() {
         binding = FragmentMediaBinding.inflate(inflater, container, false)
         return binding.root
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        playlistViewModel.onReload()
+        favouritesViewModel.onReload()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

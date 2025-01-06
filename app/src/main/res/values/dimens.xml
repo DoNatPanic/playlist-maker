@@ -22,6 +22,7 @@
     <dimen name="audio_player_large_button_size">100dp</dimen>
     <dimen name="audio_player_button_elevation">8dp</dimen>
     <dimen name="audio_player_margin">24dp</dimen>
+    <dimen name="playlist_image_margin">24dp</dimen>
     <dimen name="audio_player_buttons_top_margin">24dp</dimen>
     <dimen name="audio_player_time_top_margin">32dp</dimen>
     <dimen name="audio_player_time_bottom_margin">16dp</dimen>
@@ -32,4 +33,17 @@
     <dimen name="media_library_empty_string_margin_horizontal">24dp</dimen>
     <dimen name="media_library_empty_string_margin_vertical">10dp</dimen>
     <dimen name="not_found_image_margin_top">86dp</dimen>
+    <dimen name="create_playlist_button_radius">8dp</dimen>
+    <dimen name="create_playlist_button_height">44dp</dimen>
+    <dimen name="create_playlist_button_margin_bottom">32dp</dimen>
+    <dimen name="create_playlist_edit_text_height">56dp</dimen>
+    <dimen name="create_playlist_name_edit_text_margin_top">32dp</dimen>
+    <dimen name="create_playlist_info_edit_text_margin_top">16dp</dimen>
+    <dimen name="create_playlist_album_image_margin_top">16dp</dimen>
+    <dimen name="playlist_screen_guidelines_left_value">0.02</dimen>
+    <dimen name="playlist_screen_guidelines_right_value">0.98</dimen>
+    <dimen name="rounded_dialog_radius">16dp</dimen>
+    <dimen name="player_bottom_sheet_title_padding">18dp</dimen>
+    <dimen name="bottom_sheet_delimeter_width">50dp</dimen>
+    <dimen name="bottom_sheet_delimeter_height">4dp</dimen>
 </resources>

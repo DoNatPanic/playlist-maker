@@ -19,6 +19,9 @@ interface FavouriteDao {
     @Query("SELECT * FROM favourites_table")
     fun getFavourites(): List<FavouriteEntity>
 
+    @Query("SELECT * FROM favourites_table WHERE track_id = :id")
+    fun getFavouriteById(id: Long): FavouriteEntity
+
     @Query("SELECT track_id FROM favourites_table")
     fun getFavouritesIds(): List<Long>
 }

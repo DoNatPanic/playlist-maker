@@ -9,9 +9,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentFavouritesBinding
-import com.example.playlistmaker.domain.search.entity.SearchResult
+import com.example.playlistmaker.domain.common.SearchResult
 import com.example.playlistmaker.domain.search.entity.Track
-import com.example.playlistmaker.ui.audioplayer.activity.AudioPlayerActivity
+import com.example.playlistmaker.ui.audioplayer.activity.AudioPlayerFragment
 import com.example.playlistmaker.ui.media.view_model.FavouritesViewModel
 import com.example.playlistmaker.ui.search.activity.TrackAdapter
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
@@ -55,7 +55,7 @@ class FavouritesFragment : Fragment() {
 
     private fun renderSearchResult(result: SearchResult) {
         when (result) {
-            is SearchResult.Content -> {
+            is SearchResult.TrackContent -> {
                 setMessage("")
                 trackAdapter.setItems(result.results)
                 trackAdapter.notifyDataSetChanged()
@@ -87,8 +87,8 @@ class FavouritesFragment : Fragment() {
     // перейти на экран аудиоплеера
     private fun openAudioPlayer(track: Track) {
         findNavController().navigate(
-            R.id.action_mediaFragment_to_audioPlayerActivity,
-            AudioPlayerActivity.createArgs(track)
+            R.id.action_mediaFragment_to_audioPlayerFragment,
+            AudioPlayerFragment.createArgs(track)
         )
     }
 
