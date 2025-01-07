@@ -41,6 +41,9 @@
     <string name="create_playlist_button_str">Создать</string>
     <string name="new_playlist_name_hint">Название*</string>
     <string name="new_playlist_info_hint">Описание</string>
+    <string name="material_alert_title_placeholder">Заголовок</string>
+    <string name="material_alert_neutral_button_placeholder">НЕТ</string>
+    <string name="material_alert_positive_button_placeholder">ДА</string>
 
     // bottom menu labels
     <string name="menu_search_label">Поиск</string>

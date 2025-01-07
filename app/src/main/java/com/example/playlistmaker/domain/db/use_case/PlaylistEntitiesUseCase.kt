@@ -24,11 +24,19 @@ class PlaylistEntitiesUseCase(
         return playlistRepository.getTracks()
     }
 
+    fun executeDeleteTrack(track: Track): Flow<Unit> {
+        return playlistRepository.deleteTrack(track)
+    }
+
     fun executeGetTracksFromPlaylist(idsList: List<Long>): Flow<List<Track>> {
         return playlistRepository.getTracksFromPlaylist(idsList)
     }
 
-    fun executeUpdatePlaylist(playlist: Playlist, track: Track): Flow<Unit> {
-        return playlistRepository.updatePlaylist(playlist, track)
+    fun executeAddTrackToPlaylist(playlist: Playlist, track: Track): Flow<Unit> {
+        return playlistRepository.addTrackToPlaylist(playlist, track)
+    }
+
+    fun executeDeleteTrackFromPlaylist(playlist: Playlist, track: Track): Flow<Unit> {
+        return playlistRepository.deleteTrackFromPlaylist(playlist, track)
     }
 }

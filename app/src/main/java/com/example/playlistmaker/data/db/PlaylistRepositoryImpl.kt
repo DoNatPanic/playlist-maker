@@ -56,10 +56,21 @@ class PlaylistRepositoryImpl(
         emit(convertToTracksEntity(sortedList))
     }
 
-    override fun updatePlaylist(playlist: Playlist, track: Track): Flow<Unit> = flow {
+    override fun deleteTrack(track: Track): Flow<Unit> = flow {
+        val trackEntity = convertToTrackEntity(track)
+        emit(deleteTrackRequest(trackEntity))
+    }
+
+    override fun addTrackToPlaylist(playlist: Playlist, track: Track): Flow<Unit> = flow {
         val trackEntity = convertToTrackEntity(track)
         val playlistEntity = convertToPlaylistEntity(playlist)
-        emit(updatePlaylistRequest(playlistEntity, trackEntity))
+        emit(addTrackToPlaylistRequest(playlistEntity, trackEntity))
+    }
+
+    override fun deleteTrackFromPlaylist(playlist: Playlist, track: Track): Flow<Unit> = flow {
+        val trackEntity = convertToTrackEntity(track)
+        val playlistEntity = convertToPlaylistEntity(playlist)
+        emit(deleteTrackFromPlaylistRequest(playlistEntity, trackEntity))
     }
 
     private suspend fun insertPlaylistRequest(playlistEntity: PlaylistEntity) {
@@ -72,7 +83,7 @@ class PlaylistRepositoryImpl(
         }
     }
 
-    private suspend fun updatePlaylistRequest(
+    private suspend fun addTrackToPlaylistRequest(
         playlistEntity: PlaylistEntity,
         trackEntity: TrackEntity
     ) {
@@ -87,6 +98,38 @@ class PlaylistRepositoryImpl(
                 var newPlaylistEntity = PlaylistEntity(
                     playlistId = playlistEntity.playlistId,
                     tracksCount = playlistEntity.tracksCount + 1,
+                    playlistName = playlistEntity.playlistName,
+                    playlistInfo = playlistEntity.playlistInfo,
+                    playlistImgPath = playlistEntity.playlistImgPath,
+                    trackIds = createJsonFromIdsList(list)
+                )
+                appDatabase.trackDao().updatePlaylist(newPlaylistEntity, trackEntity)
+            } catch (e: Throwable) {
+                // nothing
+            }
+        }
+    }
+
+    private suspend fun deleteTrackFromPlaylistRequest(
+        playlistEntity: PlaylistEntity,
+        trackEntity: TrackEntity
+    ) {
+        return withContext(Dispatchers.IO) {
+            try {
+                var list: MutableList<String> = mutableListOf()
+                if (!playlistEntity.trackIds.isNullOrEmpty()) {
+                    list.addAll(createIdsListFromJson(playlistEntity.trackIds!!))
+                }
+                for (item in list) {
+                    if (item.toLong() == trackEntity.trackId) {
+                        list.remove(item)
+                        break
+                    }
+                }
+
+                var newPlaylistEntity = PlaylistEntity(
+                    playlistId = playlistEntity.playlistId,
+                    tracksCount = playlistEntity.tracksCount - 1,
                     playlistName = playlistEntity.playlistName,
                     playlistInfo = playlistEntity.playlistInfo,
                     playlistImgPath = playlistEntity.playlistImgPath,
@@ -125,6 +168,16 @@ class PlaylistRepositoryImpl(
                 appDatabase.trackDao().getTracks()
             } catch (e: Throwable) {
                 listOf()
+            }
+        }
+    }
+
+    private suspend fun deleteTrackRequest(trackEntity: TrackEntity): Unit {
+        return withContext(Dispatchers.IO) {
+            try {
+                appDatabase.trackDao().deleteTrack(trackEntity)
+            } catch (e: Throwable) {
+                // none
             }
         }
     }

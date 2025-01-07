@@ -55,6 +55,49 @@
         <item name="android:background">@color/transparent</item>
     </style>
 
+    <style name="Theme.MyApp.Dialog.Alert" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="buttonBarNeutralButtonStyle">@style/Widget.MyApp.NeutralButton</item>
+        <item name="buttonBarPositiveButtonStyle">@style/Widget.MyApp.PositiveButton</item>
+        <item name="dialogCornerRadius">@dimen/rounded_alert_dialog_radius</item>
+        <item name="android:background">@color/white</item>
+
+        <!-- Title -->
+        <item name="materialAlertDialogTitleTextStyle">
+            @style/MyTitle_MaterialAlertDialog.MaterialComponents.Title.Text
+        </item>
+
+        <!-- Body -->
+        <item name="materialAlertDialogBodyTextStyle">
+            @style/BodyTextAppearance.MaterialComponents.Body2
+        </item>
+    </style>
+
+    <style name="MyTitle_MaterialAlertDialog.MaterialComponents.Title.Text" parent="@style/MaterialAlertDialog.MaterialComponents.Title.Text">
+        <item name="android:textColor">@color/black_light</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="BodyTextAppearance.MaterialComponents.Body2" parent="@style/MaterialAlertDialog.MaterialComponents.Title.Text">
+        <item name="android:textColor">@color/black_light</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="Widget.MyApp.NeutralButton" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.MyApp.NeutralButton</item>
+    </style>
+
+    <style name="Widget.MyApp.PositiveButton" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.MyApp.PositiveButton</item>
+    </style>
+
+    <style name="ThemeOverlay.MyApp.NeutralButton" parent="">
+        <item name="colorPrimary">@color/blue</item>
+    </style>
+
+    <style name="ThemeOverlay.MyApp.PositiveButton" parent="">
+        <item name="colorPrimary">@color/blue</item>
+    </style>
+
     <!--    Settings activity styles    -->
     <style name="SettingsScreenBgStyle">
         <item name="android:background">@color/white</item>

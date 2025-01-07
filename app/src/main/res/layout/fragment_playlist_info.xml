@@ -121,8 +121,8 @@
         style="@style/PlayerBottomSheetBgStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:behavior_hideable="true"
-        app:behavior_peekHeight="266dp"
+        app:behavior_hideable="false"
+        app:behavior_peekHeight="230dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <View
@@ -131,6 +131,13 @@
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/bottom_sheet_delimeter_margin_top"
             android:background="@drawable/bottom_sheet_delimeter" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="12dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
     </LinearLayout>
 

@@ -15,5 +15,9 @@ interface PlaylistRepository {
 
     fun getTracksFromPlaylist(list: List<Long>): Flow<List<Track>>
 
-    fun updatePlaylist(playlist: Playlist, track: Track): Flow<Unit>
+    fun deleteTrack(track: Track): Flow<Unit>
+
+    fun addTrackToPlaylist(playlist: Playlist, track: Track): Flow<Unit>
+
+    fun deleteTrackFromPlaylist(playlist: Playlist, track: Track): Flow<Unit>
 }

@@ -16,9 +16,10 @@ class PlaylistInfoViewModel(
     private val gson: Gson
 ) : ViewModel() {
 
+    private var playlists: List<Playlist> = mutableListOf()
+
     private val getPlaylistData = SingleEventLiveData<Playlist>()
     fun getPlaylistLiveData(): SingleEventLiveData<Playlist> = getPlaylistData
-
 
     private val getPlaylistTracksData = MutableLiveData<List<Track>>(listOf())
     fun getPlaylistTracksLiveData(): MutableLiveData<List<Track>> = getPlaylistTracksData
@@ -31,26 +32,90 @@ class PlaylistInfoViewModel(
                     // по идентификатору плейлиста нашли плейлист в БД
                     getPlaylistData.postValue(result!!)
 
-                    // из строки идентификаторов треков этого плейлиста сделали список
-                    val list = createIdsListFromJson(result.trackIds!!)
+                    if (!result.trackIds.isNullOrEmpty()) {
+                        // из строки идентификаторов треков этого плейлиста делаем список
+                        var list: List<Long> = getIdsFromString(result.trackIds)
 
-                    // преобразуем тип в Long
-                    var idsList = mutableListOf<Long>()
-                    for (item in list) {
-                        idsList.add(item.toLong())
+                        // запрашиваем список треков (по айдишникам), принадлежащих плейлисту
+                        getPlaylistTracks(list)
                     }
-
-                    // определяем список треков, принадлежащих плейлисту
-                    getPlaylistTracks(idsList)
                 }
             }
         }
     }
 
+    private fun getIdsFromString(str: String): List<Long> {
+        var list: MutableList<String> = createIdsListFromJson(str)
+        // преобразуем тип в Long
+        var idsList = mutableListOf<Long>()
+        for (item in list) {
+            idsList.add(item.toLong())
+        }
+        return idsList
+    }
+
+    // пользователь хочет удалить песню из списка
+    fun onDeleteTrackClicked(playlistId: Long, track: Track): Boolean {
+
+        viewModelScope.launch {
+            getPlaylistData.value?.let {
+                playlistEntitiesUseCase.executeDeleteTrackFromPlaylist(it, track)
+                    .collect { result ->
+                        if (result != null) {
+                            // get updated playlist info
+                            getPlaylistFromDB(playlistId)
+                            getPlaylists(track)
+                        }
+                    }
+            }
+        }
+        return true
+    }
+
+    // берем из базы список всех плейлистов
+    private fun getPlaylists(track: Track) {
+        viewModelScope.launch {
+            getPlaylistData.value?.let {
+                playlistEntitiesUseCase.executeGetPlaylists().collect { result ->
+                    var isExists = false
+
+                    // ищем в плейлистах данный трек
+                    if (result != null && result.isNotEmpty()) {
+                        playlists = result
+                        for (playlist in playlists) {
+                            if (!playlist.trackIds.isNullOrEmpty()) {
+                                val list = getIdsFromString(playlist.trackIds)
+                                for (id in list) {
+                                    if (id == track.trackId) {
+                                        isExists = true
+                                        break
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    // если ни в одном плейлисте нет указанного трека, удаляем его из базы
+                    if (!isExists) {
+                        deleteTrackFromTable(track)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun deleteTrackFromTable(track: Track) {
+        viewModelScope.launch {
+            getPlaylistData.value?.let {
+                playlistEntitiesUseCase.executeDeleteTrack(track).collect {}
+            }
+        }
+    }
+
+
     private fun getPlaylistTracks(idsList: List<Long>) {
         viewModelScope.launch {
             playlistEntitiesUseCase.executeGetTracksFromPlaylist(idsList).collect { result ->
-                if (result != null && result.isNotEmpty()) {
+                if (result != null) {
                     getPlaylistTracksData.postValue(result)
                 }
             }

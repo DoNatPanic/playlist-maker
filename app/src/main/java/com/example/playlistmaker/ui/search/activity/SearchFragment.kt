@@ -94,11 +94,15 @@ class SearchFragment : Fragment() {
 
         var owner = getViewLifecycleOwner()
 
-        trackAdapter = TrackAdapter { track -> viewModel.onSearchTrackClicked(track) }
+        val onSearchTrackClick: (Track) -> Unit =
+            { track: Track -> viewModel.onSearchTrackClicked(track) }
+        trackAdapter = TrackAdapter(onSearchTrackClick)
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         binding.recyclerView.adapter = trackAdapter
 
-        trackHistoryAdapter = TrackAdapter { track -> viewModel.onHistoryTrackClicked(track) }
+        val onHistoryTrackClick: (Track) -> Unit =
+            { track: Track -> viewModel.onHistoryTrackClicked(track) }
+        trackHistoryAdapter = TrackAdapter(onHistoryTrackClick)
         binding.historyRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.historyRecyclerView.adapter = trackHistoryAdapter
 

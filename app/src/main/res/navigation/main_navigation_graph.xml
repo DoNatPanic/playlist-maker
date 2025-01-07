@@ -51,5 +51,9 @@
     <fragment
         android:id="@+id/playlistInfoFragment"
         android:name="com.example.playlistmaker.ui.media.activity.PlaylistInfoFragment"
-        android:label="PlaylistInfoFragment" />
+        android:label="PlaylistInfoFragment">
+        <action
+            android:id="@+id/action_playlistInfoFragment_to_audioPlayerFragment"
+            app:destination="@id/audioPlayerFragment" />
+    </fragment>
 </navigation>

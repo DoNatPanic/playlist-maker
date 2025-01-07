@@ -45,6 +45,7 @@
     <dimen name="left_guideline_default_value">0.07</dimen>
     <dimen name="right_guideline_default_value">0.93</dimen>
     <dimen name="rounded_dialog_radius">16dp</dimen>
+    <dimen name="rounded_alert_dialog_radius">4dp</dimen>
     <dimen name="player_bottom_sheet_title_padding">18dp</dimen>
     <dimen name="bottom_sheet_delimeter_width">50dp</dimen>
     <dimen name="bottom_sheet_delimeter_height">4dp</dimen>

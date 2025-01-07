@@ -128,7 +128,7 @@ class PlayerViewModel(
 
         try {
             viewModelScope.launch {
-                playlistEntitiesUseCase.executeUpdatePlaylist(playlist, track).collect()
+                playlistEntitiesUseCase.executeAddTrackToPlaylist(playlist, track).collect()
             }
         } catch (e: Throwable) {
             isSuccess = false

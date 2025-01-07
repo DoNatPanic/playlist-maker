@@ -36,7 +36,8 @@ class FavouritesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         var owner = getViewLifecycleOwner()
 
-        trackAdapter = TrackAdapter { track -> viewModel.onTrackClicked(track) }
+        val onTrackClick: (Track) -> Unit = { track: Track -> viewModel.onTrackClicked(track) }
+        trackAdapter = TrackAdapter(onTrackClick)
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         binding.recyclerView.adapter = trackAdapter
 
