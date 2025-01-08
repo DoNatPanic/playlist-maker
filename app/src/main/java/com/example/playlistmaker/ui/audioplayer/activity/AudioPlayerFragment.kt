@@ -28,13 +28,6 @@ import java.util.Locale
 
 class AudioPlayerFragment : Fragment() {
 
-    companion object {
-        private const val ARGS_FACT = "track"
-
-        fun createArgs(track: Track): Bundle =
-            bundleOf(ARGS_FACT to track)
-    }
-
     private var track: Track? = null
 
     private val viewModel: PlayerViewModel by viewModel {
@@ -232,5 +225,12 @@ class AudioPlayerFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         viewModel.onDestroy()
+    }
+
+    companion object {
+        private const val ARGS_FACT = "track"
+
+        fun createArgs(track: Track): Bundle =
+            bundleOf(ARGS_FACT to track)
     }
 }

@@ -35,13 +35,6 @@ import java.util.UUID
 
 class CreatePlaylistFragment : Fragment() {
 
-    companion object {
-        private const val ARGS_PLAYLIST_EDIT = "playlist_edit"
-
-        fun createArgs(playlist: Playlist): Bundle =
-            bundleOf(ARGS_PLAYLIST_EDIT to playlist)
-    }
-
     private var playlist: Playlist? = null
 
     private val viewModel: CreatePlaylistViewModel by viewModel()
@@ -248,5 +241,12 @@ class CreatePlaylistFragment : Fragment() {
             "Плейлист ${binding.playlistNameInput.text} создан",
             Toast.LENGTH_SHORT
         ).show()
+    }
+
+    companion object {
+        private const val ARGS_PLAYLIST_EDIT = "playlist_edit"
+
+        fun createArgs(playlist: Playlist): Bundle =
+            bundleOf(ARGS_PLAYLIST_EDIT to playlist)
     }
 }

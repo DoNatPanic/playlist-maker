@@ -29,13 +29,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
 
-    companion object {
-        const val INPUT_TEXT = "INPUT_TEXT"
-        const val TEXT_VALUE = ""
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
-        private const val SEARCH_DEBOUNCE_DELAY = 2000L
-    }
-
     private lateinit var binding: FragmentSearchBinding
 
     private val viewModel: SearchViewModel by viewModel()
@@ -294,5 +287,12 @@ class SearchFragment : Fragment() {
 
     private fun clearButtonIsVisible(s: CharSequence?): Boolean {
         return !s.isNullOrEmpty()
+    }
+
+    companion object {
+        const val INPUT_TEXT = "INPUT_TEXT"
+        const val TEXT_VALUE = ""
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 }

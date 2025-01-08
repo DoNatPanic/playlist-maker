@@ -36,13 +36,6 @@ import java.util.Locale
 
 
 class PlaylistInfoFragment : Fragment() {
-    companion object {
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
-        private const val ARGS_PLAYLIST_ID = "playlistId"
-
-        fun createArgs(playlistId: Long): Bundle =
-            bundleOf(ARGS_PLAYLIST_ID to playlistId)
-    }
 
     private var playlistId: Long = 0
 
@@ -350,5 +343,13 @@ class PlaylistInfoFragment : Fragment() {
         }
 
         return "$num $word"
+    }
+
+    companion object {
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
+        private const val ARGS_PLAYLIST_ID = "playlistId"
+
+        fun createArgs(playlistId: Long): Bundle =
+            bundleOf(ARGS_PLAYLIST_ID to playlistId)
     }
 }
