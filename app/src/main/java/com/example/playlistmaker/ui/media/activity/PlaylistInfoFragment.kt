@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -62,6 +64,10 @@ class PlaylistInfoFragment : Fragment() {
 
     private var progressDialog: AlertDialog? = null
 
+    private var menuBottomSheetContainer: LinearLayout? = null
+
+    private var menuBottomSheetBehavior: BottomSheetBehavior<LinearLayout>? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -74,58 +80,21 @@ class PlaylistInfoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         var owner = getViewLifecycleOwner()
 
-        progress =
-            activity?.let { MaterialAlertDialogBuilder(it, R.style.Theme_MyApp_Dialog_Alert) };
-
-        // назад
-        binding.toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
-        }
-
-        // получаем информацию о треке
-        val arguments = arguments
-
-        arguments?.getLong(PlaylistInfoFragment.ARGS_PLAYLIST_ID)?.let {
-            playlistId = it
-        }
-
-        viewModel.getPlaylistFromDB(playlistId)
-
-        viewModel.getPlaylistTracksLiveData().observe(owner) {
-            playlistTracksList = it
-            binding.minutes.text = getTotalMinutes()
-            trackAdapter.setItems(it)
-        }
-
-        viewModel.getPlaylistLiveData()
-            .observe(owner) { pl ->
-                playlist = pl
-                renderPlaylistInfo()
-            }
-
-        val onTrackClick: (Track) -> Unit = { track: Track -> openAudioPlayer(track) }
-        val onDeleteTrackClick: (Track) -> Boolean =
-            { track: Track ->
-                showDeleteTrackDialog(playlistId, track)
-            }
-        trackAdapter = TrackAdapter(onTrackClick, onDeleteTrackClick)
-        binding.recyclerView.layoutManager = LinearLayoutManager(context)
-        binding.recyclerView.adapter = trackAdapter
 
         // tracks bottom sheet
         val tracksBottomSheetContainer = binding.tracksBottomSheet
-        val tracksBottomSheetBehavior = BottomSheetBehavior.from(tracksBottomSheetContainer).apply {
-            state = BottomSheetBehavior.STATE_HALF_EXPANDED
-        }
+        val tracksBottomSheetBehavior =
+            BottomSheetBehavior.from(tracksBottomSheetContainer)
+        tracksBottomSheetBehavior.peekHeight = calcBottomMenuHeight()
 
         // menu bottom sheet
-        val menuBottomSheetContainer = binding.menuBottomSheet
+        menuBottomSheetContainer = binding.menuBottomSheet
         val menuOverlay = binding.menuOverlay
-        val menuBottomSheetBehavior = BottomSheetBehavior.from(menuBottomSheetContainer).apply {
+        menuBottomSheetBehavior = BottomSheetBehavior.from(menuBottomSheetContainer!!).apply {
             state = BottomSheetBehavior.STATE_HIDDEN
         }
 
-        menuBottomSheetBehavior.addBottomSheetCallback(object :
+        menuBottomSheetBehavior!!.addBottomSheetCallback(object :
             BottomSheetBehavior.BottomSheetCallback() {
 
             override fun onStateChanged(bottomSheet: View, newState: Int) {
@@ -144,17 +113,55 @@ class PlaylistInfoFragment : Fragment() {
             override fun onSlide(bottomSheet: View, slideOffset: Float) {}
         })
 
+
+        progress =
+            activity?.let { MaterialAlertDialogBuilder(it, R.style.Theme_MyApp_Dialog_Alert) };
+
+        // назад
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
+
+        // получаем информацию о треке
+        val arguments = arguments
+
+        arguments?.getLong(ARGS_PLAYLIST_ID)?.let {
+            playlistId = it
+        }
+
+        viewModel.getPlaylistFromDB(playlistId)
+
+        viewModel.getPlaylistTracksLiveData().observe(owner) {
+            playlistTracksList = it
+            binding.minutes.text = getTotalMinutes()
+            trackAdapter.setItems(it)
+            binding.noTracksText.isVisible = playlistTracksList.isEmpty()
+        }
+
+        viewModel.getPlaylistLiveData()
+            .observe(owner) { pl ->
+                playlist = pl
+                renderPlaylistInfo()
+            }
+
+        val onTrackClick: (Track) -> Unit = { track: Track -> openAudioPlayer(track) }
+        val onDeleteTrackClick: (Track) -> Boolean =
+            { track: Track ->
+                showDeleteTrackDialog(playlistId, track)
+            }
+        trackAdapter = TrackAdapter(onTrackClick, onDeleteTrackClick)
+        binding.recyclerView.layoutManager = LinearLayoutManager(context)
+        binding.recyclerView.adapter = trackAdapter
+
         binding.share.setOnClickListener {
             sharePlaylist()
         }
 
         binding.menu.setOnClickListener {
             renderSmallPlaylistView()
-
-            val menuBottomSheetContainer = binding.menuBottomSheet
-            val bottomSheetBehavior = BottomSheetBehavior.from(menuBottomSheetContainer)
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
+            menuBottomSheetBehavior!!.state = BottomSheetBehavior.STATE_HALF_EXPANDED
         }
+
 
         binding.shareBtn.setOnClickListener {
             sharePlaylist()
@@ -169,21 +176,48 @@ class PlaylistInfoFragment : Fragment() {
         }
     }
 
+    private fun calcBottomMenuHeight(): Int {
+        binding.main.measure(View.MeasureSpec.AT_MOST, View.MeasureSpec.UNSPECIFIED);
+        binding.pickerImage.measure(View.MeasureSpec.AT_MOST, View.MeasureSpec.UNSPECIFIED);
+        binding.playlistName.measure(View.MeasureSpec.AT_MOST, View.MeasureSpec.UNSPECIFIED);
+        binding.year.measure(View.MeasureSpec.AT_MOST, View.MeasureSpec.UNSPECIFIED);
+        binding.minutes.measure(View.MeasureSpec.AT_MOST, View.MeasureSpec.UNSPECIFIED);
+        binding.share.measure(View.MeasureSpec.AT_MOST, View.MeasureSpec.UNSPECIFIED);
+
+        val value1 = binding.pickerImage.measuredWidth + binding.playlistName.measuredHeight
+        +binding.year.measuredHeight + binding.minutes.measuredHeight + binding.share.measuredHeight
+
+        val value2 = resources.getDimensionPixelSize(R.dimen.playlist_info_name_margin_top)
+        +resources.getDimensionPixelSize(R.dimen.playlist_info_text_margin_top)
+        +resources.getDimensionPixelSize(R.dimen.playlist_info_text_margin_top)
+        +resources.getDimensionPixelSize(R.dimen.playlist_info_buttons_margin_top)
+        +resources.getDimensionPixelSize(R.dimen.playlist_info_bottom_menu_margin_top)
+
+        return binding.main.measuredHeight - value1 - value2
+    }
+
     // редактировать плейлист
     private fun openPlaylistEditPage(playlist: Playlist) {
+        menuBottomSheetBehavior!!.state = BottomSheetBehavior.STATE_HIDDEN
         findNavController().navigate(
             R.id.action_playlistInfoFragment_to_createPlaylistFragment,
             CreatePlaylistFragment.createArgs(playlist)
         )
     }
 
+    override fun onResume() {
+        super.onResume()
+        menuBottomSheetBehavior!!.state = BottomSheetBehavior.STATE_HIDDEN
+    }
+
     private fun sharePlaylist() {
+        menuBottomSheetBehavior!!.state = BottomSheetBehavior.STATE_HIDDEN
         if (playlistTracksList.isNotEmpty()) {
             viewModel.onShareButtonClicked(playlist, playlistTracksList)
         } else {
             Toast.makeText(
                 activity,
-                "Чтобы поделиться, добавьте в плейлист треки",
+                "В данном плейлисте нет списка треков, которым можно поделиться",
                 Toast.LENGTH_SHORT
             ).show()
         }

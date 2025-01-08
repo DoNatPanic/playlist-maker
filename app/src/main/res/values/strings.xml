@@ -33,7 +33,7 @@
     <string name="genre_val_str">Rock</string>
     <string name="country_val_str">Великобритания</string>
     <string name="favourites_empty">Ваша медиатека пуста</string>
-    <string name="playlists_empty">Вы не создали ни одного плейлиста</string>
+    <string name="playlists_empty">Вы не создали\nни одного плейлиста</string>
     <string name="new_playlist_button_str">Новый плейлист</string>
     <string name="favourites_tab_title">Избранные треки</string>
     <string name="playlists_tab_title">Плейлисты</string>
@@ -49,6 +49,7 @@
     <string name="delete_playlist_button_str">Удалить плейлист</string>
     <string name="edit_playlist_title">Редактировать информацию</string>
     <string name="edit_playlist_save_button_text">Сохранить</string>
+    <string name="playlist_no_tracks_text">В этом плейлисте нет треков</string>
 
     // bottom menu labels
     <string name="menu_search_label">Поиск</string>

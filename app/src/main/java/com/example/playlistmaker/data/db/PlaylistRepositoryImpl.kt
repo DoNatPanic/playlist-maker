@@ -56,14 +56,15 @@ class PlaylistRepositoryImpl(
     override fun getTracksFromPlaylist(idsList: List<Long>): Flow<List<Track>> = flow {
         var trackEntitiesList = getTracksRequest()
         var sortedList = mutableListOf<TrackEntity>()
-        for (item in trackEntitiesList) {
-            for (id in idsList) {
+
+        for (id in idsList) {
+            for (item in trackEntitiesList) {
                 if (id == item.trackId) {
                     sortedList.add(item)
                 }
             }
         }
-        emit(convertToTracksEntity(sortedList))
+        emit(convertToTracksEntity(sortedList.reversed()))
     }
 
     override fun deleteTrack(track: Track): Flow<Unit> = flow {

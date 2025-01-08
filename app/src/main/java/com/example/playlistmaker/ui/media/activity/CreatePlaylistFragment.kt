@@ -141,10 +141,11 @@ class CreatePlaylistFragment : Fragment() {
 
             val radius = resources.getDimensionPixelSize(R.dimen.album_large_image_radius)
 
+            filePath = playlist?.playlistImgPath
             Glide.with(this)
-                .load(playlist?.playlistImgPath)
-                .placeholder(R.drawable.track_image)
-                .error(R.drawable.track_image)
+                .load(filePath)
+                .placeholder(R.drawable.add_photo)
+                .error(R.drawable.add_photo)
                 .centerCrop()
                 .transform(RoundedCorners(radius))
                 .into(binding.pickerImage)

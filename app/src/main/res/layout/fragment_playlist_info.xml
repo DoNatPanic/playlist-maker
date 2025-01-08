@@ -2,6 +2,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     style="@style/PlaylistInfoFragmentBgStyle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -113,6 +114,7 @@
             app:layout_constraintBottom_toBottomOf="@id/share"
             app:layout_constraintStart_toEndOf="@id/share"
             app:layout_constraintTop_toTopOf="@+id/share" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
@@ -121,7 +123,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:behavior_hideable="false"
-        app:behavior_peekHeight="@dimen/bottom_sheet_height"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <View
@@ -130,6 +131,16 @@
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/bottom_sheet_delimeter_margin_top"
             android:background="@drawable/bottom_sheet_delimeter" />
+
+        <TextView
+            android:id="@+id/noTracksText"
+            style="@style/PlaylistInfoTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/playlist_no_tracks_margin_left"
+            android:layout_marginTop="@dimen/playlist_no_tracks_margin_top"
+            android:text="@string/playlist_no_tracks_text"
+            android:visibility="gone" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
@@ -153,7 +164,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:behavior_hideable="true"
-        app:behavior_peekHeight="505dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <View

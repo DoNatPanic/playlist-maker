@@ -93,7 +93,6 @@ class PlaylistInfoViewModel(
                         playlists = result
                         for (playlist in playlists) {
                             if (currentPlaylist != null && playlist == currentPlaylist) break
-//                            if (playlist != currentPlaylist) {
                             if (!playlist.trackIds.isNullOrEmpty()) {
                                 val list = getIdsFromString(playlist.trackIds)
                                 for (id in list) {
@@ -102,7 +101,6 @@ class PlaylistInfoViewModel(
                                         break
                                     }
                                 }
-//                            }
                             }
                         }
                     }
