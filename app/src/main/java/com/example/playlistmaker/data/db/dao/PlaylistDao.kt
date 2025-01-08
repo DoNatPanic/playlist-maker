@@ -1,6 +1,7 @@
 package com.example.playlistmaker.data.db.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -16,4 +17,7 @@ interface PlaylistDao {
 
     @Query("SELECT * FROM playlists_table WHERE playlist_id = :id")
     fun getPlaylistById(id: Long): PlaylistEntity
+
+    @Delete(entity = PlaylistEntity::class)
+    fun deletePlaylist(playlistEntity: PlaylistEntity)
 }

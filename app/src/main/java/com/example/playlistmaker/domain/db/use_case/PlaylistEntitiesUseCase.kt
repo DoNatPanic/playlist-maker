@@ -20,6 +20,10 @@ class PlaylistEntitiesUseCase(
         return playlistRepository.getPlaylistById(playlistId)
     }
 
+    fun executeDeletePlaylist(playlist: Playlist): Flow<Unit> {
+        return playlistRepository.deletePlaylist(playlist)
+    }
+
     fun executeGetTracks(): Flow<List<Track>> {
         return playlistRepository.getTracks()
     }

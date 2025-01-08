@@ -44,6 +44,9 @@
     <string name="material_alert_title_placeholder">Заголовок</string>
     <string name="material_alert_neutral_button_placeholder">НЕТ</string>
     <string name="material_alert_positive_button_placeholder">ДА</string>
+    <string name="share_playlist_button_str">Поделиться</string>
+    <string name="edit_playlist_button_str">Редактировать информацию</string>
+    <string name="delete_playlist_button_str">Удалить плейлист</string>
 
     // bottom menu labels
     <string name="menu_search_label">Поиск</string>

@@ -6,13 +6,17 @@ import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.db.use_case.PlaylistEntitiesUseCase
 import com.example.playlistmaker.domain.media.entity.Playlist
 import com.example.playlistmaker.domain.search.entity.Track
+import com.example.playlistmaker.domain.sharing.api.SharingInteractor
 import com.example.playlistmaker.presentation.utils.SingleEventLiveData
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class PlaylistInfoViewModel(
     private val playlistEntitiesUseCase: PlaylistEntitiesUseCase,
+    private val sharingInteractor: SharingInteractor,
     private val gson: Gson
 ) : ViewModel() {
 
@@ -72,8 +76,13 @@ class PlaylistInfoViewModel(
         return true
     }
 
-    // берем из базы список всех плейлистов
+    // берем из базы список всех плейлистов ...
     private fun getPlaylists(track: Track) {
+        // ... и ищем в них данный трек, если не найдем - удаляем его из таблицы
+        compareWithAnotherPlaylistsTracks(track, null)
+    }
+
+    private fun compareWithAnotherPlaylistsTracks(track: Track, currentPlaylist: Playlist?) {
         viewModelScope.launch {
             getPlaylistData.value?.let {
                 playlistEntitiesUseCase.executeGetPlaylists().collect { result ->
@@ -83,6 +92,8 @@ class PlaylistInfoViewModel(
                     if (result != null && result.isNotEmpty()) {
                         playlists = result
                         for (playlist in playlists) {
+                            if (currentPlaylist != null && playlist == currentPlaylist) break
+//                            if (playlist != currentPlaylist) {
                             if (!playlist.trackIds.isNullOrEmpty()) {
                                 val list = getIdsFromString(playlist.trackIds)
                                 for (id in list) {
@@ -91,6 +102,7 @@ class PlaylistInfoViewModel(
                                         break
                                     }
                                 }
+//                            }
                             }
                         }
                     }
@@ -125,5 +137,57 @@ class PlaylistInfoViewModel(
     private fun createIdsListFromJson(json: String): MutableList<String> {
         val mutableListTutorialType = object : TypeToken<MutableList<String>>() {}.type
         return gson.fromJson(json, mutableListTutorialType)
+    }
+
+    fun onShareButtonClicked(playlist: Playlist, trackList: List<Track>) {
+        val playlist = playlist
+
+        // добавили название плейлиста, описание, количество треков
+        var message =
+            "${playlist.playlistName}\n${playlist.playlistInfo}\n${makeMinutesText(playlist.tracksCount)}\n"
+
+        // список треков (построчно) в формате:
+        // [номер]. [имя исполнителя] - [название трека] ([продолжительность трека])
+        var count = 0
+        for (track in trackList) {
+            message += "${++count}. ${track.artistName} - ${track.artistName} (${makeTimeText(track.trackTime)})\n"
+        }
+        sharingInteractor.sharePlaylist(message)
+    }
+
+    fun onDeletePlaylistClicked(playlist: Playlist, trackList: List<Track>) {
+        // сначала сравниваем треки данного плейлиста с треками всех других плейлистов
+        // и если их нет - удаляем этот трек из таблицы
+        for (track in trackList) {
+            compareWithAnotherPlaylistsTracks(track, playlist)
+        }
+
+        // после этого удаляем плейлист
+        viewModelScope.launch {
+            playlistEntitiesUseCase.executeDeletePlaylist(playlist).collect { }
+        }
+    }
+
+    private fun makeTimeText(timeMillis: Int): String {
+        return SimpleDateFormat("mm:ss", Locale.getDefault()).format(timeMillis)
+    }
+
+    private fun makeMinutesText(tracksCount: Int): String {
+        val num = tracksCount.toString()
+        val chars = num.toList().reversed()
+        var word = "трек"
+        when (chars[0]) {
+            '2', '3', '4' -> {
+                word = "трека"
+            }
+
+            '0', '5', '6', '7', '8', '9' -> word = "треков"
+        }
+        if (chars.size > 1) {
+            if ((chars[0] == '1' || chars[0] == '2' || chars[0] == '3' || chars[0] == '4') && chars[1] == '1') word =
+                "треков"
+        }
+
+        return "$num $word"
     }
 }

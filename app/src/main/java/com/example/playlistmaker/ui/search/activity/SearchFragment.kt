@@ -181,7 +181,7 @@ class SearchFragment : Fragment() {
                 binding.clearIcon.visibility = clearButtonVisibility(s)
                 if (!s.isNullOrEmpty()) {
                     showHistory(false)
-                }
+                } else showHistory(true)
                 searchDebounce()
             }
 

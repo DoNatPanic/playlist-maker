@@ -5,11 +5,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistInfoBinding
 import com.example.playlistmaker.domain.media.entity.Playlist
@@ -27,6 +32,7 @@ import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
 import java.util.Locale
 
+
 class PlaylistInfoFragment : Fragment() {
     companion object {
         private const val CLICK_DEBOUNCE_DELAY = 1000L
@@ -37,6 +43,8 @@ class PlaylistInfoFragment : Fragment() {
     }
 
     private var playlistId: Long = 0
+
+    private lateinit var playlist: Playlist
 
     private var playlistTracksList: List<Track> = listOf()
 
@@ -50,8 +58,9 @@ class PlaylistInfoFragment : Fragment() {
 
     private var job: Job? = null
 
-    var progress: MaterialAlertDialogBuilder? = null
-    var progressDialog: AlertDialog? = null
+    private var progress: MaterialAlertDialogBuilder? = null
+
+    private var progressDialog: AlertDialog? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -90,7 +99,10 @@ class PlaylistInfoFragment : Fragment() {
         }
 
         viewModel.getPlaylistLiveData()
-            .observe(owner) { playlist -> renderPlaylistInfo(playlist) }
+            .observe(owner) { pl ->
+                playlist = pl
+                renderPlaylistInfo()
+            }
 
 
         val onTrackClick: (Track) -> Unit = { track: Track -> openAudioPlayer(track) }
@@ -103,11 +115,88 @@ class PlaylistInfoFragment : Fragment() {
         binding.recyclerView.adapter = trackAdapter
 
 
-        // bottom sheet
-        val bottomSheetContainer = binding.standardBottomSheet
-        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer).apply {
+        // tracks bottom sheet
+        val tracksBottomSheetContainer = binding.tracksBottomSheet
+        val tracksBottomSheetBehavior = BottomSheetBehavior.from(tracksBottomSheetContainer).apply {
             state = BottomSheetBehavior.STATE_HALF_EXPANDED
         }
+
+        // menu bottom sheet
+        val menuBottomSheetContainer = binding.menuBottomSheet
+        val menuOverlay = binding.menuOverlay
+        val menuBottomSheetBehavior = BottomSheetBehavior.from(menuBottomSheetContainer).apply {
+            state = BottomSheetBehavior.STATE_HIDDEN
+        }
+
+        menuBottomSheetBehavior.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+
+                when (newState) {
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                        menuOverlay.visibility = View.GONE
+                    }
+
+                    else -> {
+                        menuOverlay.visibility = View.VISIBLE
+                    }
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+        })
+
+        binding.share.setOnClickListener {
+            sharePlaylist()
+        }
+
+        binding.menu.setOnClickListener {
+            renderSmallPlaylistView()
+
+            val menuBottomSheetContainer = binding.menuBottomSheet
+            val bottomSheetBehavior = BottomSheetBehavior.from(menuBottomSheetContainer)
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
+        }
+
+        binding.shareBtn.setOnClickListener {
+            sharePlaylist()
+        }
+
+        binding.editBtn.setOnClickListener {
+            // TODO
+        }
+
+        binding.deleteBtn.setOnClickListener {
+            showDeletePlaylistDialog()
+        }
+    }
+
+    private fun sharePlaylist() {
+        if (playlistTracksList.isNotEmpty()) {
+            viewModel.onShareButtonClicked(playlist, playlistTracksList)
+        } else {
+            Toast.makeText(
+                activity,
+                "Чтобы поделиться, добавьте в плейлист треки",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    private fun renderSmallPlaylistView() {
+        binding.playlistSmallView.playlistName.text = playlist.playlistName
+        binding.playlistSmallView.tracksCount.text = makeText(playlist.tracksCount)
+        val image: ImageView = binding.playlistSmallView.sourceImage
+
+        val radius = resources.getDimensionPixelSize(R.dimen.album_image_radius)
+
+        Glide.with(this)
+            .load(playlist.playlistImgPath)
+            .placeholder(R.drawable.track_image)
+            .error(R.drawable.track_image)
+            .transform(CenterCrop(), RoundedCorners(radius))
+            .into(image)
     }
 
     // перейти на экран аудиоплеера
@@ -134,6 +223,28 @@ class PlaylistInfoFragment : Fragment() {
         return true
     }
 
+    // удалить плейлист
+    private fun showDeletePlaylistDialog(): Boolean {
+        progress?.setTitle("Хотите удалить плейлист ${playlist.playlistName}?")
+        progress?.setNeutralButton("Нет") { dialog, which ->
+            // empty
+        }
+        progress?.setPositiveButton("Да") { dialog, which ->
+            progressDialog?.dismiss()
+            viewModel.onDeletePlaylistClicked(playlist, playlistTracksList)
+            Toast.makeText(
+                activity,
+                "Плейлист ${playlist.playlistName} был удален",
+                Toast.LENGTH_SHORT
+            ).show()
+
+            findNavController().popBackStack()
+        }
+        progress?.show()
+
+        return true
+    }
+
     private fun clickDebounce() {
         job?.cancel()
         job = viewLifecycleOwner.lifecycleScope.launch {
@@ -141,7 +252,7 @@ class PlaylistInfoFragment : Fragment() {
         }
     }
 
-    private fun renderPlaylistInfo(playlist: Playlist) {
+    private fun renderPlaylistInfo() {
         binding.playlistName.text = playlist.playlistName
         binding.year.text = playlist.playlistInfo
         binding.tracksCount.text = makeText(playlist.tracksCount)

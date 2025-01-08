@@ -117,12 +117,12 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
-        android:id="@+id/standard_bottom_sheet"
+        android:id="@+id/tracks_bottom_sheet"
         style="@style/PlayerBottomSheetBgStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:behavior_hideable="false"
-        app:behavior_peekHeight="230dp"
+        app:behavior_peekHeight="@dimen/bottom_sheet_height"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <View
@@ -139,6 +139,53 @@
             android:layout_marginTop="12dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
+    </LinearLayout>
+
+    <View
+        android:id="@+id/menuOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#99000000"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/menu_bottom_sheet"
+        style="@style/PlayerBottomSheetBgStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="505dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+        <View
+            android:layout_width="@dimen/bottom_sheet_delimeter_width"
+            android:layout_height="@dimen/bottom_sheet_delimeter_height"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/bottom_sheet_delimeter_margin_top"
+            android:background="@drawable/bottom_sheet_delimeter" />
+
+        <include
+            android:id="@+id/playlistSmallView"
+            layout="@layout/playlist_small_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/shareBtn"
+            style="@style/PlaylistInfoBtnsTextView"
+            android:layout_marginTop="8dp"
+            android:text="@string/share_playlist_button_str" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/editBtn"
+            style="@style/PlaylistInfoBtnsTextView"
+            android:text="@string/edit_playlist_button_str" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/deleteBtn"
+            style="@style/PlaylistInfoBtnsTextView"
+            android:text="@string/delete_playlist_button_str" />
     </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

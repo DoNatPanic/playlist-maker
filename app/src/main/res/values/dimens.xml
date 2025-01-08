@@ -49,10 +49,11 @@
     <dimen name="player_bottom_sheet_title_padding">18dp</dimen>
     <dimen name="bottom_sheet_delimeter_width">50dp</dimen>
     <dimen name="bottom_sheet_delimeter_height">4dp</dimen>
-    <dimen name="bottom_sheet_delimeter_margin_top">4dp</dimen>
+    <dimen name="bottom_sheet_delimeter_margin_top">8dp</dimen>
     <dimen name="playlist_info_image_margin_top">16dp</dimen>
     <dimen name="playlist_info_name_margin_top">24dp</dimen>
     <dimen name="playlist_info_text_margin_top">8dp</dimen>
     <dimen name="playlist_info_buttons_margin_top">16dp</dimen>
     <dimen name="playlist_info_buttons_margin_left">16dp</dimen>
+    <dimen name="bottom_sheet_height">230dp</dimen>
 </resources>

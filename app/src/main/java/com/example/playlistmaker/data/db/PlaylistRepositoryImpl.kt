@@ -38,6 +38,11 @@ class PlaylistRepositoryImpl(
         } else emit(null)
     }
 
+    override fun deletePlaylist(playlist: Playlist): Flow<Unit> = flow {
+        val playlistEntity = convertToPlaylistEntity(playlist)
+        emit(deletePlaylistRequest(playlistEntity))
+    }
+
     override fun getTracks(): Flow<List<Track>> = flow {
         var list = getTracksRequest()
         emit(convertToTracksEntity(list))
@@ -158,6 +163,16 @@ class PlaylistRepositoryImpl(
                 appDatabase.playlistDao().getPlaylistById(playlistId)
             } catch (e: Throwable) {
                 null
+            }
+        }
+    }
+
+    private suspend fun deletePlaylistRequest(playlistEntity: PlaylistEntity): Unit {
+        return withContext(Dispatchers.IO) {
+            try {
+                appDatabase.playlistDao().deletePlaylist(playlistEntity)
+            } catch (e: Throwable) {
+                // none
             }
         }
     }
