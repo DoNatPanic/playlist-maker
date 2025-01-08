@@ -47,6 +47,8 @@
     <string name="share_playlist_button_str">Поделиться</string>
     <string name="edit_playlist_button_str">Редактировать информацию</string>
     <string name="delete_playlist_button_str">Удалить плейлист</string>
+    <string name="edit_playlist_title">Редактировать информацию</string>
+    <string name="edit_playlist_save_button_text">Сохранить</string>
 
     // bottom menu labels
     <string name="menu_search_label">Поиск</string>

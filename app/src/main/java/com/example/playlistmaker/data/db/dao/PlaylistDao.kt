@@ -5,12 +5,16 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.example.playlistmaker.data.db.PlaylistEntity
 
 @Dao
 interface PlaylistDao {
     @Insert(entity = PlaylistEntity::class, onConflict = OnConflictStrategy.IGNORE)
     fun insertPlaylist(playlistEntity: PlaylistEntity)
+
+    @Update(entity = PlaylistEntity::class)
+    fun updatePlaylist(playlistEntity: PlaylistEntity)
 
     @Query("SELECT * FROM playlists_table")
     fun getPlaylists(): List<PlaylistEntity>

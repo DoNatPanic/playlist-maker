@@ -161,7 +161,8 @@ class AudioPlayerFragment : Fragment() {
     // перейти на экран создания плейлиста
     private fun openCreatePlaylistFragment() {
         findNavController().navigate(
-            R.id.action_audioPlayerFragment_to_createPlaylistFragment
+            R.id.action_audioPlayerFragment_to_createPlaylistFragment,
+            null
         )
     }
 

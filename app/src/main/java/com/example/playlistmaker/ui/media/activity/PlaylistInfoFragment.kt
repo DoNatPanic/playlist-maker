@@ -91,7 +91,6 @@ class PlaylistInfoFragment : Fragment() {
 
         viewModel.getPlaylistFromDB(playlistId)
 
-
         viewModel.getPlaylistTracksLiveData().observe(owner) {
             playlistTracksList = it
             binding.minutes.text = getTotalMinutes()
@@ -104,7 +103,6 @@ class PlaylistInfoFragment : Fragment() {
                 renderPlaylistInfo()
             }
 
-
         val onTrackClick: (Track) -> Unit = { track: Track -> openAudioPlayer(track) }
         val onDeleteTrackClick: (Track) -> Boolean =
             { track: Track ->
@@ -113,7 +111,6 @@ class PlaylistInfoFragment : Fragment() {
         trackAdapter = TrackAdapter(onTrackClick, onDeleteTrackClick)
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         binding.recyclerView.adapter = trackAdapter
-
 
         // tracks bottom sheet
         val tracksBottomSheetContainer = binding.tracksBottomSheet
@@ -164,12 +161,20 @@ class PlaylistInfoFragment : Fragment() {
         }
 
         binding.editBtn.setOnClickListener {
-            // TODO
+            openPlaylistEditPage(playlist)
         }
 
         binding.deleteBtn.setOnClickListener {
             showDeletePlaylistDialog()
         }
+    }
+
+    // редактировать плейлист
+    private fun openPlaylistEditPage(playlist: Playlist) {
+        findNavController().navigate(
+            R.id.action_playlistInfoFragment_to_createPlaylistFragment,
+            CreatePlaylistFragment.createArgs(playlist)
+        )
     }
 
     private fun sharePlaylist() {
@@ -253,6 +258,15 @@ class PlaylistInfoFragment : Fragment() {
     }
 
     private fun renderPlaylistInfo() {
+        if (playlist.playlistImgPath != null) {
+            Glide.with(this)
+                .load(playlist.playlistImgPath)
+                .placeholder(R.drawable.track_image_large)
+                .error(R.drawable.track_image_large)
+                .centerCrop()
+                .into(binding.pickerImage)
+        }
+
         binding.playlistName.text = playlist.playlistName
         binding.year.text = playlist.playlistInfo
         binding.tracksCount.text = makeText(playlist.tracksCount)

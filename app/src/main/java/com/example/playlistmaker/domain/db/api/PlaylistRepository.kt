@@ -7,6 +7,8 @@ import kotlinx.coroutines.flow.Flow
 interface PlaylistRepository {
     fun savePlaylist(playlist: Playlist): Flow<Unit>
 
+    fun updatePlaylist(playlist: Playlist): Flow<Unit>
+
     fun getPlaylists(): Flow<List<Playlist>>
 
     fun getPlaylistById(playlistId: Long): Flow<Playlist?>

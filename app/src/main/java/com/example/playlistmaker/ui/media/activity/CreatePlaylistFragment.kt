@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -14,6 +15,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -32,6 +34,15 @@ import java.util.UUID
 
 
 class CreatePlaylistFragment : Fragment() {
+
+    companion object {
+        private const val ARGS_PLAYLIST_EDIT = "playlist_edit"
+
+        fun createArgs(playlist: Playlist): Bundle =
+            bundleOf(ARGS_PLAYLIST_EDIT to playlist)
+    }
+
+    private var playlist: Playlist? = null
 
     private val viewModel: CreatePlaylistViewModel by viewModel()
 
@@ -79,8 +90,8 @@ class CreatePlaylistFragment : Fragment() {
             closeFragment()
         }
 
-        // нажали на кнопку Создать
-        binding.createPlaylistBtn.setOnClickListener { _ -> createPlaylist() }
+        // нажали на кнопку Создать/Сохранить
+        binding.createPlaylistBtn.setOnClickListener { _ -> if (playlist == null) createPlaylist() else savePlaylist() }
 
         // регистрируем событие, которое вызывает photo picker
         val pickMedia =
@@ -114,10 +125,33 @@ class CreatePlaylistFragment : Fragment() {
             }
         })
 
+        // получаем информацию о плейлисте (в случае редактирования)
+        val arguments = arguments
+
+        if (arguments != null) {
+            playlist =
+                arguments.getParcelable<Parcelable>(ARGS_PLAYLIST_EDIT) as Playlist?
+        }
+        playlist?.let {
+            binding.toolbar.title = resources.getString(R.string.edit_playlist_title)
+            binding.createPlaylistBtn.text =
+                resources.getString(R.string.edit_playlist_save_button_text)
+            binding.playlistNameInputLayout.editText?.setText(it.playlistName)
+            binding.infoInputLayout.editText?.setText(it.playlistInfo)
+
+            val radius = resources.getDimensionPixelSize(R.dimen.album_large_image_radius)
+
+            Glide.with(this)
+                .load(playlist?.playlistImgPath)
+                .placeholder(R.drawable.track_image)
+                .error(R.drawable.track_image)
+                .centerCrop()
+                .transform(RoundedCorners(radius))
+                .into(binding.pickerImage)
+        }
     }
 
     private fun disableCallback() {
-        // Отключаем callback
         callback.isEnabled = false
     }
 
@@ -130,6 +164,13 @@ class CreatePlaylistFragment : Fragment() {
     }
 
     private fun closeFragment() {
+        // если в режиме редактирования
+        if (playlist != null) {
+            findNavController().popBackStack()
+            return
+        }
+
+        // ... иначе (в режиме создания)
         if (binding.playlistNameInput.text.toString().isNotEmpty() || isPictureSelected) {
             showDialog()
         } else {
@@ -159,7 +200,7 @@ class CreatePlaylistFragment : Fragment() {
             .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
     }
 
-    fun randomUUID() = UUID.randomUUID().toString()
+    private fun randomUUID() = UUID.randomUUID().toString()
 
     private fun showDialog() {
         activity?.let {
@@ -174,6 +215,20 @@ class CreatePlaylistFragment : Fragment() {
                 }
                 .show()
         }
+    }
+
+    private fun savePlaylist() {
+        val updatedPlaylist = Playlist(
+            playlist!!.playlistId,
+            binding.playlistNameInput.getText().toString(),
+            binding.infoInput.getText().toString(),
+            filePath,
+            playlist!!.trackIds,
+            playlist!!.tracksCount,
+
+            )
+        viewModel.onSavePlaylistClicked(updatedPlaylist)
+        findNavController().popBackStack()
     }
 
     private fun createPlaylist() {

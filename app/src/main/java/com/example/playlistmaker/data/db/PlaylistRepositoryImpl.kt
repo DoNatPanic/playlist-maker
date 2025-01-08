@@ -25,6 +25,11 @@ class PlaylistRepositoryImpl(
         emit(insertPlaylistRequest(playlistEntity))
     }
 
+    override fun updatePlaylist(playlist: Playlist): Flow<Unit> = flow {
+        val playlistEntity = convertToPlaylistEntity(playlist)
+        emit(updatePlaylistRequest(playlistEntity))
+    }
+
     override fun getPlaylists(): Flow<List<Playlist>> = flow {
         var list = getPlaylistsRequest()
         emit(convertToPlaylist(list))
@@ -82,6 +87,16 @@ class PlaylistRepositoryImpl(
         return withContext(Dispatchers.IO) {
             try {
                 appDatabase.playlistDao().insertPlaylist(playlistEntity)
+            } catch (e: Throwable) {
+                // nothing
+            }
+        }
+    }
+
+    private suspend fun updatePlaylistRequest(playlistEntity: PlaylistEntity) {
+        return withContext(Dispatchers.IO) {
+            try {
+                appDatabase.playlistDao().updatePlaylist(playlistEntity)
             } catch (e: Throwable) {
                 // nothing
             }

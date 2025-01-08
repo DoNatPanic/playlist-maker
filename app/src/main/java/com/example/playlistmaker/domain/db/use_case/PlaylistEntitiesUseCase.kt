@@ -12,6 +12,10 @@ class PlaylistEntitiesUseCase(
         return playlistRepository.savePlaylist(playlist)
     }
 
+    fun executeUpdatePlaylist(playlist: Playlist): Flow<Unit> {
+        return playlistRepository.updatePlaylist(playlist)
+    }
+
     fun executeGetPlaylists(): Flow<List<Playlist>> {
         return playlistRepository.getPlaylists()
     }
