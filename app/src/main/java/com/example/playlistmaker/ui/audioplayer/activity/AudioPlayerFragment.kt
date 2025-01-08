@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -145,11 +146,11 @@ class AudioPlayerFragment : Fragment() {
 
                 when (newState) {
                     BottomSheetBehavior.STATE_HIDDEN -> {
-                        overlay.visibility = View.GONE
+                        overlay.isVisible = false
                     }
 
                     else -> {
-                        overlay.visibility = View.VISIBLE
+                        overlay.isVisible = true
                     }
                 }
             }
@@ -194,9 +195,9 @@ class AudioPlayerFragment : Fragment() {
 
         val collectionName = track.collectionName
         if (collectionName == null) {
-            binding.album.visibility = View.GONE
+            binding.album.isVisible = false
         } else {
-            binding.album.visibility = View.VISIBLE
+            binding.album.isVisible = true
             binding.album.text = collectionName
         }
 

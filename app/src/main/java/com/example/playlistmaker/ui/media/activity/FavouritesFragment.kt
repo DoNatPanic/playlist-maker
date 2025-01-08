@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -60,16 +61,16 @@ class FavouritesFragment : Fragment() {
                 setMessage("")
                 trackAdapter.setItems(result.results)
                 trackAdapter.notifyDataSetChanged()
-                binding.notFoundImage.visibility = View.GONE
-                binding.recyclerView.visibility = View.VISIBLE
+                binding.notFoundImage.isVisible = false
+                binding.recyclerView.isVisible = true
             }
 
             SearchResult.NotFound -> {
                 setMessage(getString(R.string.favourites_empty))
                 trackAdapter.setItems(listOf())
                 trackAdapter.notifyDataSetChanged()
-                binding.notFoundImage.visibility = View.VISIBLE
-                binding.recyclerView.visibility = View.GONE
+                binding.notFoundImage.isVisible = true
+                binding.recyclerView.isVisible = false
             }
 
             else -> {}
@@ -78,10 +79,10 @@ class FavouritesFragment : Fragment() {
 
     private fun setMessage(text: String) {
         if (text.isNotEmpty()) {
-            binding.placeholderMessage.visibility = View.VISIBLE
+            binding.placeholderMessage.isVisible = true
             binding.placeholderMessage.text = text
         } else {
-            binding.placeholderMessage.visibility = View.GONE
+            binding.placeholderMessage.isVisible = false
         }
     }
 

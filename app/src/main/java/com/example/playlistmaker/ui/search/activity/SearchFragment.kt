@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -178,7 +179,7 @@ class SearchFragment : Fragment() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                binding.clearIcon.visibility = clearButtonVisibility(s)
+                binding.clearIcon.isVisible = clearButtonIsVisible(s)
                 if (!s.isNullOrEmpty()) {
                     showHistory(false)
                 } else showHistory(true)
@@ -210,13 +211,13 @@ class SearchFragment : Fragment() {
             is SearchResult.Error -> {
                 val message = getString(R.string.something_went_wrong)
                 setMessage(message)
-                binding.placeholderMessage.visibility = View.VISIBLE
-                binding.updateBtn.visibility = View.VISIBLE
-                binding.notFoundImage.visibility = View.GONE
-                binding.wentWrongImage.visibility = View.VISIBLE
-                binding.progressBar.visibility = View.GONE
-                binding.recyclerView.visibility = View.VISIBLE
-                binding.historyRecyclerView.visibility = View.VISIBLE
+                binding.placeholderMessage.isVisible = true
+                binding.updateBtn.isVisible = true
+                binding.notFoundImage.isVisible = false
+                binding.wentWrongImage.isVisible = true
+                binding.progressBar.isVisible = false
+                binding.recyclerView.isVisible = true
+                binding.historyRecyclerView.isVisible = true
             }
 
             is SearchResult.TrackContent -> {
@@ -224,23 +225,23 @@ class SearchFragment : Fragment() {
                 trackAdapter.setItems(result.results)
                 trackAdapter.notifyDataSetChanged()
 
-                binding.updateBtn.visibility = View.GONE
-                binding.notFoundImage.visibility = View.GONE
-                binding.wentWrongImage.visibility = View.GONE
-                binding.progressBar.visibility = View.GONE
-                binding.recyclerView.visibility = View.VISIBLE
-                binding.historyRecyclerView.visibility = View.VISIBLE
+                binding.updateBtn.isVisible = false
+                binding.notFoundImage.isVisible = false
+                binding.wentWrongImage.isVisible = false
+                binding.progressBar.isVisible = false
+                binding.recyclerView.isVisible = true
+                binding.historyRecyclerView.isVisible = true
             }
 
             SearchResult.Loading -> {
                 setMessage("")
 
-                binding.updateBtn.visibility = View.GONE
-                binding.notFoundImage.visibility = View.GONE
-                binding.wentWrongImage.visibility = View.GONE
-                binding.progressBar.visibility = View.VISIBLE
-                binding.recyclerView.visibility = View.GONE
-                binding.historyRecyclerView.visibility = View.GONE
+                binding.updateBtn.isVisible = false
+                binding.notFoundImage.isVisible = false
+                binding.wentWrongImage.isVisible = false
+                binding.progressBar.isVisible = true
+                binding.recyclerView.isVisible = false
+                binding.historyRecyclerView.isVisible = false
             }
 
             SearchResult.NotFound -> {
@@ -248,12 +249,12 @@ class SearchFragment : Fragment() {
                 trackAdapter.setItems(listOf())
                 trackAdapter.notifyDataSetChanged()
 
-                binding.updateBtn.visibility = View.GONE
-                binding.notFoundImage.visibility = View.VISIBLE
-                binding.wentWrongImage.visibility = View.GONE
-                binding.progressBar.visibility = View.GONE
-                binding.recyclerView.visibility = View.VISIBLE
-                binding.historyRecyclerView.visibility = View.VISIBLE
+                binding.updateBtn.isVisible = false
+                binding.notFoundImage.isVisible = true
+                binding.wentWrongImage.isVisible = false
+                binding.progressBar.isVisible = false
+                binding.recyclerView.isVisible = true
+                binding.historyRecyclerView.isVisible = true
             }
 
             SearchResult.Empty -> {
@@ -261,12 +262,12 @@ class SearchFragment : Fragment() {
                 trackAdapter.setItems(listOf())
                 trackAdapter.notifyDataSetChanged()
 
-                binding.updateBtn.visibility = View.GONE
-                binding.notFoundImage.visibility = View.GONE
-                binding.wentWrongImage.visibility = View.GONE
-                binding.progressBar.visibility = View.GONE
-                binding.recyclerView.visibility = View.VISIBLE
-                binding.historyRecyclerView.visibility = View.VISIBLE
+                binding.updateBtn.isVisible = false
+                binding.notFoundImage.isVisible = false
+                binding.wentWrongImage.isVisible = false
+                binding.progressBar.isVisible = false
+                binding.recyclerView.isVisible = true
+                binding.historyRecyclerView.isVisible = true
             }
 
             else -> {}
@@ -275,31 +276,23 @@ class SearchFragment : Fragment() {
 
     private fun setMessage(text: String) {
         if (text.isNotEmpty()) {
-            binding.placeholderMessage.visibility = View.VISIBLE
+            binding.placeholderMessage.isVisible = true
             binding.placeholderMessage.text = text
         } else {
-            binding.placeholderMessage.visibility = View.GONE
+            binding.placeholderMessage.isVisible = false
         }
     }
 
     private fun showHistory(show: Boolean) {
-        binding.historyMessage.visibility = uiElementsVisibility(show)
-        binding.historyScrollView.visibility = uiElementsVisibility(show)
+        binding.historyMessage.isVisible = uiElementsisVisible(show)
+        binding.historyScrollView.isVisible = uiElementsisVisible(show)
     }
 
-    private fun uiElementsVisibility(s: Boolean): Int {
-        return if (s) {
-            View.VISIBLE
-        } else {
-            View.GONE
-        }
+    private fun uiElementsisVisible(s: Boolean): Boolean {
+        return s
     }
 
-    private fun clearButtonVisibility(s: CharSequence?): Int {
-        return if (s.isNullOrEmpty()) {
-            View.GONE
-        } else {
-            View.VISIBLE
-        }
+    private fun clearButtonIsVisible(s: CharSequence?): Boolean {
+        return !s.isNullOrEmpty()
     }
 }

@@ -101,11 +101,11 @@ class PlaylistInfoFragment : Fragment() {
 
                 when (newState) {
                     BottomSheetBehavior.STATE_HIDDEN -> {
-                        menuOverlay.visibility = View.GONE
+                        menuOverlay.isVisible = false
                     }
 
                     else -> {
-                        menuOverlay.visibility = View.VISIBLE
+                        menuOverlay.isVisible = true
                     }
                 }
             }
