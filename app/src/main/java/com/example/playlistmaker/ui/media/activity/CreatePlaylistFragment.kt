@@ -194,7 +194,9 @@ class CreatePlaylistFragment : Fragment() {
             .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
     }
 
-    private fun randomUUID() = UUID.randomUUID().toString()
+    private fun randomUUID(): String {
+      return UUID.randomUUID().toString()
+    }
 
     private fun showDialog() {
         activity?.let {
