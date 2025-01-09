@@ -7,7 +7,8 @@ import com.example.playlistmaker.databinding.TrackViewBinding
 import com.example.playlistmaker.domain.search.entity.Track
 
 class TrackAdapter(
-    private val onProductClick: (track: Track) -> Unit
+    private val onProductClick: (track: Track) -> Unit,
+    private val onDeleteTrackClick: (track: Track) -> Boolean = { _ -> false }
 ) : RecyclerView.Adapter<TrackViewHolder>() {
     private var tracks: List<Track> = emptyList()
 
@@ -16,15 +17,16 @@ class TrackAdapter(
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): TrackViewHolder {
         val binding = TrackViewBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
         )
-        return TrackViewHolder(binding) { track ->
-            onProductClick(track)
-        }
+        return TrackViewHolder(binding, onProductClick, onDeleteTrackClick)
     }
 
     override fun getItemCount(): Int {

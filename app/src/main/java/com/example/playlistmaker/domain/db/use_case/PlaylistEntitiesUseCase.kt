@@ -12,15 +12,39 @@ class PlaylistEntitiesUseCase(
         return playlistRepository.savePlaylist(playlist)
     }
 
+    fun executeUpdatePlaylist(playlist: Playlist): Flow<Unit> {
+        return playlistRepository.updatePlaylist(playlist)
+    }
+
     fun executeGetPlaylists(): Flow<List<Playlist>> {
         return playlistRepository.getPlaylists()
+    }
+
+    fun executeGetPlaylistById(playlistId: Long): Flow<Playlist?> {
+        return playlistRepository.getPlaylistById(playlistId)
+    }
+
+    fun executeDeletePlaylist(playlist: Playlist): Flow<Unit> {
+        return playlistRepository.deletePlaylist(playlist)
     }
 
     fun executeGetTracks(): Flow<List<Track>> {
         return playlistRepository.getTracks()
     }
 
-    fun executeUpdatePlaylist(playlist: Playlist, track: Track): Flow<Unit> {
-        return playlistRepository.updatePlaylist(playlist, track)
+    fun executeDeleteTrack(track: Track): Flow<Unit> {
+        return playlistRepository.deleteTrack(track)
+    }
+
+    fun executeGetTracksFromPlaylist(idsList: List<Long>): Flow<List<Track>> {
+        return playlistRepository.getTracksFromPlaylist(idsList)
+    }
+
+    fun executeAddTrackToPlaylist(playlist: Playlist, track: Track): Flow<Unit> {
+        return playlistRepository.addTrackToPlaylist(playlist, track)
+    }
+
+    fun executeDeleteTrackFromPlaylist(playlist: Playlist, track: Track): Flow<Unit> {
+        return playlistRepository.deleteTrackFromPlaylist(playlist, track)
     }
 }

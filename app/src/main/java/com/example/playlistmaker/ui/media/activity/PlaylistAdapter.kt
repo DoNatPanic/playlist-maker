@@ -6,7 +6,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.databinding.PlaylistViewBinding
 import com.example.playlistmaker.domain.media.entity.Playlist
 
-class PlaylistAdapter : RecyclerView.Adapter<PlaylistViewHolder>() {
+class PlaylistAdapter(
+    private val onClick: (playlist: Playlist) -> Unit
+) : RecyclerView.Adapter<PlaylistViewHolder>() {
     private var playlists: List<Playlist> = emptyList()
 
     fun setItems(items: List<Playlist>) {
@@ -21,7 +23,9 @@ class PlaylistAdapter : RecyclerView.Adapter<PlaylistViewHolder>() {
             false
         )
 
-        return PlaylistViewHolder(binding)
+        return PlaylistViewHolder(binding) { playlist ->
+            onClick(playlist)
+        }
     }
 
     override fun getItemCount(): Int {

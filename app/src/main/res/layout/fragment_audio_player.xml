@@ -207,7 +207,7 @@
             android:layout_width="@dimen/bottom_sheet_delimeter_width"
             android:layout_height="@dimen/bottom_sheet_delimeter_height"
             android:layout_gravity="center"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/bottom_sheet_delimeter_margin_top"
             android:background="@drawable/bottom_sheet_delimeter" />
 
         <TextView

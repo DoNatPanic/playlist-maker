@@ -16,4 +16,10 @@ class CreatePlaylistViewModel(
             playlistEntitiesUseCase.executeSavePlaylist(playlist).collect()
         }
     }
+
+    fun onSavePlaylistClicked(playlist: Playlist) {
+        viewModelScope.launch {
+            playlistEntitiesUseCase.executeUpdatePlaylist(playlist).collect()
+        }
+    }
 }

@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.example.playlistmaker.domain.common.SearchResult
+import com.example.playlistmaker.domain.media.entity.Playlist
 import com.example.playlistmaker.ui.media.view_model.PlaylistsViewModel
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
@@ -34,7 +36,11 @@ class PlaylistsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         var owner = getViewLifecycleOwner()
 
-        playlistAdapter = PlaylistAdapter()
+        playlistAdapter = PlaylistAdapter { playlist -> viewModel.onPlaylistClicked(playlist) }
+
+        viewModel.getOpenPlaylistInfoTrigger().observe(owner) { playlist ->
+            openPlaylistInfoFragment(playlist)
+        }
 
         binding.newPlaylistBtn.setOnClickListener {
             openCreatePlaylistFragment()
@@ -58,16 +64,16 @@ class PlaylistsFragment : Fragment() {
                 setMessage("")
                 playlistAdapter.setItems(result.results)
                 playlistAdapter.notifyDataSetChanged()
-                binding.notFoundImage.visibility = View.GONE
-                binding.recyclerView.visibility = View.VISIBLE
+                binding.notFoundImage.isVisible = false
+                binding.recyclerView.isVisible = true
             }
 
             SearchResult.NotFound -> {
                 setMessage(getString(R.string.playlists_empty))
                 playlistAdapter.setItems(listOf())
                 playlistAdapter.notifyDataSetChanged()
-                binding.notFoundImage.visibility = View.VISIBLE
-                binding.recyclerView.visibility = View.GONE
+                binding.notFoundImage.isVisible = true
+                binding.recyclerView.isVisible = false
             }
 
             else -> {}
@@ -76,17 +82,26 @@ class PlaylistsFragment : Fragment() {
 
     private fun setMessage(text: String) {
         if (text.isNotEmpty()) {
-            binding.placeholderMessage.visibility = View.VISIBLE
+            binding.placeholderMessage.isVisible = true
             binding.placeholderMessage.text = text
         } else {
-            binding.placeholderMessage.visibility = View.GONE
+            binding.placeholderMessage.isVisible = false
         }
     }
 
     // перейти на экран создания плейлиста
     private fun openCreatePlaylistFragment() {
         findNavController().navigate(
-            R.id.action_mediaFragment_to_createPlaylistFragment
+            R.id.action_mediaFragment_to_createPlaylistFragment,
+            null
+        )
+    }
+
+    // перейти на экран информации о плейлисте
+    private fun openPlaylistInfoFragment(playlist: Playlist) {
+        findNavController().navigate(
+            R.id.action_mediaFragment_to_playlistInfoFragment,
+            PlaylistInfoFragment.createArgs(playlist.playlistId!!)
         )
     }
 

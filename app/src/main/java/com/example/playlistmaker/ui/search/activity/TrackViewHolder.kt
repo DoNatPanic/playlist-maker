@@ -12,7 +12,8 @@ import java.util.Locale
 
 class TrackViewHolder(
     private val binding: TrackViewBinding,
-    private val onProductClick: (track: Track) -> Unit
+    private val onProductClick: (track: Track) -> Unit,
+    private val onDeleteTrackClick: (track: Track) -> Boolean
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(model: Track) {
@@ -34,5 +35,6 @@ class TrackViewHolder(
             .into(image)
 
         binding.root.setOnClickListener { _ -> onProductClick(model) }
+        binding.root.setOnLongClickListener { _ -> onDeleteTrackClick(model) }
     }
 }

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,13 +27,6 @@ import java.util.Locale
 
 
 class AudioPlayerFragment : Fragment() {
-
-    companion object {
-        private const val ARGS_FACT = "track"
-
-        fun createArgs(track: Track): Bundle =
-            bundleOf(ARGS_FACT to track)
-    }
 
     private var track: Track? = null
 
@@ -145,11 +139,11 @@ class AudioPlayerFragment : Fragment() {
 
                 when (newState) {
                     BottomSheetBehavior.STATE_HIDDEN -> {
-                        overlay.visibility = View.GONE
+                        overlay.isVisible = false
                     }
 
                     else -> {
-                        overlay.visibility = View.VISIBLE
+                        overlay.isVisible = true
                     }
                 }
             }
@@ -161,7 +155,8 @@ class AudioPlayerFragment : Fragment() {
     // перейти на экран создания плейлиста
     private fun openCreatePlaylistFragment() {
         findNavController().navigate(
-            R.id.action_audioPlayerFragment_to_createPlaylistFragment
+            R.id.action_audioPlayerFragment_to_createPlaylistFragment,
+            null
         )
     }
 
@@ -193,9 +188,9 @@ class AudioPlayerFragment : Fragment() {
 
         val collectionName = track.collectionName
         if (collectionName == null) {
-            binding.album.visibility = View.GONE
+            binding.album.isVisible = false
         } else {
-            binding.album.visibility = View.VISIBLE
+            binding.album.isVisible = true
             binding.album.text = collectionName
         }
 
@@ -230,5 +225,12 @@ class AudioPlayerFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         viewModel.onDestroy()
+    }
+
+    companion object {
+        private const val ARGS_FACT = "track"
+
+        fun createArgs(track: Track): Bundle =
+            bundleOf(ARGS_FACT to track)
     }
 }

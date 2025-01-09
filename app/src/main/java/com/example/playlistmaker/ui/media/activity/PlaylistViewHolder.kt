@@ -10,7 +10,8 @@ import com.example.playlistmaker.databinding.PlaylistViewBinding
 import com.example.playlistmaker.domain.media.entity.Playlist
 
 class PlaylistViewHolder(
-    private val binding: PlaylistViewBinding
+    private val binding: PlaylistViewBinding,
+    private val onClick: (playlist: Playlist) -> Unit
 ) :
     RecyclerView.ViewHolder(binding.root) {
     fun bind(playlist: Playlist) {
@@ -27,6 +28,8 @@ class PlaylistViewHolder(
             .error(R.drawable.track_image)
             .transform(CenterCrop(), RoundedCorners(radius))
             .into(image)
+
+        binding.root.setOnClickListener { _ -> onClick(playlist) }
     }
 
     private fun makeText(tracksCount: Int): String {

@@ -25,9 +25,27 @@ class PlaylistRepositoryImpl(
         emit(insertPlaylistRequest(playlistEntity))
     }
 
+    override fun updatePlaylist(playlist: Playlist): Flow<Unit> = flow {
+        val playlistEntity = convertToPlaylistEntity(playlist)
+        emit(updatePlaylistRequest(playlistEntity))
+    }
+
     override fun getPlaylists(): Flow<List<Playlist>> = flow {
         var list = getPlaylistsRequest()
         emit(convertToPlaylist(list))
+    }
+
+    override fun getPlaylistById(playlistId: Long): Flow<Playlist?> = flow {
+        var playlistEntity = getPlaylistByIdRequest(playlistId)
+
+        if (playlistEntity != null) {
+            emit(playlistDbConvertor.map(playlistEntity))
+        } else emit(null)
+    }
+
+    override fun deletePlaylist(playlist: Playlist): Flow<Unit> = flow {
+        val playlistEntity = convertToPlaylistEntity(playlist)
+        emit(deletePlaylistRequest(playlistEntity))
     }
 
     override fun getTracks(): Flow<List<Track>> = flow {
@@ -35,10 +53,35 @@ class PlaylistRepositoryImpl(
         emit(convertToTracksEntity(list))
     }
 
-    override fun updatePlaylist(playlist: Playlist, track: Track): Flow<Unit> = flow {
+    override fun getTracksFromPlaylist(idsList: List<Long>): Flow<List<Track>> = flow {
+        var trackEntitiesList = getTracksRequest()
+        var sortedList = mutableListOf<TrackEntity>()
+
+        for (id in idsList) {
+            for (item in trackEntitiesList) {
+                if (id == item.trackId) {
+                    sortedList.add(item)
+                }
+            }
+        }
+        emit(convertToTracksEntity(sortedList.reversed()))
+    }
+
+    override fun deleteTrack(track: Track): Flow<Unit> = flow {
+        val trackEntity = convertToTrackEntity(track)
+        emit(deleteTrackRequest(trackEntity))
+    }
+
+    override fun addTrackToPlaylist(playlist: Playlist, track: Track): Flow<Unit> = flow {
         val trackEntity = convertToTrackEntity(track)
         val playlistEntity = convertToPlaylistEntity(playlist)
-        emit(updatePlaylistRequest(playlistEntity, trackEntity))
+        emit(addTrackToPlaylistRequest(playlistEntity, trackEntity))
+    }
+
+    override fun deleteTrackFromPlaylist(playlist: Playlist, track: Track): Flow<Unit> = flow {
+        val trackEntity = convertToTrackEntity(track)
+        val playlistEntity = convertToPlaylistEntity(playlist)
+        emit(deleteTrackFromPlaylistRequest(playlistEntity, trackEntity))
     }
 
     private suspend fun insertPlaylistRequest(playlistEntity: PlaylistEntity) {
@@ -51,7 +94,17 @@ class PlaylistRepositoryImpl(
         }
     }
 
-    private suspend fun updatePlaylistRequest(
+    private suspend fun updatePlaylistRequest(playlistEntity: PlaylistEntity) {
+        return withContext(Dispatchers.IO) {
+            try {
+                appDatabase.playlistDao().updatePlaylist(playlistEntity)
+            } catch (e: Throwable) {
+                // nothing
+            }
+        }
+    }
+
+    private suspend fun addTrackToPlaylistRequest(
         playlistEntity: PlaylistEntity,
         trackEntity: TrackEntity
     ) {
@@ -78,6 +131,38 @@ class PlaylistRepositoryImpl(
         }
     }
 
+    private suspend fun deleteTrackFromPlaylistRequest(
+        playlistEntity: PlaylistEntity,
+        trackEntity: TrackEntity
+    ) {
+        return withContext(Dispatchers.IO) {
+            try {
+                var list: MutableList<String> = mutableListOf()
+                if (!playlistEntity.trackIds.isNullOrEmpty()) {
+                    list.addAll(createIdsListFromJson(playlistEntity.trackIds!!))
+                }
+                for (item in list) {
+                    if (item.toLong() == trackEntity.trackId) {
+                        list.remove(item)
+                        break
+                    }
+                }
+
+                var newPlaylistEntity = PlaylistEntity(
+                    playlistId = playlistEntity.playlistId,
+                    tracksCount = playlistEntity.tracksCount - 1,
+                    playlistName = playlistEntity.playlistName,
+                    playlistInfo = playlistEntity.playlistInfo,
+                    playlistImgPath = playlistEntity.playlistImgPath,
+                    trackIds = createJsonFromIdsList(list)
+                )
+                appDatabase.trackDao().updatePlaylist(newPlaylistEntity, trackEntity)
+            } catch (e: Throwable) {
+                // nothing
+            }
+        }
+    }
+
     private suspend fun getPlaylistsRequest(): List<PlaylistEntity> {
         return withContext(Dispatchers.IO) {
             try {
@@ -88,12 +173,42 @@ class PlaylistRepositoryImpl(
         }
     }
 
+    private suspend fun getPlaylistByIdRequest(playlistId: Long): PlaylistEntity? {
+        return withContext(Dispatchers.IO) {
+            try {
+                appDatabase.playlistDao().getPlaylistById(playlistId)
+            } catch (e: Throwable) {
+                null
+            }
+        }
+    }
+
+    private suspend fun deletePlaylistRequest(playlistEntity: PlaylistEntity): Unit {
+        return withContext(Dispatchers.IO) {
+            try {
+                appDatabase.playlistDao().deletePlaylist(playlistEntity)
+            } catch (e: Throwable) {
+                // none
+            }
+        }
+    }
+
     private suspend fun getTracksRequest(): List<TrackEntity> {
         return withContext(Dispatchers.IO) {
             try {
                 appDatabase.trackDao().getTracks()
             } catch (e: Throwable) {
                 listOf()
+            }
+        }
+    }
+
+    private suspend fun deleteTrackRequest(trackEntity: TrackEntity): Unit {
+        return withContext(Dispatchers.IO) {
+            try {
+                appDatabase.trackDao().deleteTrack(trackEntity)
+            } catch (e: Throwable) {
+                // none
             }
         }
     }
