@@ -21,7 +21,7 @@
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/themeSwitcher"
             style="@style/SettingsSwitch"
-            android:text="@string/settings_str" />
+            android:text="@string/dark_theme_str" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/shareBtn"

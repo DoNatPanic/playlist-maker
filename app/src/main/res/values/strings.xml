@@ -3,6 +3,7 @@
     <string name="search_str">Поиск</string>
     <string name="media_str">Медиатека</string>
     <string name="settings_str">Настройки</string>
+    <string name="dark_theme_str">Тёмная тема</string>
     <string name="share_str">Поделиться приложением</string>
     <string name="support_str">Написать в поддержку</string>
     <string name="agreement_str">Пользовательское соглашение</string>
